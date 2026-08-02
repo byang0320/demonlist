@@ -1,1 +1,51 @@
-// Zod schemas for level inputs will live here.
+import { z } from 'zod'
+
+const optionalText = (max: number) =>
+  z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().trim().max(max).optional(),
+  )
+
+const optionalUrl = z.preprocess(
+  (value) => (value === '' ? undefined : value),
+  z.url().optional(),
+)
+
+const slug = z
+  .string()
+  .trim()
+  .min(1, 'Slug is required')
+  .max(100, 'Slug must be 100 characters or fewer')
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must contain lowercase letters, numbers, and hyphens only')
+
+const rank = z.coerce
+  .number()
+  .int('Rank must be a whole number')
+  .positive('Rank must be greater than zero')
+
+export const levelFieldsSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(200),
+  slug,
+  rank,
+  creatorName: optionalText(200),
+  description: optionalText(5_000),
+  thumbnailUrl: optionalUrl,
+  externalUrl: optionalUrl,
+  status: z.enum(['ACTIVE', 'ARCHIVED']).default('ACTIVE'),
+})
+
+export const createLevelSchema = levelFieldsSchema
+
+export const updateLevelSchema = levelFieldsSchema.extend({
+  id: z.string().trim().min(1, 'Level ID is required'),
+})
+
+export const moveLevelSchema = z.object({
+  levelId: z.string().trim().min(1, 'Level ID is required'),
+  targetRank: rank,
+})
+
+export type LevelFields = z.infer<typeof levelFieldsSchema>
+export type CreateLevelInput = z.infer<typeof createLevelSchema>
+export type UpdateLevelInput = z.infer<typeof updateLevelSchema>
+export type MoveLevelInput = z.infer<typeof moveLevelSchema>
