@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
 import { getLevelBySlugWithPlayers } from '@/features/levels/queries'
 
 export const dynamic = 'force-dynamic'
@@ -21,32 +22,6 @@ function LevelPlaceholder() {
       />
     </svg>
   )
-}
-
-function PlayerAvatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
-  return (
-    <span
-      className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-[#252d49] bg-cover bg-center text-sm font-bold text-[#c6beff]"
-      style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
-      role="img"
-      aria-label={`${name}'s avatar`}
-    >
-      {!avatarUrl && name.slice(0, 1).toUpperCase()}
-    </span>
-  )
-}
-
-function formatCompletionDate(date: Date | null) {
-  if (!date) {
-    return 'Date not recorded'
-  }
-
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  }).format(date)
 }
 
 export default async function LevelProfilePage({
@@ -97,26 +72,11 @@ export default async function LevelProfilePage({
             </div>
           </div>
 
-          <div className="grid gap-6 border-t border-white/10 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:p-8">
-            <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-                Description
-              </p>
-              <p className="m-0 max-w-3xl whitespace-pre-wrap text-base leading-7 text-[#d7dcf0]">
-                {level.description || 'No description has been added for this level yet.'}
-              </p>
-            </div>
-            {level.externalUrl && (
-              <a
-                href={level.externalUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="self-start rounded-xl border border-[#ae9dff]/30 px-4 py-3 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-              >
-                Open level link <span aria-hidden="true">↗</span>
-              </a>
-            )}
-          </div>
+          <ProfileInfoCards
+            type="level"
+            description={level.description}
+            externalUrl={level.externalUrl}
+          />
         </header>
 
         <section className="mt-8">
@@ -133,54 +93,7 @@ export default async function LevelProfilePage({
               No completion records have been added yet.
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80">
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-145 border-collapse text-left">
-                  <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
-                    <tr>
-                      <th className="px-5 py-4 font-semibold">Player</th>
-                      <th className="px-5 py-4 font-semibold">Completed</th>
-                      <th className="px-5 py-4 text-right font-semibold">Video</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {level.completions.map((completion) => (
-                      <tr key={`${completion.player.slug}-${completion.completedAt?.toISOString() ?? 'undated'}`} className="transition hover:bg-white/[0.03]">
-                        <td className="px-5 py-4">
-                          <Link
-                            href={`/players/${completion.player.slug}`}
-                            className="flex items-center gap-3 font-semibold text-white no-underline hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-                          >
-                            <PlayerAvatar
-                              name={completion.player.name}
-                              avatarUrl={completion.player.avatarUrl}
-                            />
-                            <span className="truncate">{completion.player.name}</span>
-                          </Link>
-                        </td>
-                        <td className="whitespace-nowrap px-5 py-4 text-sm text-[#b9c2d8]">
-                          {formatCompletionDate(completion.completedAt)}
-                        </td>
-                        <td className="px-5 py-4 text-right">
-                          {completion.videoUrl ? (
-                            <a
-                              href={completion.videoUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-sm font-semibold text-[#c6beff] underline decoration-[#9c8cff]/50 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-                            >
-                              Watch video ↗
-                            </a>
-                          ) : (
-                            <span className="text-sm text-[#59627b]">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <CompletionTable type="level" completions={level.completions} />
           )}
         </section>
       </div>

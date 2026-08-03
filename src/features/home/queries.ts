@@ -27,6 +27,24 @@ export function getHomePageData() {
         level: { rank: 'asc' },
       },
     }),
+    prisma.completion.findMany({
+      where: {
+        level: {
+          status: 'ACTIVE',
+          rank: 1,
+        },
+      },
+      select: {
+        player: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        player: { name: 'asc' },
+      },
+    }),
     prisma.player.findMany({
       select: {
         name: true,
@@ -40,7 +58,7 @@ export function getHomePageData() {
       },
       orderBy: { name: 'asc' },
     }),
-  ]).then(([totalUniqueLevels, totalCompletions, hardestCompletion, players]) => {
+  ]).then(([totalUniqueLevels, totalCompletions, hardestCompletion, rankOneCompletions, players]) => {
     const collator = new Intl.Collator('en', {
       sensitivity: 'base',
       numeric: false,
@@ -62,6 +80,7 @@ export function getHomePageData() {
         totalCompletions,
         totalUniqueLevels,
         hardestLevel: hardestCompletion?.level ?? null,
+        rankOnePlayers: rankOneCompletions.map(({ player }) => player.name),
       },
       players,
     }

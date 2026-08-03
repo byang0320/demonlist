@@ -20,6 +20,7 @@ export function getPlayerBySlugWithLevels(
       completions: {
         select: {
           completedAt: true,
+          videoUrl: true,
           level: {
             select: {
               id: true,

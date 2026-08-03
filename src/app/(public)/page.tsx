@@ -7,6 +7,25 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage() {
   const { stats, players } = await getHomePageData()
 
+  const hardestLevelContent = (
+    <>
+      <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
+        Hardest level completed
+      </p>
+      {stats.hardestLevel ? (
+        <p className="mt-3 truncate text-3xl font-bold tracking-[-0.02em]">
+          {stats.hardestLevel.name}
+        </p>
+      ) : (
+        <p className="mt-3 text-xl font-bold text-[#59627b]">No records yet</p>
+      )}
+      <p className="mt-2 text-sm text-[#8c97b2]">according to our ranking</p>
+      <p className="mt-2 text-sm text-[#8c97b2]">
+        Completed by: {stats.rankOnePlayers.length > 0 ? stats.rankOnePlayers.join(', ') : 'No players yet'}
+      </p>
+    </>
+  )
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.25),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
       <div className="mx-auto w-full max-w-280">
@@ -50,28 +69,23 @@ export default async function HomePage() {
             </p>
             <p className="mt-2 text-sm text-[#8c97b2]">Levels currently on the list</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-[#111725]/80 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-              Hardest completed
-            </p>
-            {stats.hardestLevel ? (
-              <Link
-                href={`/levels/${stats.hardestLevel.slug}`}
-                className="mt-3 block truncate text-xl font-bold text-white no-underline hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-              >
-                <span className="mr-2 text-[#c6beff]">#{stats.hardestLevel.rank}</span>
-                {stats.hardestLevel.name}
-              </Link>
-            ) : (
-              <p className="mt-3 text-xl font-bold text-[#59627b]">No records yet</p>
-            )}
-            <p className="mt-2 text-sm text-[#8c97b2]">Completed by: WRITE THE PEOPLE WHO HAVE COMPLETED IT HERE</p>
-          </div>
+          {stats.hardestLevel ? (
+            <Link
+              href={`/levels/${stats.hardestLevel.slug}`}
+              className="block rounded-2xl border border-white/10 bg-[#111725]/80 p-5 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+            >
+              {hardestLevelContent}
+            </Link>
+          ) : (
+            <div className="rounded-2xl border border-white/10 bg-[#111725]/80 p-5">
+              {hardestLevelContent}
+            </div>
+          )}
         </section>
 
         <section className="mt-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">
           <div className="mb-5">
-            <h2 className="m-0 text-2xl font-bold tracking-[-0.04em]">Jump to a profile</h2>
+            <h2 className="m-0 text-2xl font-bold">Jump to a profile</h2>
             <p className="mt-2 text-sm text-[#8c97b2]">
               Choose a Stream VC member to see their completed levels.
             </p>

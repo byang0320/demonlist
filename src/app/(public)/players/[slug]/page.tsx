@@ -5,6 +5,7 @@ import {
   getPlayerBySlugWithLevels,
   type PlayerCompletionSort,
 } from '@/features/players/queries'
+import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,37 +28,6 @@ function PlayerAvatar({
       {!avatarUrl && name.slice(0, 1).toUpperCase()}
     </span>
   )
-}
-
-function LevelPlaceholder() {
-  return (
-    <svg aria-hidden="true" className="h-7 w-7" viewBox="0 0 48 48" fill="none">
-      <path
-        d="M24 5 40.5 14.5v19L24 43 7.5 33.5v-19L24 5Z"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
-      <path
-        d="m15 18 9-5 9 5-9 5-9-5Zm0 7 9 5 9-5M15 25v7l9 5 9-5v-7"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function formatCompletionDate(date: Date | null) {
-  if (!date) {
-    return 'Date not recorded'
-  }
-
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  }).format(date)
 }
 
 export default async function PlayerProfilePage({
@@ -126,32 +96,11 @@ export default async function PlayerProfilePage({
             </div>
           </div>
 
-          <div className="grid gap-3 border-t border-white/10 p-5 sm:grid-cols-2 sm:p-8">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-                Total completions
-              </p>
-              <p className="mt-2 text-3xl font-bold tracking-[-0.05em] text-white">
-                {player.completions.length}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-                Hardest level completed
-              </p>
-              {hardestLevel ? (
-                <Link
-                  href={`/levels/${hardestLevel.level.slug}`}
-                  className="mt-2 block truncate text-lg font-bold text-white no-underline hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-                >
-                  <span className="mr-2 text-[#c6beff]">{hardestLevel.level.rank}</span>
-                  {hardestLevel.level.name}
-                </Link>
-              ) : (
-                <p className="mt-2 text-lg font-semibold text-[#59627b]">No completions yet</p>
-              )}
-            </div>
-          </div>
+          <ProfileInfoCards
+            type="player"
+            completionCount={player.completions.length}
+            hardestLevel={hardestLevel?.level ?? null}
+          />
         </header>
 
         <section className="mt-8">
@@ -184,58 +133,11 @@ export default async function PlayerProfilePage({
               This player has no completion records yet.
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80">
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-145 border-collapse text-left">
-                  <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
-                    <tr>
-                      <th className="px-5 py-4 font-semibold">Level</th>
-                      <th className="px-5 py-4 font-semibold">Rank</th>
-                      <th className="px-5 py-4 text-right font-semibold">
-                        <Link
-                          href={dateSortHref}
-                          className="inline-flex items-center gap-1 text-[#8c97b2] no-underline hover:text-[#c6beff]"
-                          title="Sort by chronological completion date"
-                        >
-                          Completed
-                        </Link>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {player.completions.map((completion) => (
-                      <tr key={completion.level.id} className="transition hover:bg-white/[0.03]">
-                        <td className="px-5 py-4">
-                          <Link
-                            href={`/levels/${completion.level.slug}`}
-                            className="flex items-center gap-3 font-semibold text-white no-underline hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-                          >
-                            <span
-                              className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80"
-                              style={
-                                completion.level.thumbnailUrl
-                                  ? { backgroundImage: `url(${completion.level.thumbnailUrl})` }
-                                  : undefined
-                              }
-                              aria-hidden="true"
-                            >
-                              {!completion.level.thumbnailUrl && <LevelPlaceholder />}
-                            </span>
-                            <span className="truncate">{completion.level.name}</span>
-                          </Link>
-                        </td>
-                        <td className="px-5 py-4 text-sm font-semibold text-[#c6beff]">
-                          {completion.level.rank}
-                        </td>
-                        <td className="whitespace-nowrap px-5 py-4 text-right text-sm text-[#b9c2d8]">
-                          {formatCompletionDate(completion.completedAt)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <CompletionTable
+              type="player"
+              completions={player.completions}
+              dateSortHref={dateSortHref}
+            />
           )}
         </section>
       </div>
