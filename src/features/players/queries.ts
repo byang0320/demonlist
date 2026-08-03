@@ -1,6 +1,11 @@
 import { prisma } from '@/lib/db'
 
-export function getPlayerBySlugWithLevels(slug: string) {
+export type PlayerCompletionSort = 'rank' | 'date'
+
+export function getPlayerBySlugWithLevels(
+  slug: string,
+  sort: PlayerCompletionSort = 'rank',
+) {
   return prisma.player.findUnique({
     where: {
       slug,
@@ -22,15 +27,22 @@ export function getPlayerBySlugWithLevels(slug: string) {
               slug: true,
               rank: true,
               creatorName: true,
+              thumbnailUrl: true,
               status: true,
             },
           },
         },
-        orderBy: {
-          level: {
-            rank: 'asc',
-          },
-        },
+        orderBy:
+          sort === 'date'
+            ? [
+                { completedAt: { sort: 'asc', nulls: 'last' } },
+                { level: { rank: 'asc' } },
+              ]
+            : {
+                level: {
+                  rank: 'asc',
+                },
+              },
       },
     },
   })
