@@ -41,7 +41,12 @@ model Level {
   name         String
   slug         String       @unique
   rank         Int          @unique
-  creatorName  String?
+  type         String
+  demoted      Boolean      @default(false)
+  unrated      Boolean      @default(false)
+  publishedBy  String
+  createdBy    String?
+  verifiedBy   String?
   description  String?
   thumbnailUrl String?
   externalUrl  String?

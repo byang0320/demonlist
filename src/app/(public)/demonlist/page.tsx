@@ -68,11 +68,26 @@ export default async function DemonListPage() {
                     {level.rank}
                   </span>
                   <span className="min-w-0 py-4 pr-3">
+                    <span className="mb-1 flex flex-wrap gap-1 text-[0.62rem] font-bold uppercase tracking-[0.04em]">
+                      <span className="rounded-full bg-[#9c8cff]/15 px-2 py-0.5 text-[#c6beff]">
+                        {level.type}
+                      </span>
+                      {level.demoted && (
+                        <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-red-300">
+                          Demoted
+                        </span>
+                      )}
+                      {level.unrated && (
+                        <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-red-300">
+                          Unrated
+                        </span>
+                      )}
+                    </span>
                     <span className="block truncate text-base font-bold sm:text-[1.05rem]">
                       {level.name}
                     </span>
                     <span className="mt-1 block truncate text-[0.84rem] text-[#b9c2d8]">
-                      {level.creatorName ? `by ${level.creatorName}` : 'Creator unknown'}
+                      by {level.publishedBy}
                     </span>
                     <span className="mt-2 block truncate text-[0.7rem] uppercase tracking-[0.04em] text-[#8c97b2]">
                       {level._count.completions}{' '}

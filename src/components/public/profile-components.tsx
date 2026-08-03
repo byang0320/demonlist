@@ -54,7 +54,7 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
           Description
         </p>
         <p className="m-0 max-w-3xl whitespace-pre-wrap text-base leading-7 text-[#d7dcf0]">
-          {props.description || 'No description has been added for this level yet.'}
+          {props.description || '(No description provided)'}
         </p>
       </div>
       {props.externalUrl && (

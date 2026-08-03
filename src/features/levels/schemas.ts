@@ -6,6 +6,14 @@ const optionalText = (max: number) =>
     z.string().trim().max(max).optional(),
   )
 
+const requiredText = (label: string, max: number) =>
+  z.string().trim().min(1, `${label} is required`).max(max)
+
+const optionalBoolean = z.preprocess(
+  (value) => (value === '' || value === undefined ? false : value),
+  z.boolean().default(false),
+)
+
 const optionalUrl = z.preprocess(
   (value) => (value === '' ? undefined : value),
   z.url().optional(),
@@ -27,7 +35,12 @@ export const levelFieldsSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(200),
   slug,
   rank,
-  creatorName: optionalText(200),
+  type: z.enum(['Classic', 'Platformer']),
+  demoted: optionalBoolean,
+  unrated: optionalBoolean,
+  publishedBy: requiredText('Published by', 200),
+  createdBy: optionalText(200),
+  verifiedBy: optionalText(200),
   description: optionalText(5_000),
   thumbnailUrl: optionalUrl,
   externalUrl: optionalUrl,
