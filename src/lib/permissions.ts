@@ -1,1 +1,10 @@
-// Shared administrator authorization checks will live here.
+function getAdminEmails() {
+  return (process.env.ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean)
+}
+
+export function isAdminEmail(email: string | null | undefined) {
+  return Boolean(email && getAdminEmails().includes(email.toLowerCase()))
+}

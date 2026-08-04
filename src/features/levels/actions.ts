@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 
+import { requireAdmin } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 
 type ReorderableLevel = {
@@ -15,6 +16,8 @@ type ReorderableLevel = {
  * silently reorder the wrong range.
  */
 export async function moveLevel(level: ReorderableLevel, newRank: number) {
+  await requireAdmin()
+
   if (!Number.isInteger(newRank) || newRank < 1) {
     throw new Error('New rank must be a positive whole number')
   }
