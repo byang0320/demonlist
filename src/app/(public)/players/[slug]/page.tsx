@@ -39,7 +39,7 @@ export default async function PlayerProfilePage({
 }) {
   const { slug } = await params
   const requestedSort = (await searchParams).sort
-  const sort: PlayerCompletionSort = requestedSort === 'date' ? 'date' : 'rank'
+  const sort: PlayerCompletionSort = requestedSort === 'date' ? 'date' : 'alphabetical'
   const player = await getPlayerBySlugWithLevels(slug, sort)
 
   if (!player) {
@@ -48,6 +48,10 @@ export default async function PlayerProfilePage({
 
   const hardestLevel = player.completions.reduce<typeof player.completions[number] | null>(
     (hardest, completion) => {
+      if (completion.level.type !== 'Classic') {
+        return hardest
+      }
+
       if (!hardest || completion.level.rank < hardest.level.rank) {
         return completion
       }
@@ -57,17 +61,17 @@ export default async function PlayerProfilePage({
     null,
   )
 
-  const rankSortHref = `/players/${player.slug}`
+  const alphabeticalSortHref = `/players/${player.slug}`
   const dateSortHref = `/players/${player.slug}?sort=date`
 
   return (
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
       <div className="mx-auto w-full max-w-280">
         <Link
-          href="/demonlist"
+          href="/"
           className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
         >
-          <span aria-hidden="true">←</span> Back to Demon List
+          <span aria-hidden="true">←</span> Back Home
         </Link>
 
         <header className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20">
@@ -113,10 +117,10 @@ export default async function PlayerProfilePage({
             <div className="flex items-center gap-2 text-sm text-[#8c97b2]">
               <span>Sort by</span>
               <Link
-                href={rankSortHref}
-                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'rank' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
+                href={alphabeticalSortHref}
+                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'alphabetical' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
               >
-                rank
+                alphabetically
               </Link>
               <Link
                 href={dateSortHref}

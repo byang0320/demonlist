@@ -5,7 +5,6 @@ type PlayerInfoCardsProps = {
   completionCount: number
   hardestLevel: {
     name: string
-    rank: number
     slug: string
   } | null
 }
@@ -31,16 +30,13 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
             className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
           >
             <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-              Hardest level completed
+              Hardest Classic level completed
             </p>
-            <p className="mt-2 break-words text-3xl font-bold leading-tight">
-              <span className="mr-2 text-[#c6beff]">{props.hardestLevel.rank}</span>
-              {props.hardestLevel.name}
-            </p>
+            <p className="mt-2 break-words text-3xl font-bold leading-tight">{props.hardestLevel.name}</p>
           </Link>
         ) : (
-          <InfoCard label="Hardest level completed">
-            <p className="mt-2 text-lg font-semibold text-[#59627b]">No completions yet</p>
+          <InfoCard label="Hardest Classic level completed">
+            <p className="mt-2 text-lg font-semibold text-[#59627b]">No Classic completions yet</p>
           </InfoCard>
         )}
       </div>
@@ -88,6 +84,7 @@ type PlayerCompletion = {
     name: string
     slug: string
     rank: number
+    type: string
     thumbnailUrl: string | null
   }
 }
@@ -121,8 +118,8 @@ export function CompletionTable(props: CompletionTableProps) {
           <table className="w-full min-w-145 border-collapse text-left">
             <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
               <tr>
-                <th className="px-1 py-4 text-center font-semibold">Rank</th>
                 <th className="px-5 py-4 font-semibold">Level</th>
+                <th className="px-5 py-4 font-semibold">Type</th>
                 <th className="px-5 py-4 text-right font-semibold">
                   <Link
                     href={props.dateSortHref}
@@ -138,19 +135,21 @@ export function CompletionTable(props: CompletionTableProps) {
             <tbody className="divide-y divide-white/10">
               {props.completions.map((completion) => (
                 <tr key={completion.level.id} className="group relative transition hover:bg-white/[0.03]">
-                  <td className="px-5 py-4 text-center text-3xl font-bold text-[#c6beff]">
+                  <td className="px-5 py-4">
                     <Link
                       href={`/levels/${completion.level.slug}`}
                       aria-label={`View level ${completion.level.name}`}
                       className="text-[#c6beff] no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
                     >
-                      <span className="relative z-10">{completion.level.rank}</span>
+                      <span className="relative z-10 flex items-center gap-3 font-semibold text-white group-hover:text-[#c6beff]">
+                        <LevelThumbnail url={completion.level.thumbnailUrl} />
+                        <span className="truncate">{completion.level.name}</span>
+                      </span>
                     </Link>
                   </td>
                   <td className="px-5 py-4">
-                    <span className="flex items-center gap-3 font-semibold text-white group-hover:text-[#c6beff]">
-                      <LevelThumbnail url={completion.level.thumbnailUrl} />
-                      <span className="truncate">{completion.level.name}</span>
+                    <span className="rounded-full bg-[#9c8cff]/15 px-2 py-1 text-xs font-bold uppercase tracking-[0.04em] text-[#c6beff]">
+                      {completion.level.type}
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-5 py-4 text-right text-sm text-[#b9c2d8]">

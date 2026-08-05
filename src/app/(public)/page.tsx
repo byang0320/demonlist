@@ -1,30 +1,12 @@
 import Link from 'next/link'
 
+import { LevelListSummary } from '@/components/public/level-list-summary'
 import { getHomePageData } from '@/features/home/queries'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const { stats, players } = await getHomePageData()
-
-  const hardestLevelContent = (
-    <>
-      <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-        Hardest level completed
-      </p>
-      {stats.hardestLevel ? (
-        <p className="mt-3 truncate text-3xl font-bold tracking-[-0.02em]">
-          {stats.hardestLevel.name}
-        </p>
-      ) : (
-        <p className="mt-3 text-xl font-bold text-[#59627b]">No records yet</p>
-      )}
-      <p className="mt-2 text-sm text-[#8c97b2]">according to our ranking</p>
-      <p className="mt-2 text-sm text-[#8c97b2]">
-        Completed by: {stats.rankOnePlayers.length > 0 ? stats.rankOnePlayers.join(', ') : 'No players yet'}
-      </p>
-    </>
-  )
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.25),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
@@ -41,46 +23,12 @@ export default async function HomePage() {
             <p className="mt-6 text-base leading-7 text-[#b9c2d8] sm:text-lg">
               Explore the hardest levels the Stream VC has completed, and see who conquered them.
             </p>
-            <Link
-              href="/demonlist"
-              className="mt-8 inline-flex min-h-12 items-center rounded-xl bg-[#9c8cff] px-5 text-sm font-bold text-[#0b0d18] no-underline transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30"
-            >
-              Check it out <span className="ml-2" aria-hidden="true">→</span>
-            </Link>
           </div>
         </header>
 
-        <section className="mt-5 grid gap-3 sm:grid-cols-3" aria-label="Demonlist statistics">
-          <div className="rounded-2xl border border-white/10 bg-[#111725]/80 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-              Collective completions
-            </p>
-            <p className="mt-3 text-4xl font-bold tracking-[-0.06em] text-white">
-              {stats.totalCompletions}
-            </p>
-            <p className="mt-2 text-sm text-[#8c97b2]">All recorded player-level completions</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-[#111725]/80 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-              Unique levels
-            </p>
-            <p className="mt-3 text-4xl font-bold tracking-[-0.06em] text-white">
-              {stats.totalUniqueLevels}
-            </p>
-            <p className="mt-2 text-sm text-[#8c97b2]">Levels currently on the list</p>
-          </div>
-          {stats.hardestLevel ? (
-            <Link
-              href={`/levels/${stats.hardestLevel.slug}`}
-              className="block rounded-2xl border border-white/10 bg-[#111725]/80 p-5 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-            >
-              {hardestLevelContent}
-            </Link>
-          ) : (
-            <div className="rounded-2xl border border-white/10 bg-[#111725]/80 p-5">
-              {hardestLevelContent}
-            </div>
-          )}
+        <section className="mt-5 grid gap-3 lg:grid-cols-2" aria-label="Demonlist statistics">
+          <LevelListSummary title="Demonlist" href="/demonlist" stats={stats.classic} />
+          <LevelListSummary title="Pemonlist" href="/pemonlist" stats={stats.platformer} />
         </section>
 
         <section className="mt-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">

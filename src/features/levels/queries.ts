@@ -1,9 +1,12 @@
 import { prisma } from '@/lib/db'
 
-export function listRankedLevels() {
+export type LevelType = 'Classic' | 'Platformer'
+
+export function listRankedLevels(type: LevelType) {
   return prisma.level.findMany({
     where: {
       status: 'ACTIVE',
+      type,
     },
     select: {
       id: true,

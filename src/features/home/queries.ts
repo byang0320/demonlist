@@ -1,50 +1,74 @@
 import { prisma } from '@/lib/db'
+import type { LevelType } from '@/features/levels/queries'
+
+function getLevelTypeStats(type: LevelType) {
+  const activeLevel = { status: 'ACTIVE' as const, type }
+  const cleanLevel = { ...activeLevel, demoted: false, unrated: false }
+
+  return Promise.all([
+    prisma.completion.count({
+      where: { level: cleanLevel },
+    }),
+    prisma.completion.count({
+      where: { level: { ...activeLevel, demoted: true } },
+    }),
+    prisma.completion.count({
+      where: { level: { ...activeLevel, unrated: true } },
+    }),
+    prisma.level.count({ where: cleanLevel }),
+    prisma.level.count({ where: { ...activeLevel, demoted: true } }),
+    prisma.level.count({ where: { ...activeLevel, unrated: true } }),
+    prisma.level.findFirst({
+      where: activeLevel,
+      select: {
+        name: true,
+        slug: true,
+        rank: true,
+        completions: {
+          select: {
+            player: {
+              select: { name: true },
+            },
+          },
+          orderBy: {
+            player: { name: 'asc' },
+          },
+        },
+      },
+      orderBy: { rank: 'asc' },
+    }),
+  ]).then(
+    ([
+      totalCompletions,
+      demotedCompletions,
+      unratedCompletions,
+      totalUniqueLevels,
+      demotedUniqueLevels,
+      unratedUniqueLevels,
+      hardestLevel,
+    ]) => ({
+      totalCompletions,
+      demotedCompletions,
+      unratedCompletions,
+      totalUniqueLevels,
+      demotedUniqueLevels,
+      unratedUniqueLevels,
+      hardestLevel: hardestLevel
+        ? {
+            name: hardestLevel.name,
+            slug: hardestLevel.slug,
+            rank: hardestLevel.rank,
+            players: hardestLevel.completions.map(({ player }) => player.name),
+          }
+        : null,
+    }),
+  )
+}
 
 export function getHomePageData() {
   return Promise.all([
-    prisma.level.count({
-      where: { status: 'ACTIVE' },
-    }),
-    prisma.completion.count({
-      where: {
-        level: { status: 'ACTIVE' },
-      },
-    }),
-    prisma.completion.findFirst({
-      where: {
-        level: { status: 'ACTIVE' },
-      },
-      select: {
-        level: {
-          select: {
-            name: true,
-            slug: true,
-            rank: true,
-          },
-        },
-      },
-      orderBy: {
-        level: { rank: 'asc' },
-      },
-    }),
-    prisma.completion.findMany({
-      where: {
-        level: {
-          status: 'ACTIVE',
-          rank: 1,
-        },
-      },
-      select: {
-        player: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      orderBy: {
-        player: { name: 'asc' },
-      },
-    }),
+    getLevelTypeStats('Classic'),
+    getLevelTypeStats('Platformer'),
     prisma.player.findMany({
       select: {
         name: true,
@@ -58,7 +82,7 @@ export function getHomePageData() {
       },
       orderBy: { name: 'asc' },
     }),
-  ]).then(([totalUniqueLevels, totalCompletions, hardestCompletion, rankOneCompletions, players]) => {
+  ]).then(([classic, platformer, players]) => {
     const collator = new Intl.Collator('en', {
       sensitivity: 'base',
       numeric: false,
@@ -77,10 +101,8 @@ export function getHomePageData() {
 
     return {
       stats: {
-        totalCompletions,
-        totalUniqueLevels,
-        hardestLevel: hardestCompletion?.level ?? null,
-        rankOnePlayers: rankOneCompletions.map(({ player }) => player.name),
+        classic,
+        platformer,
       },
       players,
     }

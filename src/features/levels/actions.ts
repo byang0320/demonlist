@@ -9,7 +9,7 @@ type ReorderableLevel = {
 }
 
 /**
- * Move an active level to a new rank while keeping all active ranks unique.
+ * Move an active level to a new rank while keeping ranks unique within its type.
  *
  * The caller only needs to provide the level identity and its known rank. The
  * current row is read again inside the transaction so stale page data cannot
@@ -31,6 +31,7 @@ export async function moveLevel(level: ReorderableLevel, newRank: number) {
           name: true,
           slug: true,
           rank: true,
+          type: true,
           status: true,
         },
       })
@@ -48,7 +49,10 @@ export async function moveLevel(level: ReorderableLevel, newRank: number) {
       }
 
       const activeLevels = await tx.level.findMany({
-        where: { status: 'ACTIVE' },
+        where: {
+          status: 'ACTIVE',
+          type: currentLevel.type,
+        },
         select: {
           id: true,
           rank: true,
@@ -74,6 +78,7 @@ export async function moveLevel(level: ReorderableLevel, newRank: number) {
       const archivedLevelInRange = await tx.level.findFirst({
         where: {
           status: 'ARCHIVED',
+          type: currentLevel.type,
           rank: {
             gte: rangeStart,
             lte: rangeEnd,
@@ -129,6 +134,7 @@ export async function moveLevel(level: ReorderableLevel, newRank: number) {
           name: true,
           slug: true,
           rank: true,
+          type: true,
           status: true,
         },
       })
