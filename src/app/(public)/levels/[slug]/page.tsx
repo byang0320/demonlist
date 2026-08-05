@@ -47,8 +47,8 @@ export default async function LevelProfilePage({
         </Link>
 
         <header className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20">
-          <div className="grid grid-cols-[5rem_minmax(0,1fr)_6rem] items-center gap-4 p-5 sm:grid-cols-[8rem_minmax(0,1fr)_8rem] sm:gap-8 sm:p-8">
-            <div className="flex h-full items-center justify-center border-r border-white/10 pr-4 text-center text-7xl font-extrabold leading-none tracking-[-0.08em] text-[#c6beff] sm:pr-8 sm:text-9xl">
+          <div className="grid grid-cols-[max-content_minmax(0,1fr)_6rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_8rem] sm:gap-8 sm:p-8">
+            <div className="flex h-full w-max items-center justify-start whitespace-nowrap border-r border-white/10 pr-4 text-left text-7xl font-extrabold leading-none tracking-[-0.08em] text-[#c6beff] sm:pr-8 sm:text-9xl">
               {level.rank}
             </div>
 

@@ -85,7 +85,7 @@ export function LevelCard({ level, admin = false }: { level: RankedLevel; admin?
   if (admin) {
     return (
       <li>
-        <div className={`${cardClassName} grid min-h-22 grid-cols-[3.4rem_minmax(0,1fr)_3.5rem_4.5rem] items-center sm:min-h-26 sm:grid-cols-[4.5rem_minmax(0,1fr)_5rem_5.5rem]`}>
+        <div className={`${cardClassName} grid min-h-22 grid-cols-[5.5rem_minmax(0,1fr)_3.5rem_4.5rem] items-center sm:min-h-26 sm:grid-cols-[6.5rem_minmax(0,1fr)_5rem_5.5rem]`}>
           <Link
             className="contents"
             href={levelHref}
@@ -107,7 +107,7 @@ export function LevelCard({ level, admin = false }: { level: RankedLevel; admin?
   return (
     <li>
       <Link
-        className={`${cardClassName} grid min-h-22 grid-cols-[3.4rem_minmax(0,1fr)_3.5rem_1.25rem] items-center sm:min-h-26 sm:grid-cols-[4.5rem_minmax(0,1fr)_5rem_1.5rem]`}
+        className={`${cardClassName} grid min-h-22 grid-cols-[5.5rem_minmax(0,1fr)_3.5rem_1.25rem] items-center sm:min-h-26 sm:grid-cols-[6.5rem_minmax(0,1fr)_5rem_1.5rem]`}
         href={levelHref}
         aria-label={`Rank ${level.rank}: ${level.name}`}
       >
