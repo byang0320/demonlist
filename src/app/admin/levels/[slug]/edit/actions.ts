@@ -3,8 +3,11 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { updateLevel } from '@/features/levels/actions'
-import { updateLevelSchema } from '@/features/levels/schemas'
+import {
+  LEVEL_NAME_PUBLISHER_CONFLICT,
+  updateLevel,
+} from '@/features/levels/actions'
+import { getLevelFormSubmittedValues, updateLevelSchema } from '@/features/levels/schemas'
 import { requireAdmin } from '@/lib/auth'
 import type { LevelActionState } from '@/app/admin/levels/new/actions'
 
@@ -15,6 +18,7 @@ export async function updateLevelAction(
 ): Promise<LevelActionState> {
   await requireAdmin()
 
+  const values = getLevelFormSubmittedValues(formData)
   const parsed = updateLevelSchema.safeParse({
     ...Object.fromEntries(formData.entries()),
     id: levelId,
@@ -23,6 +27,7 @@ export async function updateLevelAction(
   if (!parsed.success) {
     return {
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
     }
   }
 
@@ -37,7 +42,10 @@ export async function updateLevelAction(
       formError:
         error instanceof Error && error.message.startsWith('Rank must be')
           ? error.message
+          : error instanceof Error && error.message === LEVEL_NAME_PUBLISHER_CONFLICT
+            ? error.message
           : 'Unable to save the level. Check that the slug and proposed rank are available.',
+      values,
     }
   }
 

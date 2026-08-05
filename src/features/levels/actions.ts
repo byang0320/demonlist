@@ -2,11 +2,75 @@ import { Prisma } from '@prisma/client'
 
 import { requireAdmin } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { slugify } from '@/lib/slugs'
 import type { CreateLevelInput, UpdateLevelInput } from '@/features/levels/schemas'
 
 type ReorderableLevel = {
   id: string
   rank: number
+}
+
+export const LEVEL_NAME_PUBLISHER_CONFLICT =
+  'A level with this name and publisher already exists.'
+
+async function getUniqueLevelSlug(
+  tx: Prisma.TransactionClient,
+  input: { name: string; publishedBy: string; slug: string },
+  excludeId?: string,
+) {
+  const duplicate = await tx.level.findFirst({
+    where: {
+      ...(excludeId ? { id: { not: excludeId } } : {}),
+      name: { equals: input.name, mode: 'insensitive' },
+      publishedBy: { equals: input.publishedBy, mode: 'insensitive' },
+    },
+    select: { id: true },
+  })
+
+  if (duplicate) {
+    throw new Error(LEVEL_NAME_PUBLISHER_CONFLICT)
+  }
+
+  if (excludeId) {
+    const submittedSlug = await tx.level.findUnique({
+      where: { slug: input.slug },
+      select: { id: true },
+    })
+
+    if (submittedSlug?.id === excludeId) {
+      return input.slug
+    }
+  }
+
+  const baseSlug = slugify(input.name)
+  const baseOwner = await tx.level.findUnique({
+    where: { slug: baseSlug },
+    select: { id: true },
+  })
+
+  if (!baseOwner || baseOwner.id === excludeId) {
+    return baseSlug
+  }
+
+  const publisherSlug = slugify(input.publishedBy) || 'publisher'
+  const suffixBase = `${baseSlug}-${publisherSlug}`.slice(0, 100)
+  let candidate = suffixBase
+  let suffix = 2
+
+  while (true) {
+    const owner = await tx.level.findUnique({
+      where: { slug: candidate },
+      select: { id: true },
+    })
+
+    if (!owner || owner.id === excludeId) {
+      return candidate
+    }
+
+    const numericSuffix = `-${suffix}`
+    candidate = `${suffixBase.slice(0, 100 - numericSuffix.length)}${numericSuffix}`
+    suffix += 1
+  }
 }
 
 /**
@@ -16,6 +80,7 @@ type ReorderableLevel = {
  */
 export async function createLevel(input: CreateLevelInput) {
   return prisma.$transaction(async (tx) => {
+    const slug = await getUniqueLevelSlug(tx, input)
     const levels = await tx.level.findMany({
       where: { type: input.type },
       select: {
@@ -62,6 +127,7 @@ export async function createLevel(input: CreateLevelInput) {
     return tx.level.create({
       data: {
         ...input,
+        slug,
         rank,
       },
       select: {
@@ -80,6 +146,7 @@ export async function createLevel(input: CreateLevelInput) {
  */
 export async function updateLevel(input: UpdateLevelInput) {
   return prisma.$transaction(async (tx) => {
+    const slug = await getUniqueLevelSlug(tx, input, input.id)
     const currentLevel = await tx.level.findUnique({
       where: { id: input.id },
       select: {
@@ -171,7 +238,7 @@ export async function updateLevel(input: UpdateLevelInput) {
       where: { id: input.id },
       data: {
         name: input.name,
-        slug: input.slug,
+        slug,
         type: input.type,
         demoted: input.demoted,
         unrated: input.unrated,

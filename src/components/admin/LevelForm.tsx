@@ -1,11 +1,12 @@
 'use client'
 
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 
 import {
   createLevelAction,
   type LevelActionState,
 } from '@/app/admin/levels/new/actions'
+import { slugify } from '@/lib/slugs'
 
 const initialState: LevelActionState = {}
 
@@ -43,16 +44,6 @@ function FieldError({ errors }: { errors?: string[] }) {
   return <p className="mt-2 text-sm text-red-300">{errors[0]}</p>
 }
 
-function slugify(value: string) {
-  return value
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 100)
-}
-
 export default function LevelForm({
   maxRanks,
   action = createLevelAction,
@@ -67,10 +58,10 @@ export default function LevelForm({
   typeLocked?: boolean
 }) {
   const [state, formAction, pending] = useActionState(action, initialState)
-  const [name, setName] = useState(initialValues?.name ?? '')
-  const [slug, setSlug] = useState(initialValues?.slug ?? '')
   const [type, setType] = useState<LevelType>(initialValues?.type ?? 'Classic')
   const maxRank = maxRanks[type]
+  const submittedValues = state.values
+  const slugInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (state.formError || Object.keys(state.fieldErrors ?? {}).length > 0) {
@@ -79,7 +70,12 @@ export default function LevelForm({
   }, [state])
 
   return (
-    <form action={formAction} autoComplete="off" className="mt-8 space-y-8">
+    <form
+      key={submittedValues ? JSON.stringify(submittedValues) : 'initial'}
+      action={formAction}
+      autoComplete="off"
+      className="mt-8 space-y-8"
+    >
       {state.formError && (
         <p
           className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200"
@@ -101,13 +97,14 @@ export default function LevelForm({
             className={inputClassName}
             name="name"
             onChange={(event) => {
-              setName(event.target.value)
-              setSlug(slugify(event.target.value))
+              if (slugInputRef.current) {
+                slugInputRef.current.value = slugify(event.target.value)
+              }
             }}
             placeholder="e.g. Cosmic Cyclone"
             required
             maxLength={200}
-            value={name}
+            defaultValue={submittedValues?.name ?? initialValues?.name ?? ''}
           />
           <FieldError errors={state.fieldErrors?.name} />
         </label>
@@ -118,14 +115,15 @@ export default function LevelForm({
             autoComplete="off"
             className={inputClassName}
             name="slug"
+            ref={slugInputRef}
             readOnly
             required
             maxLength={100}
-            value={slug}
+            defaultValue={submittedValues?.slug ?? initialValues?.slug ?? ''}
             placeholder="No need to edit this manually!"
           />
           <p className="mt-2 text-xs font-normal text-[#8c97b2]">
-            This will become the URL: /levels/{slug || '[slug]'}
+            This will become the URL: /levels/{submittedValues?.slug ?? initialValues?.slug ?? '[slug]'}. If it is already taken, the publisher name will be appended automatically.
           </p>
           <FieldError errors={state.fieldErrors?.slug} />
         </label>
@@ -138,7 +136,7 @@ export default function LevelForm({
             disabled={typeLocked}
             name="type"
             onChange={(event) => setType(event.target.value as LevelType)}
-            value={type}
+            defaultValue={submittedValues?.type ?? type}
           >
             <option value="Classic">Classic</option>
             <option value="Platformer">Platformer</option>
@@ -154,7 +152,7 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Status
-          <select autoComplete="off" className={inputClassName} name="status" defaultValue={initialValues?.status ?? 'ACTIVE'}>
+          <select autoComplete="off" className={inputClassName} name="status" defaultValue={submittedValues?.status ?? initialValues?.status ?? 'ACTIVE'}>
             <option value="ACTIVE">Active</option>
             <option value="ARCHIVED">Archived</option>
           </select>
@@ -163,7 +161,7 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Proposed rank
-          <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue={initialValues?.rank ?? 1} placeholder="e.g. 67" />
+          <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue={submittedValues?.rank ?? initialValues?.rank ?? 1} placeholder="e.g. 67" />
           <p className="mt-2 text-xs font-normal text-[#8c97b2]">
             {typeLocked
               ? 'If changed, the ranks of other levels will be adjusted automatically!'
@@ -178,12 +176,12 @@ export default function LevelForm({
         <div className="flex flex-col justify-end gap-3 pb-1">
           <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
             <input autoComplete="off" type="hidden" name="demoted" value="false" />
-            <input autoComplete="off" defaultChecked={initialValues?.demoted ?? false} className="h-4 w-4 accent-[#9c8cff]" name="demoted" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={submittedValues?.demoted === 'true' || (submittedValues?.demoted === undefined && (initialValues?.demoted ?? false))} className="h-4 w-4 accent-[#9c8cff]" name="demoted" type="checkbox" value="true" />
             Demoted
           </label>
           <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
             <input autoComplete="off" type="hidden" name="unrated" value="false" />
-            <input autoComplete="off" defaultChecked={initialValues?.unrated ?? false} className="h-4 w-4 accent-[#9c8cff]" name="unrated" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={submittedValues?.unrated === 'true' || (submittedValues?.unrated === undefined && (initialValues?.unrated ?? false))} className="h-4 w-4 accent-[#9c8cff]" name="unrated" type="checkbox" value="true" />
             Unrated
           </label>
         </div>
@@ -199,37 +197,37 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Published by
-          <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} defaultValue={initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" />
+          <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} defaultValue={submittedValues?.publishedBy ?? initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" />
           <FieldError errors={state.fieldErrors?.publishedBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Created by
-          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (this field is optional)"/>
+          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (this field is optional)"/>
           <FieldError errors={state.fieldErrors?.createdBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Verified by
-          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (this field is optional)" />
+          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (this field is optional)" />
           <FieldError errors={state.fieldErrors?.verifiedBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Level Description (copied from in-game)
-          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (this field is optional)" />
+          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (this field is optional)" />
           <FieldError errors={state.fieldErrors?.description} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Thumbnail URL
-          <input autoComplete="off" className={inputClassName} name="thumbnailUrl" type="url" defaultValue={initialValues?.thumbnailUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)"/>
+          <input autoComplete="off" className={inputClassName} name="thumbnailUrl" type="url" defaultValue={submittedValues?.thumbnailUrl ?? initialValues?.thumbnailUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)"/>
           <FieldError errors={state.fieldErrors?.thumbnailUrl} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           External URL
-          <input autoComplete="off" className={inputClassName} name="externalUrl" type="url" defaultValue={initialValues?.externalUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)" />
+          <input autoComplete="off" className={inputClassName} name="externalUrl" type="url" defaultValue={submittedValues?.externalUrl ?? initialValues?.externalUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)" />
           <FieldError errors={state.fieldErrors?.externalUrl} />
         </label>
       </section>

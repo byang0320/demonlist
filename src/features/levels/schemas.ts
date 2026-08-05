@@ -72,3 +72,31 @@ export type LevelFields = z.infer<typeof levelFieldsSchema>
 export type CreateLevelInput = z.infer<typeof createLevelSchema>
 export type UpdateLevelInput = z.infer<typeof updateLevelSchema>
 export type MoveLevelInput = z.infer<typeof moveLevelSchema>
+
+export type LevelFormSubmittedValues = Partial<Record<keyof CreateLevelInput, string>>
+
+const levelFormFields: (keyof CreateLevelInput)[] = [
+  'name',
+  'slug',
+  'rank',
+  'type',
+  'demoted',
+  'unrated',
+  'publishedBy',
+  'createdBy',
+  'verifiedBy',
+  'description',
+  'thumbnailUrl',
+  'externalUrl',
+  'status',
+]
+
+export function getLevelFormSubmittedValues(formData: FormData): LevelFormSubmittedValues {
+  return Object.fromEntries(
+    levelFormFields.flatMap((field) => {
+      const fieldValues = formData.getAll(field)
+      const value = fieldValues[fieldValues.length - 1]
+      return typeof value === 'string' ? [[field, value]] : []
+    }),
+  ) as LevelFormSubmittedValues
+}
