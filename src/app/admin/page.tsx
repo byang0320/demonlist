@@ -66,6 +66,24 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
         </section>
+
+        <section className="mt-8" aria-labelledby="completion-management-heading">
+          <h2 id="completion-management-heading" className="mb-4 text-2xl font-bold sm:text-3xl">Completion management</h2>
+          <p className="-mt-2 mb-4 text-sm text-[#8c97b2]">
+            Before you create a record, make sure that both the level you beat and your player profile have already been created. See above.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/admin/completions" className={actionLinkClassName}>
+              View/Edit Completions
+            </Link>
+            <Link
+              href="/admin/completions/new"
+              className="flex min-h-20 items-center justify-center rounded-2xl border border-[#c6beff] bg-[#9c8cff] px-5 py-4 text-center text-sm font-bold text-[#0b0d18] no-underline shadow-lg shadow-[#9c8cff]/10 transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 sm:text-base"
+            >
+              + Create New Completion
+            </Link>
+          </div>
+        </section>
       </div>
     </main>
   )

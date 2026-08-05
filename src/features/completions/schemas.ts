@@ -24,4 +24,29 @@ export const addCompletionSchema = z.object({
   notes: optionalText,
 })
 
+export const updateCompletionSchema = addCompletionSchema.extend({
+  id: z.string().trim().min(1, 'Completion ID is required'),
+})
+
 export type AddCompletionInput = z.infer<typeof addCompletionSchema>
+export type UpdateCompletionInput = z.infer<typeof updateCompletionSchema>
+
+export type CompletionFormSubmittedValues = Partial<Record<keyof AddCompletionInput, string>>
+
+const completionFormFields: (keyof AddCompletionInput)[] = [
+  'playerId',
+  'levelId',
+  'times',
+  'completedAt',
+  'videoUrl',
+  'notes',
+]
+
+export function getCompletionFormSubmittedValues(formData: FormData): CompletionFormSubmittedValues {
+  return Object.fromEntries(
+    completionFormFields.flatMap((field) => {
+      const value = formData.get(field)
+      return typeof value === 'string' ? [[field, value]] : []
+    }),
+  ) as CompletionFormSubmittedValues
+}
