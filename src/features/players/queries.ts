@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db'
 
-export type PlayerCompletionSort = 'alphabetical' | 'date'
+export type PlayerCompletionSort = 'rank' | 'alphabetical' | 'date'
 
 const levelNameCollator = new Intl.Collator('en', {
   sensitivity: 'base',
@@ -67,7 +67,11 @@ export function getPlayerBySlugWithLevels(
 
     const completions = [...player.completions]
 
-    if (sort === 'date') {
+    if (sort === 'rank') {
+      completions.sort((left, right) => {
+        return left.level.rank - right.level.rank || compareLevelCompletions(left, right)
+      })
+    } else if (sort === 'date') {
       completions.sort((left, right) => {
         const leftDate = left.completedAt?.getTime() ?? Number.POSITIVE_INFINITY
         const rightDate = right.completedAt?.getTime() ?? Number.POSITIVE_INFINITY

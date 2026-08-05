@@ -1,7 +1,7 @@
-import { DemonList } from '@/components/public/demon-list'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default function PemonListPage() {
-  return <DemonList title="Stream VC Pemonlist" type="Platformer" />
+  redirect('/demonlist?type=platformer')
 }

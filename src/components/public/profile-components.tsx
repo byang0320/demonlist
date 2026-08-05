@@ -1,11 +1,14 @@
 import Link from 'next/link'
+import type { LevelType } from '@/features/levels/queries'
 
 type PlayerInfoCardsProps = {
   type: 'player'
   completionCount: number
+  levelType: LevelType
   hardestLevel: {
     name: string
     slug: string
+    rank: number
   } | null
 }
 
@@ -19,7 +22,7 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
   if (props.type === 'player') {
     return (
       <div className="grid gap-3 border-t border-white/10 p-5 sm:grid-cols-2 sm:p-8">
-        <InfoCard label="Total completions">
+        <InfoCard label={`Total ${props.levelType} completions`}>
           <p className="mt-2 text-3xl font-bold tracking-[-0.05em] text-white">
             {props.completionCount}
           </p>
@@ -30,13 +33,18 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
             className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
           >
             <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
-              Hardest Classic level completed
+              Hardest {props.levelType} Level Completed
             </p>
-            <p className="mt-2 break-words text-3xl font-bold leading-tight">{props.hardestLevel.name}</p>
+            <p className="mt-2 break-words text-3xl font-bold leading-tight">
+              <span className="text-[#c6beff]">{props.hardestLevel.rank}</span>{' '}
+              {props.hardestLevel.name}
+            </p>
           </Link>
         ) : (
-          <InfoCard label="Hardest Classic level completed">
-            <p className="mt-2 text-lg font-semibold text-[#59627b]">No Classic completions yet</p>
+          <InfoCard label={`Hardest ${props.levelType} Level Completed`}>
+            <p className="mt-2 text-lg font-semibold text-[#59627b]">
+              No {props.levelType} completions yet
+            </p>
           </InfoCard>
         )}
       </div>
@@ -118,8 +126,8 @@ export function CompletionTable(props: CompletionTableProps) {
           <table className="w-full min-w-145 border-collapse text-left">
             <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
               <tr>
+                <th className="w-20 px-5 py-4 font-semibold">Rank</th>
                 <th className="px-5 py-4 font-semibold">Level</th>
-                <th className="px-5 py-4 font-semibold">Type</th>
                 <th className="px-5 py-4 text-right font-semibold">
                   <Link
                     href={props.dateSortHref}
@@ -135,6 +143,9 @@ export function CompletionTable(props: CompletionTableProps) {
             <tbody className="divide-y divide-white/10">
               {props.completions.map((completion) => (
                 <tr key={completion.level.id} className="group relative transition hover:bg-white/[0.03]">
+                  <td className="px-5 py-4 text-2xl font-extrabold tracking-[-0.06em] text-[#c6beff]">
+                    {completion.level.rank}
+                  </td>
                   <td className="px-5 py-4">
                     <Link
                       href={`/levels/${completion.level.slug}`}
@@ -146,11 +157,6 @@ export function CompletionTable(props: CompletionTableProps) {
                         <span className="truncate">{completion.level.name}</span>
                       </span>
                     </Link>
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="rounded-full bg-[#9c8cff]/15 px-2 py-1 text-xs font-bold uppercase tracking-[0.04em] text-[#c6beff]">
-                      {completion.level.type}
-                    </span>
                   </td>
                   <td className="whitespace-nowrap px-5 py-4 text-right text-sm text-[#b9c2d8]">
                     {formatCompletionDate(completion.completedAt)}

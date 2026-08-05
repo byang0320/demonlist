@@ -76,11 +76,19 @@ export function getLevelBySlugWithPlayers(slug: string) {
             },
           },
         },
-        orderBy: {
-          player: {
-            name: 'asc',
+        orderBy: [
+          {
+            completedAt: {
+              sort: 'asc',
+              nulls: 'last',
+            },
           },
-        },
+          {
+            player: {
+              name: 'asc',
+            },
+          },
+        ],
       },
       _count: {
         select: {

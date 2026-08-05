@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
 import { listRankedLevels, type LevelType } from '@/features/levels/queries'
+import { DemonListToggle } from '@/components/public/demon-list-toggle'
 
 export type RankedLevel = Awaited<ReturnType<typeof listRankedLevels>>[number]
 
@@ -116,15 +118,32 @@ export function LevelCard({ level, admin = false }: { level: RankedLevel; admin?
 }
 
 export async function DemonList({
-  title,
-  type,
+  initialType = 'Classic',
   admin = false,
 }: {
-  title: string
-  type: LevelType
+  initialType?: LevelType
   admin?: boolean
 }) {
-  const levels = await listRankedLevels(type)
+  const [classicLevels, platformerLevels] = await Promise.all([
+    listRankedLevels('Classic'),
+    listRankedLevels('Platformer'),
+  ])
+
+  const listPanel = (type: LevelType, levels: RankedLevel[]): ReactNode => (
+    <section aria-label={`${type} demonlist`}>
+      {levels.length === 0 ? (
+        <div className="grid min-h-64 place-items-center content-center gap-2 rounded-2xl border border-dashed border-white/10 text-center text-[#8c97b2]">
+          <div className="text-[#c6beff]"><LevelPlaceholder /></div>
+          <h2 className="m-0 text-lg font-semibold text-white">No ranked levels yet</h2>
+          <p className="m-0">The list will appear here once levels have been added.</p>
+        </div>
+      ) : (
+        <ol className="m-0 grid list-none gap-3 p-0" aria-label={`${type} ranked demon levels`}>
+          {levels.map((level) => <LevelCard key={level.id} level={level} admin={admin} />)}
+        </ol>
+      )}
+    </section>
+  )
 
   return (
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
@@ -137,31 +156,17 @@ export async function DemonList({
         </Link>
         <header className="flex flex-col items-start justify-between gap-5 pb-6 pt-4 sm:flex-row sm:items-end sm:gap-8 sm:pb-9">
           <div>
-            <h1 className="text-5xl font-bold leading-[0.95] sm:text-7xl">{title}</h1>
+            <h1 className="text-5xl font-bold leading-[0.95] sm:text-7xl">Stream VC Demonlist</h1>
           </div>
-          <p className="mb-1 flex-1 text-sm text-[#8c97b2] sm:flex-none sm:text-right">
-            <span className="mr-1 text-4xl font-bold tracking-[-0.05em] text-white sm:block">
-              {levels.length}
-            </span>{' '}
-            {levels.length === 1 ? `placed ${type} level` : `placed ${type} levels`}
-          </p>
         </header>
-
-        {levels.length === 0 ? (
-          <div className="grid min-h-64 place-items-center content-center gap-2 rounded-2xl border border-dashed border-white/10 text-center text-[#8c97b2]">
-            <div className="text-[#c6beff]">
-              <LevelPlaceholder />
-            </div>
-            <h2 className="m-0 text-lg font-semibold text-white">No ranked levels yet</h2>
-            <p className="m-0">The list will appear here once levels have been added.</p>
-          </div>
-        ) : (
-          <ol className="m-0 grid list-none gap-3 p-0" aria-label="Ranked demon levels">
-            {levels.map((level) => (
-              <LevelCard key={level.id} level={level} admin={admin} />
-            ))}
-          </ol>
-        )}
+        <DemonListToggle
+          initialType={initialType}
+          classicCount={classicLevels.length}
+          platformerCount={platformerLevels.length}
+        >
+          {listPanel('Classic', classicLevels)}
+          {listPanel('Platformer', platformerLevels)}
+        </DemonListToggle>
       </div>
     </main>
   )

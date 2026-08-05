@@ -5,7 +5,9 @@ import {
   getPlayerBySlugWithLevels,
   type PlayerCompletionSort,
 } from '@/features/players/queries'
+import { PlayerCompletionToggle } from '@/components/public/player-completion-toggle'
 import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
+import type { LevelType } from '@/features/levels/queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,23 +37,26 @@ export default async function PlayerProfilePage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ sort?: string }>
+  searchParams: Promise<{ sort?: string; type?: string }>
 }) {
   const { slug } = await params
-  const requestedSort = (await searchParams).sort
-  const sort: PlayerCompletionSort = requestedSort === 'date' ? 'date' : 'alphabetical'
+  const requestedParams = await searchParams
+  const requestedSort = requestedParams.sort
+  const sort: PlayerCompletionSort = requestedSort === 'date'
+    ? 'date'
+    : requestedSort === 'alphabetically' || requestedSort === 'alphabetical'
+      ? 'alphabetical'
+      : 'rank'
+  const levelType: LevelType = requestedParams.type === 'platformer' ? 'Platformer' : 'Classic'
   const player = await getPlayerBySlugWithLevels(slug, sort)
 
   if (!player) {
     notFound()
   }
 
-  const hardestLevel = player.completions.reduce<typeof player.completions[number] | null>(
+  const completions = player.completions.filter((completion) => completion.level.type === levelType)
+  const hardestLevel = completions.reduce<typeof completions[number] | null>(
     (hardest, completion) => {
-      if (completion.level.type !== 'Classic') {
-        return hardest
-      }
-
       if (!hardest || completion.level.rank < hardest.level.rank) {
         return completion
       }
@@ -61,8 +66,20 @@ export default async function PlayerProfilePage({
     null,
   )
 
-  const alphabeticalSortHref = `/players/${player.slug}`
-  const dateSortHref = `/players/${player.slug}?sort=date`
+  const typeQuery = levelType === 'Platformer' ? 'type=platformer' : ''
+  const sortHref = (nextSort: PlayerCompletionSort) => {
+    const sortQuery = nextSort === 'rank'
+      ? ''
+      : `sort=${nextSort === 'alphabetical' ? 'alphabetically' : nextSort}`
+    const query = [typeQuery, sortQuery]
+      .filter(Boolean)
+      .join('&')
+
+    return `/players/${player.slug}${query ? `?${query}` : ''}`
+  }
+  const rankSortHref = sortHref('rank')
+  const alphabeticalSortHref = sortHref('alphabetical')
+  const dateSortHref = sortHref('date')
 
   return (
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
@@ -78,7 +95,7 @@ export default async function PlayerProfilePage({
           <div className="grid gap-6 p-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-8 sm:p-8">
             <PlayerAvatar name={player.name} avatarUrl={player.avatarUrl} />
             <div className="min-w-0">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[#c6beff]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.10em] text-[#c6beff]">
                 Player profile
               </p>
               <h1 className="break-words text-4xl font-bold leading-none sm:text-6xl">
@@ -100,10 +117,22 @@ export default async function PlayerProfilePage({
             </div>
           </div>
 
+          <PlayerCompletionToggle
+            initialType={levelType}
+            classicCount={player.completions.filter((completion) => completion.level.type === 'Classic').length}
+            platformerCount={player.completions.filter((completion) => completion.level.type === 'Platformer').length}
+            sort={sort}
+          />
+
           <ProfileInfoCards
             type="player"
-            completionCount={player.completions.length}
-            hardestLevel={hardestLevel?.level ?? null}
+            completionCount={completions.length}
+            levelType={levelType}
+            hardestLevel={hardestLevel ? {
+              name: hardestLevel.level.name,
+              slug: hardestLevel.level.slug,
+              rank: hardestLevel.level.rank,
+            } : null}
           />
         </header>
 
@@ -111,11 +140,17 @@ export default async function PlayerProfilePage({
           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl font-bold sm:text-3xl">
-                Completed Levels
+                Completed {levelType} Levels
               </h2>
             </div>
             <div className="flex items-center gap-2 text-sm text-[#8c97b2]">
               <span>Sort by</span>
+              <Link
+                href={rankSortHref}
+                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'rank' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
+              >
+                rank
+              </Link>
               <Link
                 href={alphabeticalSortHref}
                 className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'alphabetical' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
@@ -132,14 +167,14 @@ export default async function PlayerProfilePage({
             </div>
           </div>
 
-          {player.completions.length === 0 ? (
+          {completions.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
-              This player has no completion records yet.
+              This player has no {levelType.toLowerCase()} completion records yet.
             </div>
           ) : (
             <CompletionTable
               type="player"
-              completions={player.completions}
+              completions={completions}
               dateSortHref={dateSortHref}
             />
           )}

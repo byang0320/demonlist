@@ -27,8 +27,8 @@ export default async function HomePage() {
         </header>
 
         <section className="mt-5 grid gap-3 lg:grid-cols-2" aria-label="Demonlist statistics">
-          <LevelListSummary title="Demonlist" href="/demonlist" stats={stats.classic} />
-          <LevelListSummary title="Pemonlist" href="/pemonlist" stats={stats.platformer} />
+          <LevelListSummary title="Classic Demonlist" href="/demonlist" stats={stats.classic} />
+          <LevelListSummary title="Platformer Demonlist" href="/demonlist?type=platformer" stats={stats.platformer} />
         </section>
 
         <section className="mt-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">

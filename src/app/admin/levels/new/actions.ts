@@ -45,9 +45,7 @@ export async function createLevelAction(
 
   revalidatePath('/')
   revalidatePath('/demonlist')
-  revalidatePath('/pemonlist')
   revalidatePath('/admin/demonlist')
-  revalidatePath('/admin/pemonlist')
 
-  redirect(createdLevel.type === 'Classic' ? '/admin/demonlist' : '/admin/pemonlist')
+  redirect(createdLevel.type === 'Classic' ? '/admin/demonlist' : '/admin/demonlist?type=platformer')
 }

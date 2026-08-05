@@ -43,10 +43,8 @@ export async function updateLevelAction(
 
   revalidatePath('/')
   revalidatePath('/demonlist')
-  revalidatePath('/pemonlist')
   revalidatePath(`/levels/${updatedLevel.slug}`)
   revalidatePath('/admin/demonlist')
-  revalidatePath('/admin/pemonlist')
 
-  redirect(updatedLevel.type === 'Classic' ? '/admin/demonlist' : '/admin/pemonlist')
+  redirect(updatedLevel.type === 'Classic' ? '/admin/demonlist' : '/admin/demonlist?type=platformer')
 }

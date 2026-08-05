@@ -40,10 +40,10 @@ export default async function LevelProfilePage({
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
       <div className="mx-auto w-full max-w-280">
         <Link
-          href={level.type === "Classic" ? "/demonlist" : "/pemonlist"}
+          href={level.type === "Classic" ? "/demonlist" : "/demonlist?type=platformer"}
           className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
         >
-          <span aria-hidden="true">←</span> Back to {level.type === "Classic" ? "Demonlist" : "Pemonlist"}
+          <span aria-hidden="true">←</span> Back to {level.type === "Classic" ? "Demonlist" : "Platformer Demonlist"}
         </Link>
 
         <header className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20">
