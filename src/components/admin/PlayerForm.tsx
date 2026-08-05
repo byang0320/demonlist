@@ -144,7 +144,7 @@ export default function PlayerForm({
             placeholder="Paste an image link... (to be changed) (optional)"
           />
           <p className="mt-2 text-xs font-normal leading-5 text-[#8c97b2]">
-            Any image link from the internet will work, but I&apos;ve found that Twitter has the highest quality. To use your Twitter profile picture, navigate to your Twitter profile, right click on the profile picture and click &quot;Copy image address&quot;. In the future, I might add the option to upload your own profile picture here... there just isn't enough database storage space to currently do that.
+            Any image link from the internet will work, but I&apos;ve found that Twitter has the highest quality. To use your Twitter profile picture, navigate to your Twitter profile, right click on the profile picture and click &quot;Copy image address&quot;. In the future, I might add the option to upload your own profile picture here... there just isn&apos;t enough database storage space to currently do that.
           </p>
           <FieldError errors={state.fieldErrors?.avatarUrl} />
         </label>
