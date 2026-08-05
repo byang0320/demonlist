@@ -102,7 +102,7 @@ export default async function PlayerProfilePage({
                 {player.name}
               </h1>
               <p className="mt-5 max-w-2xl whitespace-pre-wrap text-base leading-7 text-[#b9c2d8]">
-                {player.bio || 'No biography has been added for this player yet.'}
+                {player.bio || `No biography has been added for ${player.name} yet.`}
               </p>
               {player.externalUrl && (
                 <a
@@ -169,7 +169,7 @@ export default async function PlayerProfilePage({
 
           {completions.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
-              This player has no {levelType.toLowerCase()} completion records yet.
+              {player.name} has no {levelType} completion records yet.
             </div>
           ) : (
             <CompletionTable

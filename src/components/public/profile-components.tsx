@@ -220,7 +220,7 @@ export function CompletionTable(props: CompletionTableProps) {
                         rel="noreferrer"
                         className="text-sm font-semibold text-[#c6beff] underline decoration-[#9c8cff]/50 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
                       >
-                        Watch video ↗
+                        YouTube ↗
                       </a>
                     ) : (
                       <span className="text-sm text-[#59627b]">—</span>

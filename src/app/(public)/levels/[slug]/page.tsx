@@ -108,7 +108,7 @@ export default async function LevelProfilePage({
 
           {level.completions.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
-              No completion records have been added yet.
+              No completion records have been added yet. Check back very soon...
             </div>
           ) : (
             <CompletionTable type="level" completions={level.completions} />
