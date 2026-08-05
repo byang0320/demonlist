@@ -1,0 +1,3 @@
+ALTER TABLE "Player"
+ADD COLUMN "country1" TEXT,
+ADD COLUMN "country2" TEXT;

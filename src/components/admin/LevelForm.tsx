@@ -59,6 +59,7 @@ export default function LevelForm({
 }) {
   const [state, formAction, pending] = useActionState(action, initialState)
   const [type, setType] = useState<LevelType>(initialValues?.type ?? 'Classic')
+  const [slugPreview, setSlugPreview] = useState(initialValues?.slug ?? '')
   const maxRank = maxRanks[type]
   const submittedValues = state.values
   const slugInputRef = useRef<HTMLInputElement>(null)
@@ -97,8 +98,10 @@ export default function LevelForm({
             className={inputClassName}
             name="name"
             onChange={(event) => {
+              const nextSlug = slugify(event.target.value)
+              setSlugPreview(nextSlug)
               if (slugInputRef.current) {
-                slugInputRef.current.value = slugify(event.target.value)
+                slugInputRef.current.value = nextSlug
               }
             }}
             placeholder="e.g. Cosmic Cyclone"
@@ -123,7 +126,7 @@ export default function LevelForm({
             placeholder="No need to edit this manually!"
           />
           <p className="mt-2 text-xs font-normal text-[#8c97b2]">
-            This will become the URL: /levels/{submittedValues?.slug ?? initialValues?.slug ?? '[slug]'}. If it is already taken, the publisher name will be appended automatically.
+            This will become the URL: /levels/{submittedValues?.slug ?? (slugPreview || '[slug]')}. If it is already taken, the publisher name will be appended automatically.
           </p>
           <FieldError errors={state.fieldErrors?.slug} />
         </label>
