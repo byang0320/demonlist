@@ -2,6 +2,17 @@ import { prisma } from '@/lib/db'
 
 export type LevelType = 'Classic' | 'Platformer'
 
+export function getNextAvailableRank(type: LevelType) {
+  return prisma.level
+    .count({
+      where: {
+        status: 'ACTIVE',
+        type,
+      },
+    })
+    .then((count) => count + 1)
+}
+
 export function listRankedLevels(type: LevelType) {
   return prisma.level.findMany({
     where: {

@@ -10,7 +10,17 @@ const requiredText = (label: string, max: number) =>
   z.string().trim().min(1, `${label} is required`).max(max)
 
 const optionalBoolean = z.preprocess(
-  (value) => (value === '' || value === undefined ? false : value),
+  (value) => {
+    if (value === '' || value === undefined || value === false || value === 'false') {
+      return false
+    }
+
+    if (value === true || value === 'true' || value === 'on') {
+      return true
+    }
+
+    return value
+  },
   z.boolean().default(false),
 )
 

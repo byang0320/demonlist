@@ -2,10 +2,76 @@ import { Prisma } from '@prisma/client'
 
 import { requireAdmin } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import type { CreateLevelInput } from '@/features/levels/schemas'
 
 type ReorderableLevel = {
   id: string
   rank: number
+}
+
+/**
+ * Create a level and insert it into the rank sequence for its type.
+ * Active levels use the proposed rank; archived levels are appended after the
+ * type's existing ranks so they do not create gaps in a public list.
+ */
+export async function createLevel(input: CreateLevelInput) {
+  return prisma.$transaction(async (tx) => {
+    const levels = await tx.level.findMany({
+      where: { type: input.type },
+      select: {
+        id: true,
+        rank: true,
+        status: true,
+      },
+      orderBy: { rank: 'asc' },
+    })
+
+    const activeLevels = levels.filter((level) => level.status === 'ACTIVE')
+    const activeRanks = activeLevels.map((level, index) => index + 1)
+
+    if (activeLevels.some((level, index) => level.rank !== activeRanks[index])) {
+      throw new Error('Active levels must have contiguous ranks before creating a level')
+    }
+
+    const rank = input.status === 'ACTIVE' ? input.rank : levels.length + 1
+
+    if (input.status === 'ACTIVE' && rank > activeLevels.length + 1) {
+      throw new Error(`Rank must be between 1 and ${activeLevels.length + 1}`)
+    }
+
+    const levelsToShift = levels.filter((level) => level.rank >= rank)
+
+    if (levelsToShift.length > 0) {
+      // Move all rows in this type into a temporary negative range first so
+      // the composite unique constraint cannot be hit during the shift.
+      for (const [index, level] of levels.entries()) {
+        await tx.level.update({
+          where: { id: level.id },
+          data: { rank: -(index + 1) },
+        })
+      }
+
+      for (const level of levels) {
+        await tx.level.update({
+          where: { id: level.id },
+          data: { rank: level.rank >= rank ? level.rank + 1 : level.rank },
+        })
+      }
+    }
+
+    return tx.level.create({
+      data: {
+        ...input,
+        rank,
+      },
+      select: {
+        id: true,
+        slug: true,
+        type: true,
+        rank: true,
+      },
+    })
+  })
 }
 
 /**
