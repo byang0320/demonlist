@@ -41,8 +41,12 @@ export function getCompletionForAdmin(id: string) {
   })
 }
 
-export function listCompletionsForAdmin() {
+export function listCompletionsForAdmin(filters?: { levelId?: string; playerId?: string }) {
   return prisma.completion.findMany({
+    where: {
+      ...(filters?.levelId ? { levelId: filters.levelId } : {}),
+      ...(filters?.playerId ? { playerId: filters.playerId } : {}),
+    },
     select: {
       id: true,
       createdAt: true,

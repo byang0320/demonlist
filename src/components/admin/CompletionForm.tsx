@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useMemo, useState } from 'react'
+import { useActionState, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   createCompletionAction,
@@ -45,7 +45,7 @@ function FieldError({ errors }: { errors?: string[] }) {
   return <p className="mt-2 text-sm text-red-300">{errors[0]}</p>
 }
 
-function SearchDropdown({
+export function SearchDropdown({
   label,
   name,
   options,
@@ -54,6 +54,7 @@ function SearchDropdown({
   onSearchChange,
   onSelect,
   onFocus,
+  onClose,
   open,
   renderOption,
   renderSelected,
@@ -67,11 +68,29 @@ function SearchDropdown({
   onSearchChange: (value: string) => void
   onSelect: (id: string) => void
   onFocus: () => void
+  onClose: () => void
   open: boolean
   renderOption: (option: { id: string }) => React.ReactNode
   renderSelected: (id: string) => string
   error?: string[]
 }) {
+  const containerRef = useRef<HTMLLabelElement>(null)
+
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [onClose, open])
+
   const filteredOptions = useMemo(() => {
     const query = search.trim().toLowerCase()
     if (!query) {
@@ -84,7 +103,7 @@ function SearchDropdown({
   }, [options, renderSelected, search])
 
   return (
-    <label className="relative text-sm font-semibold text-[#d7dcf0]">
+    <label ref={containerRef} className="relative text-sm font-semibold text-[#d7dcf0]">
       {label}
       <input
         autoComplete="off"
@@ -215,6 +234,7 @@ export default function CompletionForm({
               setLevelOpen(false)
             }}
             onFocus={() => setLevelOpen(true)}
+            onClose={() => setLevelOpen(false)}
             open={levelOpen}
             renderOption={(option) => {
               const level = levelById.get(option.id)
@@ -240,6 +260,7 @@ export default function CompletionForm({
               setPlayerOpen(false)
             }}
             onFocus={() => setPlayerOpen(true)}
+            onClose={() => setPlayerOpen(false)}
             open={playerOpen}
             renderOption={(option) => <span>{playerById.get(option.id)?.name}</span>}
             renderSelected={playerLabel}

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import CompletionFilters from '@/components/admin/CompletionFilters'
+import { getCompletionFormOptions } from '@/features/completions/queries'
 import { listCompletionsForAdmin } from '@/features/completions/queries'
 
 export const dynamic = 'force-dynamic'
@@ -17,8 +19,16 @@ function formatCompletionDate(date: Date | null) {
   }).format(date)
 }
 
-export default async function AdminCompletionsPage() {
-  const completions = await listCompletionsForAdmin()
+export default async function AdminCompletionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ levelId?: string; playerId?: string }>
+}) {
+  const { levelId, playerId } = await searchParams
+  const [{ levels, players }, completions] = await Promise.all([
+    getCompletionFormOptions(),
+    listCompletionsForAdmin({ levelId, playerId }),
+  ])
 
   return (
     <main className="min-h-screen bg-[#080b14] px-4 py-8 text-[#f4f6ff] sm:px-6 sm:py-12">
@@ -43,6 +53,13 @@ export default async function AdminCompletionsPage() {
             + Create New Completion
           </Link>
         </header>
+
+        <CompletionFilters
+          levels={levels}
+          players={players}
+          selectedLevelId={levelId}
+          selectedPlayerId={playerId}
+        />
 
         {completions.length > 0 ? (
           <div className="grid gap-3">
