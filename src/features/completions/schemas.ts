@@ -18,6 +18,7 @@ const optionalUrl = z.preprocess(
 export const addCompletionSchema = z.object({
   playerId: z.string().trim().min(1, 'Player is required'),
   levelId: z.string().trim().min(1, 'Level is required'),
+  times: z.coerce.number().int('Times must be a whole number').positive('Times must be greater than zero').default(1),
   completedAt: optionalDate,
   videoUrl: optionalUrl,
   notes: optionalText,

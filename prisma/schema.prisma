@@ -65,6 +65,7 @@ model Completion {
   id          String    @id @default(cuid())
   playerId    String
   levelId     String
+  times       Int       @default(1)
   completedAt DateTime?
   videoUrl    String?
   notes       String?
