@@ -72,6 +72,14 @@ export default async function HomePage() {
             <p className="m-0 text-sm text-[#8c97b2]">No Stream VC players yet. Strange...</p>
           )}
         </section>
+        <div className="mt-5 text-center">
+          <Link
+            href="/admin"
+            className="text-xs text-[#59627b] underline underline-offset-2 transition hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+          >
+            Admin
+          </Link>
+        </div>
       </div>
     </main>
   )

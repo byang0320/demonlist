@@ -13,10 +13,13 @@ export default async function AdminDashboardPage() {
   return (
     <main className="min-h-screen bg-[#080b14] px-4 py-8 text-[#f4f6ff] sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-280">
+        <Link
+          href="/"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+        >
+          <span aria-hidden="true">←</span> Back Home
+        </Link>
         <header className="mb-8">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[#c6beff]">
-            Control center
-          </p>
           <h1 className="m-0 text-4xl font-bold sm:text-6xl">Admin Dashboard</h1>
         </header>
 
@@ -70,7 +73,7 @@ export default async function AdminDashboardPage() {
         <section className="mt-8" aria-labelledby="completion-management-heading">
           <h2 id="completion-management-heading" className="mb-4 text-2xl font-bold sm:text-3xl">Completion management</h2>
           <p className="-mt-2 mb-4 text-sm text-[#8c97b2]">
-            Before you create a record, make sure that both the level you beat and your player profile have already been created. See above.
+            Before you create a record, make sure that both the level you beat and your player profile have already been created. Refer to the buttons above.
           </p>
           <div className="grid grid-cols-2 gap-3">
             <Link href="/admin/completions" className={actionLinkClassName}>

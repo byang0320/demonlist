@@ -22,10 +22,11 @@ export default async function AdminLayout({
 
   return (
     <>
-      <header className="flex items-center justify-between border-b border-white/10 bg-[#111725] px-5 py-4 text-[#f4f6ff]">
-        <span className="text-sm font-semibold">Demonlist Admin</span>
-        <AdminAuthControls />
-      </header>
+      <div className="pointer-events-none fixed right-4 top-4 z-50 sm:right-6 sm:top-6">
+        <div className="pointer-events-auto">
+          <AdminAuthControls />
+        </div>
+      </div>
       {children}
     </>
   )
