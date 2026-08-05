@@ -2,6 +2,22 @@ import { prisma } from '@/lib/db'
 
 export type PlayerCompletionSort = 'rank' | 'alphabetical' | 'date'
 
+export function getPlayerForAdminBySlug(slug: string) {
+  return prisma.player.findUnique({
+    where: { slug },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      bio: true,
+      avatarUrl: true,
+      externalUrl: true,
+      country1: true,
+      country2: true,
+    },
+  })
+}
+
 const levelNameCollator = new Intl.Collator('en', {
   sensitivity: 'base',
   numeric: false,

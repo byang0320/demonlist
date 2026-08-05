@@ -1,11 +1,30 @@
 import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/db'
-import type { CreatePlayerInput } from '@/features/players/schemas'
+import type { CreatePlayerInput, UpdatePlayerInput } from '@/features/players/schemas'
 
 export function createPlayer(input: CreatePlayerInput) {
   return prisma.player.create({
     data: input,
+    select: {
+      id: true,
+      slug: true,
+    },
+  })
+}
+
+export function updatePlayer(input: UpdatePlayerInput) {
+  return prisma.player.update({
+    where: { id: input.id },
+    data: {
+      name: input.name,
+      slug: input.slug,
+      bio: input.bio,
+      avatarUrl: input.avatarUrl,
+      externalUrl: input.externalUrl,
+      country1: input.country1,
+      country2: input.country2,
+    },
     select: {
       id: true,
       slug: true,
