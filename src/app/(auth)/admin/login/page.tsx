@@ -1,10 +1,17 @@
 'use client'
 
+import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 
 export default function AdminLoginPage() {
   return (
-    <main className="grid min-h-screen place-items-center bg-[#080b14] px-5 text-[#f4f6ff]">
+    <main className="relative grid min-h-screen place-items-center bg-[#080b14] px-5 text-[#f4f6ff]">
+      <Link
+        href="/"
+        className="absolute left-5 top-6 inline-flex items-center gap-2 text-sm font-semibold text-[#69738e] no-underline transition hover:text-[#b9c2d8] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+      >
+        <span aria-hidden="true">←</span> Back Home
+      </Link>
       <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#111725]/90 p-8 text-center shadow-2xl shadow-black/20">
         <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#c6beff]">
           Stream VC Demonlist
