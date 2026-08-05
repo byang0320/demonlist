@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation"
+
 export default function AdminLevelsPage() {
-  return <h1>Manage Levels</h1>
+  redirect("/admin");
 }
