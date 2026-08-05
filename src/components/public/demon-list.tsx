@@ -158,6 +158,14 @@ export async function DemonList({
           <div>
             <h1 className="text-5xl font-bold leading-[0.95] sm:text-7xl">Stream VC Demonlist</h1>
           </div>
+          {admin && (
+            <Link
+              href="/admin/levels/new"
+              className="inline-flex min-h-11 items-center rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+            >
+              + Create New Level
+            </Link>
+          )}
         </header>
         <DemonListToggle
           initialType={initialType}

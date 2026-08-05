@@ -10,11 +10,25 @@ export default async function AdminPlayersPage() {
   return (
     <main className="min-h-screen bg-[#080b14] px-4 py-8 text-[#f4f6ff] sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-280">
-        <header className="mb-8">
-          <h1 className="mt-3 text-4xl font-bold sm:text-6xl">Manage Players</h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-[#b9c2d8]">
-            View and edit Stream VC player profiles.
-          </p>
+        <Link
+          href="/admin"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+        >
+          <span aria-hidden="true">←</span> Back to Admin Panel
+        </Link>
+        <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="mt-3 text-4xl font-bold sm:text-6xl">Manage Players</h1>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#b9c2d8]">
+              View and edit Stream VC player profiles.
+            </p>
+          </div>
+          <Link
+            href="/admin/players/new"
+            className="inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto"
+          >
+            + Create New Player
+          </Link>
         </header>
 
         {players.length > 0 ? (

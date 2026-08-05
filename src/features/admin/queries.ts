@@ -1,10 +1,17 @@
 import { prisma } from '@/lib/db'
 
 export async function getAdminDashboardCounts() {
-  const [activeLevels, players, completions] = await Promise.all([
+  const [classicLevels, platformerLevels, players, completions] = await Promise.all([
     prisma.level.count({
       where: {
         status: 'ACTIVE',
+        type: 'Classic',
+      },
+    }),
+    prisma.level.count({
+      where: {
+        status: 'ACTIVE',
+        type: 'Platformer',
       },
     }),
     prisma.player.count(),
@@ -12,7 +19,10 @@ export async function getAdminDashboardCounts() {
   ])
 
   return {
-    activeLevels,
+    activeLevels: {
+      classic: classicLevels,
+      platformer: platformerLevels,
+    },
     players,
     completions,
   }
