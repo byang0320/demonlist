@@ -2,6 +2,38 @@ import { prisma } from '@/lib/db'
 
 export type PlayerCompletionSort = 'rank' | 'alphabetical' | 'date'
 
+export function listPlayersForAdmin() {
+  return prisma.player.findMany({
+    select: {
+      name: true,
+      slug: true,
+      avatarUrl: true,
+      _count: {
+        select: {
+          completions: true,
+        },
+      },
+    },
+    orderBy: { name: 'asc' },
+  }).then((players) => {
+    const collator = new Intl.Collator('en', {
+      sensitivity: 'base',
+      numeric: false,
+    })
+
+    return players.sort((left, right) => {
+      const leftStartsWithNumber = /^\d/.test(left.name)
+      const rightStartsWithNumber = /^\d/.test(right.name)
+
+      if (leftStartsWithNumber !== rightStartsWithNumber) {
+        return leftStartsWithNumber ? -1 : 1
+      }
+
+      return collator.compare(left.name, right.name)
+    })
+  })
+}
+
 export function getPlayerForAdminBySlug(slug: string) {
   return prisma.player.findUnique({
     where: { slug },
