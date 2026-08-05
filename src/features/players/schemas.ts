@@ -36,7 +36,10 @@ export const playerFieldsSchema = z.object({
   slug,
   bio: optionalText(5_000),
   avatarUrl: optionalUrl,
-  externalUrl: optionalUrl,
+  discordHandle: optionalText(100),
+  youtubeUrl: optionalUrl,
+  twitchUrl: optionalUrl,
+  twitterUrl: optionalUrl,
   country1: optionalCountry,
   country2: optionalCountry,
 }).superRefine((values, context) => {
@@ -74,7 +77,10 @@ const playerFormFields: (keyof CreatePlayerInput)[] = [
   'slug',
   'bio',
   'avatarUrl',
-  'externalUrl',
+  'discordHandle',
+  'youtubeUrl',
+  'twitchUrl',
+  'twitterUrl',
   'country1',
   'country2',
 ]

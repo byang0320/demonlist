@@ -43,7 +43,10 @@ export function getPlayerForAdminBySlug(slug: string) {
       slug: true,
       bio: true,
       avatarUrl: true,
-      externalUrl: true,
+      youtubeUrl: true,
+      twitchUrl: true,
+      discordHandle: true,
+      twitterUrl: true,
       country1: true,
       country2: true,
     },
@@ -86,7 +89,10 @@ export function getPlayerBySlugWithLevels(
       slug: true,
       bio: true,
       avatarUrl: true,
-      externalUrl: true,
+      youtubeUrl: true,
+      twitchUrl: true,
+      discordHandle: true,
+      twitterUrl: true,
       completions: {
         select: {
           times: true,

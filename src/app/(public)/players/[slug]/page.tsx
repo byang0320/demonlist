@@ -104,15 +104,29 @@ export default async function PlayerProfilePage({
               <p className="mt-5 max-w-2xl whitespace-pre-wrap text-base leading-7 text-[#b9c2d8]">
                 {player.bio || `No biography has been added for ${player.name} yet.`}
               </p>
-              {player.externalUrl && (
-                <a
-                  href={player.externalUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex rounded-xl border border-[#ae9dff]/30 px-4 py-3 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-                >
-                  Open external profile <span className="ml-2" aria-hidden="true">↗</span>
-                </a>
+              {(player.youtubeUrl || player.twitchUrl || player.discordHandle || player.twitterUrl) && (
+                <div className="mt-5 flex flex-wrap items-center gap-2">
+                  {player.discordHandle && (
+                    <span className="rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-[#b9c2d8]">
+                      Discord: {player.discordHandle}
+                    </span>
+                  )}
+                  {player.youtubeUrl && (
+                    <a href={player.youtubeUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25">
+                      YouTube ↗︎
+                    </a>
+                  )}
+                  {player.twitchUrl && (
+                    <a href={player.twitchUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25">
+                      Twitch ↗︎
+                    </a>
+                  )}
+                  {player.twitterUrl && (
+                    <a href={player.twitterUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25">
+                      Twitter ↗︎
+                    </a>
+                  )}
+                </div>
               )}
             </div>
           </div>

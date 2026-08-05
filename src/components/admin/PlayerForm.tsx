@@ -14,7 +14,10 @@ export type PlayerFormValues = {
   slug: string
   bio: string | null
   avatarUrl: string | null
-  externalUrl: string | null
+  youtubeUrl: string | null
+  twitchUrl: string | null
+  discordHandle: string | null
+  twitterUrl: string | null
   country1: string | null
   country2: string | null
 }
@@ -130,7 +133,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.bio} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Avatar URL
           <input
             autoComplete="off"
@@ -140,20 +143,63 @@ export default function PlayerForm({
             defaultValue={submittedValues?.avatarUrl ?? initialValues?.avatarUrl ?? ''}
             placeholder="Paste an image link... (to be changed) (optional)"
           />
+          <p className="mt-2 text-xs font-normal leading-5 text-[#8c97b2]">
+            Any image link from the internet will work, but I&apos;ve found that Twitter has the highest quality. To use your Twitter profile picture, navigate to your Twitter profile, right click on the profile picture and click &quot;Copy image address&quot;. In the future, I might add the option to upload your own profile picture here... there just isn't enough database storage space to currently do that.
+          </p>
           <FieldError errors={state.fieldErrors?.avatarUrl} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
-          External profile URL
+          Discord username
           <input
             autoComplete="off"
             className={inputClassName}
-            name="externalUrl"
-            type="url"
-            defaultValue={submittedValues?.externalUrl ?? initialValues?.externalUrl ?? ''}
-            placeholder="Paste a profile link... (to be changed) (optional)"
+            name="discordHandle"
+            type="text"
+            maxLength={100}
+            defaultValue={submittedValues?.discordHandle ?? initialValues?.discordHandle ?? ''}
+            placeholder="e.g. player.1234 (optional)"
           />
-          <FieldError errors={state.fieldErrors?.externalUrl} />
+          <FieldError errors={state.fieldErrors?.discordHandle} />
+        </label>
+
+        <label className="text-sm font-semibold text-[#d7dcf0]">
+          YouTube URL
+          <input
+            autoComplete="off"
+            className={inputClassName}
+            name="youtubeUrl"
+            type="url"
+            defaultValue={submittedValues?.youtubeUrl ?? initialValues?.youtubeUrl ?? ''}
+            placeholder="Paste a YouTube channel link... (optional)"
+          />
+          <FieldError errors={state.fieldErrors?.youtubeUrl} />
+        </label>
+
+        <label className="text-sm font-semibold text-[#d7dcf0]">
+          Twitch URL
+          <input
+            autoComplete="off"
+            className={inputClassName}
+            name="twitchUrl"
+            type="url"
+            defaultValue={submittedValues?.twitchUrl ?? initialValues?.twitchUrl ?? ''}
+            placeholder="Paste a Twitch channel link... (optional)"
+          />
+          <FieldError errors={state.fieldErrors?.twitchUrl} />
+        </label>
+
+        <label className="text-sm font-semibold text-[#d7dcf0]">
+          Twitter URL
+          <input
+            autoComplete="off"
+            className={inputClassName}
+            name="twitterUrl"
+            type="url"
+            defaultValue={submittedValues?.twitterUrl ?? initialValues?.twitterUrl ?? ''}
+            placeholder="Paste a Twitter/X profile link... (optional)"
+          />
+          <FieldError errors={state.fieldErrors?.twitterUrl} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">

@@ -22,7 +22,10 @@ export default async function EditPlayerPage({
     slug: player.slug,
     bio: player.bio,
     avatarUrl: player.avatarUrl,
-    externalUrl: player.externalUrl,
+    youtubeUrl: player.youtubeUrl,
+    twitchUrl: player.twitchUrl,
+    discordHandle: player.discordHandle,
+    twitterUrl: player.twitterUrl,
     country1: player.country1,
     country2: player.country2,
   }
