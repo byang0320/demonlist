@@ -67,7 +67,7 @@ export function LevelListSummary({ title, href, stats }: LevelListSummaryProps) 
       <div className="grid grid-cols-2 border-t border-white/10">
         <div className="p-5 sm:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">Total</p>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-4">
             <p className="m-0 text-4xl font-bold tracking-[-0.06em] text-white">
               {stats.totalCompletions}
             </p>
@@ -80,7 +80,7 @@ export function LevelListSummary({ title, href, stats }: LevelListSummaryProps) 
         </div>
         <div className="border-l border-white/10 p-5 sm:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">Unique</p>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-4">
             <p className="m-0 text-4xl font-bold tracking-[-0.06em] text-white">
               {stats.totalUniqueLevels}
             </p>
