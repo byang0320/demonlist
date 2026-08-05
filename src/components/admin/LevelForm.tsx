@@ -74,7 +74,7 @@ export default function LevelForm({
 
   useEffect(() => {
     if (state.formError || Object.keys(state.fieldErrors ?? {}).length > 0) {
-      window.scrollTo({ top: 0, behavior: 'instant' })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [state])
 
