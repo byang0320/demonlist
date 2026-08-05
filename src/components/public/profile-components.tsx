@@ -36,7 +36,7 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
               Hardest {props.levelType} Level Completed
             </p>
             <p className="mt-2 break-words text-3xl font-bold leading-tight">
-              <span className="text-[#c6beff]">{props.hardestLevel.rank}</span>{' '}
+              <span className="text-[#c6beff]">{props.hardestLevel.rank}.</span>{' '}
               {props.hardestLevel.name}
             </p>
           </Link>
@@ -85,6 +85,7 @@ function InfoCard({ label, children }: { label: string; children: React.ReactNod
 }
 
 type PlayerCompletion = {
+  times: number
   completedAt: Date | null
   videoUrl: string | null
   level: {
@@ -98,6 +99,7 @@ type PlayerCompletion = {
 }
 
 type LevelCompletion = {
+  times: number
   completedAt: Date | null
   videoUrl: string | null
   player: {
@@ -154,7 +156,10 @@ export function CompletionTable(props: CompletionTableProps) {
                     >
                       <span className="relative z-10 flex items-center gap-3 font-semibold text-white group-hover:text-[#c6beff]">
                         <LevelThumbnail url={completion.level.thumbnailUrl} />
-                        <span className="truncate">{completion.level.name}</span>
+                        <span className="truncate">
+                          {completion.level.name}
+                          {completion.times >= 2 ? ` (x${completion.times})` : ''}
+                        </span>
                       </span>
                     </Link>
                   </td>
@@ -205,7 +210,10 @@ export function CompletionTable(props: CompletionTableProps) {
                           name={completion.player.name}
                           avatarUrl={completion.player.avatarUrl}
                         />
-                        <span className="truncate">{completion.player.name}</span>
+                        <span className="truncate">
+                          {completion.player.name}
+                          {completion.times >= 2 ? ` (x${completion.times})` : ''}
+                        </span>
                       </span>
                     </Link>
                   </td>
