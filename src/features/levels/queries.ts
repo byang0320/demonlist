@@ -90,3 +90,25 @@ export function getLevelBySlugWithPlayers(slug: string) {
     },
   })
 }
+
+export function getLevelForAdminBySlug(slug: string) {
+  return prisma.level.findUnique({
+    where: { slug },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      rank: true,
+      type: true,
+      demoted: true,
+      unrated: true,
+      publishedBy: true,
+      createdBy: true,
+      verifiedBy: true,
+      description: true,
+      thumbnailUrl: true,
+      externalUrl: true,
+      status: true,
+    },
+  })
+}

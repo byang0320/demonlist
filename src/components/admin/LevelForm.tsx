@@ -4,12 +4,33 @@ import { useActionState, useEffect, useState } from 'react'
 
 import {
   createLevelAction,
-  type CreateLevelActionState,
+  type LevelActionState,
 } from '@/app/admin/levels/new/actions'
 
-const initialState: CreateLevelActionState = {}
+const initialState: LevelActionState = {}
 
 type LevelType = 'Classic' | 'Platformer'
+
+export type LevelFormValues = {
+  name: string
+  slug: string
+  rank: number
+  type: LevelType
+  demoted: boolean
+  unrated: boolean
+  publishedBy: string
+  createdBy: string | null
+  verifiedBy: string | null
+  description: string | null
+  thumbnailUrl: string | null
+  externalUrl: string | null
+  status: 'ACTIVE' | 'ARCHIVED'
+}
+
+type LevelFormAction = (
+  previousState: LevelActionState,
+  formData: FormData,
+) => Promise<LevelActionState>
 
 const inputClassName =
   'mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15'
@@ -34,13 +55,21 @@ function slugify(value: string) {
 
 export default function LevelForm({
   maxRanks,
+  action = createLevelAction,
+  initialValues,
+  submitLabel = 'Create',
+  typeLocked = false,
 }: {
   maxRanks: Record<LevelType, number>
+  action?: LevelFormAction
+  initialValues?: LevelFormValues
+  submitLabel?: string
+  typeLocked?: boolean
 }) {
-  const [state, formAction, pending] = useActionState(createLevelAction, initialState)
-  const [name, setName] = useState('')
-  const [type, setType] = useState<LevelType>('Classic')
-  const slug = slugify(name)
+  const [state, formAction, pending] = useActionState(action, initialState)
+  const [name, setName] = useState(initialValues?.name ?? '')
+  const [slug, setSlug] = useState(initialValues?.slug ?? '')
+  const [type, setType] = useState<LevelType>(initialValues?.type ?? 'Classic')
   const maxRank = maxRanks[type]
 
   useEffect(() => {
@@ -71,7 +100,10 @@ export default function LevelForm({
             autoComplete="off"
             className={inputClassName}
             name="name"
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              setName(event.target.value)
+              setSlug(slugify(event.target.value))
+            }}
             placeholder="e.g. Cosmic Cyclone"
             required
             maxLength={200}
@@ -103,6 +135,7 @@ export default function LevelForm({
           <select
             autoComplete="off"
             className={inputClassName}
+            disabled={typeLocked}
             name="type"
             onChange={(event) => setType(event.target.value as LevelType)}
             value={type}
@@ -110,12 +143,18 @@ export default function LevelForm({
             <option value="Classic">Classic</option>
             <option value="Platformer">Platformer</option>
           </select>
+          {typeLocked && <input autoComplete="off" name="type" type="hidden" value={type} />}
+          <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+            {typeLocked
+              ? 'You cannot change the level type retroactively. Delete this and create a new level if you need to change the type.'
+              : 'Make sure the correct level type is chosen; it cannot be changed later.'}
+          </p>
           <FieldError errors={state.fieldErrors?.type} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Status
-          <select autoComplete="off" className={inputClassName} name="status" defaultValue="ACTIVE">
+          <select autoComplete="off" className={inputClassName} name="status" defaultValue={initialValues?.status ?? 'ACTIVE'}>
             <option value="ACTIVE">Active</option>
             <option value="ARCHIVED">Archived</option>
           </select>
@@ -124,9 +163,11 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Proposed rank
-          <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue="1" placeholder="e.g. 67" />
+          <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue={initialValues?.rank ?? 1} placeholder="e.g. 67" />
           <p className="mt-2 text-xs font-normal text-[#8c97b2]">
-            Active levels at this rank and below will move down one position.
+            {typeLocked
+              ? 'If changed, the ranks of other levels will be adjusted automatically!'
+              : 'Active levels at this rank and below will move down one position.'}
           </p>
           <p className="mt-1 text-xs font-normal text-[#8c97b2]">
             This should be between 1 and {maxRank}
@@ -137,12 +178,12 @@ export default function LevelForm({
         <div className="flex flex-col justify-end gap-3 pb-1">
           <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
             <input autoComplete="off" type="hidden" name="demoted" value="false" />
-            <input autoComplete="off" className="h-4 w-4 accent-[#9c8cff]" name="demoted" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={initialValues?.demoted ?? false} className="h-4 w-4 accent-[#9c8cff]" name="demoted" type="checkbox" value="true" />
             Demoted
           </label>
           <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
             <input autoComplete="off" type="hidden" name="unrated" value="false" />
-            <input autoComplete="off" className="h-4 w-4 accent-[#9c8cff]" name="unrated" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={initialValues?.unrated ?? false} className="h-4 w-4 accent-[#9c8cff]" name="unrated" type="checkbox" value="true" />
             Unrated
           </label>
         </div>
@@ -158,37 +199,37 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Published by
-          <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} placeholder="e.g. APTeamOfficial" />
+          <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} defaultValue={initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" />
           <FieldError errors={state.fieldErrors?.publishedBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Created by
-          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} placeholder="e.g. Riot and more (this field is optional)"/>
+          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (this field is optional)"/>
           <FieldError errors={state.fieldErrors?.createdBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Verified by
-          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} placeholder="e.g. DoSh7t (this field is optional)" />
+          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (this field is optional)" />
           <FieldError errors={state.fieldErrors?.verifiedBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Level Description (copied from in-game)
-          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (this field is optional)" />
+          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (this field is optional)" />
           <FieldError errors={state.fieldErrors?.description} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Thumbnail URL
-          <input autoComplete="off" className={inputClassName} name="thumbnailUrl" type="url" placeholder="Paste a link... (to be changed) (this field is optional)"/>
+          <input autoComplete="off" className={inputClassName} name="thumbnailUrl" type="url" defaultValue={initialValues?.thumbnailUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)"/>
           <FieldError errors={state.fieldErrors?.thumbnailUrl} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           External URL
-          <input autoComplete="off" className={inputClassName} name="externalUrl" type="url" placeholder="Paste a link... (to be changed) (this field is optional)" />
+          <input autoComplete="off" className={inputClassName} name="externalUrl" type="url" defaultValue={initialValues?.externalUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)" />
           <FieldError errors={state.fieldErrors?.externalUrl} />
         </label>
       </section>
@@ -199,7 +240,7 @@ export default function LevelForm({
           type="submit"
           disabled={pending}
         >
-          {pending ? 'Creating…' : 'Create'}
+          {pending ? `${submitLabel}…` : submitLabel}
         </button>
       </div>
     </form>

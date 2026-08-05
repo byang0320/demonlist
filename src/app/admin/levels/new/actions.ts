@@ -7,15 +7,17 @@ import { createLevel } from '@/features/levels/actions'
 import { createLevelSchema, type CreateLevelInput } from '@/features/levels/schemas'
 import { requireAdmin } from '@/lib/auth'
 
-export type CreateLevelActionState = {
+export type LevelActionState = {
   fieldErrors?: Partial<Record<keyof CreateLevelInput, string[]>>
   formError?: string
 }
 
+export type CreateLevelActionState = LevelActionState
+
 export async function createLevelAction(
-  _previousState: CreateLevelActionState,
+  _previousState: LevelActionState,
   formData: FormData,
-): Promise<CreateLevelActionState> {
+): Promise<LevelActionState> {
   await requireAdmin()
 
   const parsed = createLevelSchema.safeParse(Object.fromEntries(formData.entries()))

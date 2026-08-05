@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 
 import { requireAdmin } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import type { CreateLevelInput } from '@/features/levels/schemas'
+import type { CreateLevelInput, UpdateLevelInput } from '@/features/levels/schemas'
 
 type ReorderableLevel = {
   id: string
@@ -63,6 +63,126 @@ export async function createLevel(input: CreateLevelInput) {
       data: {
         ...input,
         rank,
+      },
+      select: {
+        id: true,
+        slug: true,
+        type: true,
+        rank: true,
+      },
+    })
+  })
+}
+
+/**
+ * Update a level while rebuilding the affected type rank sequences.
+ * Rank changes and type changes are handled in one transaction.
+ */
+export async function updateLevel(input: UpdateLevelInput) {
+  return prisma.$transaction(async (tx) => {
+    const currentLevel = await tx.level.findUnique({
+      where: { id: input.id },
+      select: {
+        id: true,
+        type: true,
+        status: true,
+      },
+    })
+
+    if (!currentLevel) {
+      throw new Error('Level not found')
+    }
+
+    if (input.type !== currentLevel.type) {
+      throw new Error('A level type cannot be changed after creation')
+    }
+
+    const types = [currentLevel.type, input.type].filter(
+      (type, index, allTypes) => allTypes.indexOf(type) === index,
+    )
+    const levels = await tx.level.findMany({
+      where: { type: { in: types } },
+      select: {
+        id: true,
+        type: true,
+        status: true,
+        rank: true,
+      },
+      orderBy: { rank: 'asc' },
+    })
+    const otherLevels = levels.filter((level) => level.id !== input.id)
+    const targetLevels = otherLevels.filter((level) => level.type === input.type)
+    const targetActiveLevels = targetLevels.filter((level) => level.status === 'ACTIVE')
+    const targetArchivedLevels = targetLevels.filter((level) => level.status === 'ARCHIVED')
+
+    if (input.status === 'ACTIVE' && input.rank > targetActiveLevels.length + 1) {
+      throw new Error(`Rank must be between 1 and ${targetActiveLevels.length + 1}`)
+    }
+
+    const targetActive = [...targetActiveLevels]
+    const targetArchived = [...targetArchivedLevels]
+
+    if (input.status === 'ACTIVE') {
+      targetActive.splice(input.rank - 1, 0, {
+        id: input.id,
+        type: input.type,
+        status: 'ACTIVE',
+        rank: input.rank,
+      })
+    } else {
+      targetArchived.push({
+        id: input.id,
+        type: input.type,
+        status: 'ARCHIVED',
+        rank: targetActive.length + targetArchived.length + 1,
+      })
+    }
+
+    const finalLevels = [...targetActive, ...targetArchived]
+    const sourceLevels = otherLevels.filter((level) => level.type === currentLevel.type && level.type !== input.type)
+    const finalRanks = new Map<string, number>()
+
+    finalLevels.forEach((level, index) => finalRanks.set(level.id, index + 1))
+    sourceLevels.forEach((level, index) => finalRanks.set(level.id, index + 1))
+
+    // Temporarily free every affected type's unique rank values before writing
+    // the final sequences, since rows may move into one another's old ranks.
+    for (const [index, level] of levels.entries()) {
+      await tx.level.update({
+        where: { id: level.id },
+        data: { rank: -(index + 1) },
+      })
+    }
+
+    for (const level of levels) {
+      const finalRank = finalRanks.get(level.id)
+
+      if (finalRank === undefined) {
+        continue
+      }
+
+      await tx.level.update({
+        where: { id: level.id },
+        data: { rank: finalRank },
+      })
+    }
+
+    return tx.level.update({
+      where: { id: input.id },
+      data: {
+        name: input.name,
+        slug: input.slug,
+        type: input.type,
+        demoted: input.demoted,
+        unrated: input.unrated,
+        publishedBy: input.publishedBy,
+        createdBy: input.createdBy,
+        verifiedBy: input.verifiedBy,
+        description: input.description,
+        thumbnailUrl: input.thumbnailUrl,
+        externalUrl: input.externalUrl,
+        status: input.status,
+        rank: finalRanks.get(input.id) ?? input.rank,
       },
       select: {
         id: true,
