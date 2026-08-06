@@ -52,12 +52,12 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
   }
 
   return (
-    <div className="grid gap-6 border-t border-white/10 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:p-8">
+    <div className="grid gap-6 border-t border-white/10 p-5 sm:p-8">
       <div>
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
           Description
         </p>
-        <p className="m-0 max-w-3xl whitespace-pre-wrap text-base leading-7 text-[#d7dcf0]">
+        <p className="m-0 w-full whitespace-pre-wrap text-base leading-7 text-[#d7dcf0]">
           {props.description || '(No description provided)'}
         </p>
       </div>
