@@ -52,8 +52,7 @@ export const levelFieldsSchema = z.object({
   createdBy: optionalText(200),
   verifiedBy: optionalText(200),
   description: optionalText(5_000),
-  thumbnailUrl: optionalUrl,
-  externalUrl: optionalUrl,
+  videoUrl: optionalUrl,
   status: z.enum(['ACTIVE', 'ARCHIVED']).default('ACTIVE'),
 })
 
@@ -86,8 +85,7 @@ const levelFormFields: (keyof CreateLevelInput)[] = [
   'createdBy',
   'verifiedBy',
   'description',
-  'thumbnailUrl',
-  'externalUrl',
+  'videoUrl',
   'status',
 ]
 

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
 import { getLevelBySlugWithPlayers } from '@/features/levels/queries'
+import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,6 +37,17 @@ export default async function LevelProfilePage({
     notFound()
   }
 
+  const thumbnailUrl = getYouTubeThumbnailUrl(level.videoUrl)
+  const thumbnail = (
+    <div
+      className="grid aspect-video w-full place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)]"
+      style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
+      aria-hidden="true"
+    >
+      {!thumbnailUrl && <LevelPlaceholder />}
+    </div>
+  )
+
   return (
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
       <div className="mx-auto w-full max-w-280">
@@ -47,7 +59,7 @@ export default async function LevelProfilePage({
         </Link>
 
         <header className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20">
-          <div className="grid grid-cols-[max-content_minmax(0,1fr)_6rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_8rem] sm:gap-8 sm:p-8">
+          <div className="grid grid-cols-[max-content_minmax(0,1fr)_12rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_15rem] sm:gap-8 sm:p-8">
             <div className="flex h-full w-max items-center justify-start whitespace-nowrap border-r border-white/10 pr-4 text-left text-7xl font-extrabold leading-none tracking-[-0.08em] text-[#c6beff] sm:pr-8 sm:text-9xl">
               {level.rank}
             </div>
@@ -81,19 +93,24 @@ export default async function LevelProfilePage({
               )}
             </div>
 
-            <div
-              className="grid h-24 w-24 place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)] sm:h-32 sm:w-32"
-              style={level.thumbnailUrl ? { backgroundImage: `url(${level.thumbnailUrl})` } : undefined}
-              aria-hidden="true"
-            >
-              {!level.thumbnailUrl && <LevelPlaceholder />}
-            </div>
+            {level.videoUrl ? (
+              <a
+                href={level.videoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="block w-48 rounded-2xl no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60"
+                aria-label={`Watch the verification video for ${level.name}`}
+              >
+                {thumbnail}
+              </a>
+            ) : (
+              <div className="w-48 sm:w-60">{thumbnail}</div>
+            )}
           </div>
 
           <ProfileInfoCards
             type="level"
             description={level.description}
-            externalUrl={level.externalUrl}
           />
         </header>
 

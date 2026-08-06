@@ -42,8 +42,7 @@ export default async function EditLevelPage({
     createdBy: level.createdBy,
     verifiedBy: level.verifiedBy,
     description: level.description,
-    thumbnailUrl: level.thumbnailUrl,
-    externalUrl: level.externalUrl,
+    videoUrl: level.videoUrl,
     status: level.status,
   }
 

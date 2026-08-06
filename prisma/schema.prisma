@@ -53,8 +53,7 @@ model Level {
   createdBy    String?
   verifiedBy   String?
   description  String?
-  thumbnailUrl String?
-  externalUrl  String?
+  videoUrl     String?
   status       LevelStatus  @default(ACTIVE)
   completions  Completion[]
   createdAt    DateTime     @default(now())

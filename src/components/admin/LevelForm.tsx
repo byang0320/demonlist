@@ -23,8 +23,7 @@ export type LevelFormValues = {
   createdBy: string | null
   verifiedBy: string | null
   description: string | null
-  thumbnailUrl: string | null
-  externalUrl: string | null
+  videoUrl: string | null
   status: 'ACTIVE' | 'ARCHIVED'
 }
 
@@ -206,32 +205,26 @@ export default function LevelForm({
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Created by
-          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (this field is optional)"/>
+          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (optional)"/>
           <FieldError errors={state.fieldErrors?.createdBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">
           Verified by
-          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (this field is optional)" />
+          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (optional)" />
           <FieldError errors={state.fieldErrors?.verifiedBy} />
         </label>
 
         <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
           Level Description (copied from in-game)
-          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (this field is optional)" />
+          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (optional)" />
           <FieldError errors={state.fieldErrors?.description} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
-          Thumbnail URL
-          <input autoComplete="off" className={inputClassName} name="thumbnailUrl" type="url" defaultValue={submittedValues?.thumbnailUrl ?? initialValues?.thumbnailUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)"/>
-          <FieldError errors={state.fieldErrors?.thumbnailUrl} />
-        </label>
-
-        <label className="text-sm font-semibold text-[#d7dcf0]">
-          External URL
-          <input autoComplete="off" className={inputClassName} name="externalUrl" type="url" defaultValue={submittedValues?.externalUrl ?? initialValues?.externalUrl ?? ''} placeholder="Paste a link... (to be changed) (this field is optional)" />
-          <FieldError errors={state.fieldErrors?.externalUrl} />
+        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+          Level Verification Video (YouTube link)
+          <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. The thumbnail will be derived from this video. (optional)" />
+          <FieldError errors={state.fieldErrors?.videoUrl} />
         </label>
       </section>
 

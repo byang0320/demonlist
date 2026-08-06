@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { LevelType } from '@/features/levels/queries'
+import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 type PlayerInfoCardsProps = {
   type: 'player'
@@ -15,7 +16,6 @@ type PlayerInfoCardsProps = {
 type LevelInfoCardsProps = {
   type: 'level'
   description: string | null
-  externalUrl: string | null
 }
 
 export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsProps) {
@@ -61,16 +61,6 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
           {props.description || '(No description provided)'}
         </p>
       </div>
-      {props.externalUrl && (
-        <a
-          href={props.externalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="self-start rounded-xl border border-[#ae9dff]/30 px-4 py-3 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-        >
-          Open level link <span aria-hidden="true">↗</span>
-        </a>
-      )}
     </div>
   )
 }
@@ -94,7 +84,7 @@ type PlayerCompletion = {
     slug: string
     rank: number
     type: string
-    thumbnailUrl: string | null
+    videoUrl: string | null
   }
 }
 
@@ -155,7 +145,7 @@ export function CompletionTable(props: CompletionTableProps) {
                       className="text-[#c6beff] no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
                     >
                       <span className="relative z-10 flex items-center gap-3 font-semibold text-white group-hover:text-[#c6beff]">
-                        <LevelThumbnail url={completion.level.thumbnailUrl} />
+                        <LevelThumbnail videoUrl={completion.level.videoUrl} />
                         <span className="truncate">
                           {completion.level.name}
                           {completion.times >= 2 ? ` (x${completion.times})` : ''}
@@ -244,14 +234,16 @@ export function CompletionTable(props: CompletionTableProps) {
   )
 }
 
-function LevelThumbnail({ url }: { url: string | null }) {
+function LevelThumbnail({ videoUrl }: { videoUrl: string | null }) {
+  const thumbnailUrl = getYouTubeThumbnailUrl(videoUrl)
+
   return (
     <span
       className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80"
-      style={url ? { backgroundImage: `url(${url})` } : undefined}
+      style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
       aria-hidden="true"
     >
-      {!url && <LevelPlaceholder className="h-7 w-7" />}
+      {!thumbnailUrl && <LevelPlaceholder className="h-7 w-7" />}
     </span>
   )
 }

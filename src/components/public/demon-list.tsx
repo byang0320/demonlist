@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 
 import { listRankedLevels, type LevelType } from '@/features/levels/queries'
 import { DemonListToggle } from '@/components/public/demon-list-toggle'
+import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export type RankedLevel = Awaited<ReturnType<typeof listRankedLevels>>[number]
 
@@ -33,6 +34,8 @@ const cardClassName =
   'group overflow-hidden rounded-[1.1rem] border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:-translate-y-0.5 hover:border-[#ae9dff]/60 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25'
 
 function LevelCardDetails({ level }: { level: RankedLevel }) {
+  const thumbnailUrl = getYouTubeThumbnailUrl(level.videoUrl)
+
   return (
     <>
       <span className="pl-4 text-[1.3rem] font-extrabold tracking-[-0.06em] text-[#c6beff] sm:pl-6 sm:text-[1.65rem]">
@@ -53,27 +56,23 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
             )}
           </span>
         )}
-        <span className="block truncate text-base font-bold sm:text-[1.05rem]">
+        <span className="block truncate text-lg font-bold sm:text-[1.25rem]">
           {level.name}
         </span>
-        <span className="mt-1 block truncate text-[0.84rem] text-[#b9c2d8]">
+        <span className="mt-1 block truncate text-sm text-[#b9c2d8] sm:text-base">
           by {level.publishedBy}
         </span>
-        <span className="mt-2 block truncate text-[0.7rem] uppercase tracking-[0.04em] text-[#8c97b2]">
+        <span className="mt-2 block truncate text-xs uppercase tracking-[0.04em] text-[#8c97b2] sm:text-[0.8rem]">
           {level._count.completions}{' '}
           {level._count.completions === 1 ? 'completion' : 'completions'}
         </span>
       </span>
       <span
-        className="grid h-11 w-11 place-items-center rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)] sm:h-16 sm:w-16"
-        style={
-          level.thumbnailUrl
-            ? { backgroundImage: `url(${level.thumbnailUrl})` }
-            : undefined
-        }
+        className="grid aspect-video w-full place-items-center rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)]"
+        style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
         aria-hidden="true"
       >
-        {!level.thumbnailUrl && <LevelPlaceholder />}
+        {!thumbnailUrl && <LevelPlaceholder />}
       </span>
     </>
   )
@@ -85,7 +84,7 @@ export function LevelCard({ level, admin = false }: { level: RankedLevel; admin?
   if (admin) {
     return (
       <li>
-        <div className={`${cardClassName} grid min-h-22 grid-cols-[5.5rem_minmax(0,1fr)_3.5rem_4.5rem] items-center sm:min-h-26 sm:grid-cols-[6.5rem_minmax(0,1fr)_5rem_5.5rem]`}>
+        <div className={`${cardClassName} grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)_6rem_4.5rem] items-center sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)_12rem_5.5rem]`}>
           <Link
             className="contents"
             href={levelHref}
@@ -107,7 +106,7 @@ export function LevelCard({ level, admin = false }: { level: RankedLevel; admin?
   return (
     <li>
       <Link
-        className={`${cardClassName} grid min-h-22 grid-cols-[5.5rem_minmax(0,1fr)_3.5rem_1.25rem] items-center sm:min-h-26 sm:grid-cols-[6.5rem_minmax(0,1fr)_5rem_1.5rem]`}
+        className={`${cardClassName} grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)_6rem_1.25rem] items-center sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)_12rem_1.5rem]`}
         href={levelHref}
         aria-label={`Rank ${level.rank}: ${level.name}`}
       >

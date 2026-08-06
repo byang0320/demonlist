@@ -30,7 +30,7 @@ export function listRankedLevels(type: LevelType) {
       publishedBy: true,
       createdBy: true,
       verifiedBy: true,
-      thumbnailUrl: true,
+      videoUrl: true,
       _count: {
         select: {
           completions: true,
@@ -60,8 +60,7 @@ export function getLevelBySlugWithPlayers(slug: string) {
       createdBy: true,
       verifiedBy: true,
       description: true,
-      thumbnailUrl: true,
-      externalUrl: true,
+      videoUrl: true,
       status: true,
       completions: {
         select: {
@@ -115,8 +114,7 @@ export function getLevelForAdminBySlug(slug: string) {
       createdBy: true,
       verifiedBy: true,
       description: true,
-      thumbnailUrl: true,
-      externalUrl: true,
+      videoUrl: true,
       status: true,
     },
   })
