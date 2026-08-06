@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 
 import {
   LEVEL_NAME_PUBLISHER_CONFLICT,
+  isLevelIngameIdConflict,
   updateLevel,
 } from '@/features/levels/actions'
 import { getLevelFormSubmittedValues, updateLevelSchema } from '@/features/levels/schemas'
@@ -40,7 +41,9 @@ export async function updateLevelAction(
 
     return {
       formError:
-        error instanceof Error && error.message.startsWith('Rank must be')
+        isLevelIngameIdConflict(error)
+          ? 'A level with this in-game ID already exists.'
+          : error instanceof Error && error.message.startsWith('Rank must be')
           ? error.message
           : error instanceof Error && error.message === LEVEL_NAME_PUBLISHER_CONFLICT
             ? error.message

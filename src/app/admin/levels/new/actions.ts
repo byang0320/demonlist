@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 
 import {
   createLevel,
+  isLevelIngameIdConflict,
   LEVEL_NAME_PUBLISHER_CONFLICT,
 } from '@/features/levels/actions'
 import {
@@ -48,7 +49,9 @@ export async function createLevelAction(
 
     return {
       formError:
-        error instanceof Error && error.message.startsWith('Rank must be')
+        isLevelIngameIdConflict(error)
+          ? 'A level with this in-game ID already exists.'
+          : error instanceof Error && error.message.startsWith('Rank must be')
           ? error.message
           : error instanceof Error && error.message === LEVEL_NAME_PUBLISHER_CONFLICT
             ? error.message

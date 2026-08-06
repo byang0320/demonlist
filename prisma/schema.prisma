@@ -43,6 +43,7 @@ model Player {
 
 model Level {
   id           String       @id @default(cuid())
+  ingameId     Int          @unique
   name         String
   slug         String       @unique
   rank         Int

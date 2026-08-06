@@ -13,6 +13,15 @@ type ReorderableLevel = {
 export const LEVEL_NAME_PUBLISHER_CONFLICT =
   'A level with this name and publisher already exists.'
 
+export function isLevelIngameIdConflict(error: unknown) {
+  if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2002') {
+    return false
+  }
+
+  const target = error.meta?.target
+  return target === 'Level_ingameId_key' || (Array.isArray(target) && target.includes('ingameId'))
+}
+
 async function getUniqueLevelSlug(
   tx: Prisma.TransactionClient,
   input: { name: string; publishedBy: string; slug: string },
@@ -237,6 +246,7 @@ export async function updateLevel(input: UpdateLevelInput) {
     return tx.level.update({
       where: { id: input.id },
       data: {
+        ingameId: input.ingameId,
         name: input.name,
         slug,
         type: input.type,

@@ -44,6 +44,7 @@ export default async function EditLevelPage({
   }
 
   const initialValues: LevelFormValues = {
+    ingameId: level.ingameId,
     name: level.name,
     slug: level.slug,
     rank: level.rank,

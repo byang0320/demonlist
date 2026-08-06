@@ -104,6 +104,7 @@ export function getLevelForAdminBySlug(slug: string) {
     where: { slug },
     select: {
       id: true,
+      ingameId: true,
       name: true,
       slug: true,
       rank: true,

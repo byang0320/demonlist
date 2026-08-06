@@ -18,6 +18,7 @@ async function main() {
     prisma.level.upsert({
       where: { slug: 'silent-clubstep' },
       update: {
+        ingameId: 1,
         name: 'Silent Clubstep',
         rank: 1,
         type: 'Classic',
@@ -26,6 +27,7 @@ async function main() {
         status: 'ACTIVE',
       },
       create: {
+        ingameId: 1,
         name: 'Silent Clubstep',
         slug: 'silent-clubstep',
         rank: 1,
@@ -37,6 +39,7 @@ async function main() {
     prisma.level.upsert({
       where: { slug: 'slaughterhouse' },
       update: {
+        ingameId: 2,
         name: 'Slaughterhouse',
         rank: 2,
         type: 'Classic',
@@ -45,6 +48,7 @@ async function main() {
         status: 'ACTIVE',
       },
       create: {
+        ingameId: 2,
         name: 'Slaughterhouse',
         slug: 'slaughterhouse',
         rank: 2,
@@ -56,6 +60,7 @@ async function main() {
     prisma.level.upsert({
       where: { slug: 'acheron' },
       update: {
+        ingameId: 3,
         name: 'Acheron',
         rank: 3,
         type: 'Classic',
@@ -64,6 +69,7 @@ async function main() {
         status: 'ACTIVE',
       },
       create: {
+        ingameId: 3,
         name: 'Acheron',
         slug: 'acheron',
         rank: 3,
@@ -75,6 +81,7 @@ async function main() {
     prisma.level.upsert({
       where: { slug: 'tartarus' },
       update: {
+        ingameId: 4,
         name: 'Tartarus',
         rank: 4,
         type: 'Classic',
@@ -83,6 +90,7 @@ async function main() {
         status: 'ACTIVE',
       },
       create: {
+        ingameId: 4,
         name: 'Tartarus',
         slug: 'tartarus',
         rank: 4,
@@ -94,6 +102,7 @@ async function main() {
     prisma.level.upsert({
       where: { slug: 'the-golden' },
       update: {
+        ingameId: 5,
         name: 'The Golden',
         rank: 5,
         type: 'Classic',
@@ -102,6 +111,7 @@ async function main() {
         status: 'ACTIVE',
       },
       create: {
+        ingameId: 5,
         name: 'The Golden',
         slug: 'the-golden',
         rank: 5,

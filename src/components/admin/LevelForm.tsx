@@ -13,6 +13,7 @@ const initialState: LevelActionState = {}
 type LevelType = 'Classic' | 'Platformer'
 
 export type LevelFormValues = {
+  ingameId: number
   name: string
   slug: string
   rank: number
@@ -65,7 +66,7 @@ export default function LevelForm({
   const submittedValues = state.values
   const slugInputRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
-  const [gdLevelId, setGdLevelId] = useState('')
+  const [gdLevelId, setGdLevelId] = useState(initialValues?.ingameId?.toString() ?? '')
   const [autofilling, setAutofilling] = useState(false)
   const [autofilled, setAutofilled] = useState(false)
   const [autofillMessage, setAutofillMessage] = useState('')
@@ -155,47 +156,52 @@ export default function LevelForm({
         </p>
       )}
 
-      {allowAutofill && (
-        <section className="grid gap-4 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:p-7">
-          <div>
-            <h2 className="m-0 text-xl font-bold">Autofill with Level ID</h2>
-            <p className="mt-2 text-sm leading-6 text-[#8c97b2]">
-              Enter a Geometry Dash level ID to pull its name, description, publisher, and type from the GD Browser API. All fields remain editable after autofilling. This is just for your convenience.
-            </p>
-            <label className="mt-4 block text-sm font-semibold text-[#d7dcf0]">
-              Level ID
-              <input
-                autoComplete="off"
-                className={inputClassName}
-                inputMode="numeric"
-                value={gdLevelId}
-                onChange={(event) => {
-                  setGdLevelId(event.target.value.replace(/\D/g, ''))
-                  setAutofillMessage('')
-                }}
-                placeholder="e.g. 76159410"
-              />
-            </label>
-            {autofillMessage && (
-              <p className="mt-2 text-xs leading-5 text-[#8c97b2]" aria-live="polite">
-                {autofillMessage}
-              </p>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={autofillFromGDLevel}
-            disabled={autofilling || autofilled}
-            className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {autofilling ? 'Autofilling…' : autofilled ? 'Autofilled' : 'Autofill'}
-          </button>
-        </section>
-      )}
-
       <section className="grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:grid-cols-2 sm:p-7">
         <div className="sm:col-span-2">
           <h2 className="m-0 text-xl font-bold">Level Information</h2>
+        </div>
+
+        <div className={`grid gap-4 sm:col-span-2 ${allowAutofill ? 'sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end' : ''}`}>
+          <label className="text-sm font-semibold text-[#d7dcf0]">
+            Level ID
+            <input
+              autoComplete="off"
+              className={inputClassName}
+              inputMode="numeric"
+              name="ingameId"
+              required
+              value={gdLevelId}
+              onChange={(event) => {
+                setGdLevelId(event.target.value.replace(/\D/g, ''))
+                setAutofilled(false)
+                setAutofillMessage('')
+              }}
+              placeholder="e.g. 76159410"
+            />
+            <FieldError errors={state.fieldErrors?.ingameId} />
+          </label>
+          {allowAutofill && (
+            <button
+              type="button"
+              onClick={autofillFromGDLevel}
+              disabled={autofilling || autofilled}
+              className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {autofilling ? 'Autofilling…' : autofilled ? 'Autofilled' : 'Autofill'}
+            </button>
+          )}
+          {allowAutofill && (
+            <div className="sm:col-span-2">
+              <p className="text-xs leading-5 text-[#8c97b2]">
+                Enter the Geometry Dash level ID to pull its name, description, publisher, and type from the GDBrowser API. All fields remain editable after autofilling.
+              </p>
+              {autofillMessage && (
+                <p className="mt-2 text-xs leading-5 text-[#8c97b2]" aria-live="polite">
+                  {autofillMessage}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <label className="text-sm font-semibold text-[#d7dcf0]">

@@ -41,7 +41,13 @@ const rank = z.coerce
   .int('Rank must be a whole number')
   .positive('Rank must be greater than zero')
 
+const ingameId = z.coerce
+  .number()
+  .int('Level ID must be a whole number')
+  .positive('Level ID must be greater than zero')
+
 export const levelFieldsSchema = z.object({
+  ingameId,
   name: z.string().trim().min(1, 'Name is required').max(200),
   slug,
   rank,
@@ -75,6 +81,7 @@ export type MoveLevelInput = z.infer<typeof moveLevelSchema>
 export type LevelFormSubmittedValues = Partial<Record<keyof CreateLevelInput, string>>
 
 const levelFormFields: (keyof CreateLevelInput)[] = [
+  'ingameId',
   'name',
   'slug',
   'rank',
