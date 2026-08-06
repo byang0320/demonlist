@@ -18,7 +18,10 @@ export default async function NewLevelPage() {
             Add a new level to a list.
           </p>
         </header>
-        <LevelForm maxRanks={{ Classic: classicMaxRank, Platformer: platformerMaxRank }} />
+        <LevelForm
+          maxRanks={{ Classic: classicMaxRank, Platformer: platformerMaxRank }}
+          allowAutofill
+        />
       </div>
     </main>
   )
