@@ -1,8 +1,20 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 import LevelForm, { type LevelFormValues } from '@/components/admin/LevelForm'
 import { updateLevelAction } from '@/app/admin/levels/[slug]/edit/actions'
 import { getLevelForAdminBySlug, getNextAvailableRank } from '@/features/levels/queries'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const level = await getLevelForAdminBySlug(slug)
+
+  return { title: level?.name ? `Editing ${level.name}` : 'Editing Level' }
+}
 
 export default async function EditLevelPage({
   params,

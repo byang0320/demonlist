@@ -3,6 +3,11 @@ import Link from 'next/link'
 import { LevelListSummary } from '@/components/public/level-list-summary'
 import { getHomePageData } from '@/features/home/queries'
 
+export const metadata = {
+  title: 'Home',
+  description: 'Browse the Stream VC Geometry Dash demonlists and player profiles.',
+}
+
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {

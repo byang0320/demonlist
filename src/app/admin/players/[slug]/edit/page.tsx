@@ -1,8 +1,20 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 import PlayerForm, { type PlayerFormValues } from '@/components/admin/PlayerForm'
 import { updatePlayerAction } from '@/app/admin/players/[slug]/edit/actions'
 import { getPlayerForAdminBySlug } from '@/features/players/queries'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const player = await getPlayerForAdminBySlug(slug)
+
+  return { title: player?.name ? `Editing ${player.name}` : 'Editing Player' }
+}
 
 export default async function EditPlayerPage({
   params,

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import {
@@ -8,6 +9,22 @@ import {
 import { PlayerCompletionToggle } from '@/components/public/player-completion-toggle'
 import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
 import type { LevelType } from '@/features/levels/queries'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const player = await getPlayerBySlugWithLevels(slug)
+
+  return {
+    title: player?.name ?? 'Player Profile',
+    description: player
+      ? `View ${player.name}'s completed Geometry Dash levels.`
+      : 'View a player profile and completed Geometry Dash levels.',
+  }
+}
 
 export const dynamic = 'force-dynamic'
 

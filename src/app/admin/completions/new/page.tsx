@@ -1,6 +1,8 @@
 import CompletionForm from '@/components/admin/CompletionForm'
 import { getCompletionFormOptions } from '@/features/completions/queries'
 
+export const metadata = { title: 'Create New Completion' }
+
 export const dynamic = 'force-dynamic'
 
 export default async function NewCompletionPage() {

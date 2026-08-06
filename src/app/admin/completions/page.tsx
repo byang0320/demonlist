@@ -4,6 +4,8 @@ import CompletionFilters from '@/components/admin/CompletionFilters'
 import { getCompletionFormOptions } from '@/features/completions/queries'
 import { listCompletionsForAdmin } from '@/features/completions/queries'
 
+export const metadata = { title: 'Completions' }
+
 export const dynamic = 'force-dynamic'
 
 function formatCompletionDate(date: Date | null) {

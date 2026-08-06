@@ -1,9 +1,26 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
 import { getLevelBySlugWithPlayers } from '@/features/levels/queries'
 import { getYouTubeThumbnailUrl } from '@/lib/youtube'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const level = await getLevelBySlugWithPlayers(slug)
+
+  return {
+    title: level?.name ?? 'Level Profile',
+    description: level
+      ? `View ${level.name} and its Geometry Dash completion records.`
+      : 'View a Geometry Dash level profile and its completion records.',
+  }
+}
 
 export const dynamic = 'force-dynamic'
 

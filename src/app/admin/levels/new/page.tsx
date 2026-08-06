@@ -1,6 +1,8 @@
 import LevelForm from '@/components/admin/LevelForm'
 import { getNextAvailableRank } from '@/features/levels/queries'
 
+export const metadata = { title: 'Create New Level' }
+
 export default async function NewLevelPage() {
   const [classicMaxRank, platformerMaxRank] = await Promise.all([
     getNextAvailableRank('Classic'),

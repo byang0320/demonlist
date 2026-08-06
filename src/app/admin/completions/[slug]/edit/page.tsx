@@ -1,8 +1,24 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 import CompletionForm from '@/components/admin/CompletionForm'
 import { updateCompletionAction } from '@/app/admin/completions/[slug]/edit/actions'
 import { getCompletionForAdmin, getCompletionFormOptions } from '@/features/completions/queries'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const completion = await getCompletionForAdmin(slug)
+
+  return {
+    title: completion
+      ? `Editing ${completion.player.name} Completion`
+      : 'Editing Completion',
+  }
+}
 
 export const dynamic = 'force-dynamic'
 

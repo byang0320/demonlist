@@ -2,6 +2,8 @@ import Link from 'next/link'
 
 import { listPlayersForAdmin } from '@/features/players/queries'
 
+export const metadata = { title: 'Players' }
+
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPlayersPage() {

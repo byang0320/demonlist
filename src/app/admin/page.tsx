@@ -2,6 +2,8 @@ import Link from 'next/link'
 
 import { getAdminDashboardCounts } from '@/features/admin/queries'
 
+export const metadata = { title: 'Admin Dashboard' }
+
 export const dynamic = 'force-dynamic'
 
 const actionLinkClassName =
