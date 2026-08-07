@@ -9,7 +9,8 @@ export default defineConfig({
         seed: "tsx prisma/seed.ts",
     },
 
+    // If using Prisma Postgres, env should be "DATABASE_URL"
     datasource: {
-        url: env("DATABASE_URL"),
+        url: env("DIRECT_URL"),
     },
 });

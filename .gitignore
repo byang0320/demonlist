@@ -46,3 +46,7 @@ next-env.d.ts
 
 # csv files (importing done locally)
 src/data/*.csv
+
+# backups
+*.dump
+*.list

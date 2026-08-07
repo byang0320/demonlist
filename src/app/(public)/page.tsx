@@ -15,6 +15,16 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.25),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
+      <div className="pointer-events-none fixed right-4 top-4 z-50 sm:right-6 sm:top-6">
+        <div className="pointer-events-auto">
+          <Link
+            href="/admin"
+            className="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#59627b] no-underline transition hover:border-[#ae9dff]/50 hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+          >
+            Admin
+          </Link>
+        </div>
+      </div>
       <div className="mx-auto w-full max-w-280">
         <header className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-[#1b2140]/95 via-[#11172a]/98 to-[#0f1422] p-6 shadow-2xl shadow-black/25 sm:p-12">
           <div className="pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-[#8e7af7]/15 blur-3xl" />
@@ -77,14 +87,6 @@ export default async function HomePage() {
             <p className="m-0 text-sm text-[#8c97b2]">No Stream VC players yet. Strange...</p>
           )}
         </section>
-        <div className="mt-5 text-center">
-          <Link
-            href="/admin"
-            className="text-xs text-[#59627b] underline underline-offset-2 transition hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
-          >
-            Admin
-          </Link>
-        </div>
       </div>
     </main>
   )
