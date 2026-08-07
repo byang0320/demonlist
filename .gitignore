@@ -43,3 +43,6 @@ next-env.d.ts
 
 # all notes
 *.txt
+
+# csv files (importing done locally)
+src/data/*.csv
