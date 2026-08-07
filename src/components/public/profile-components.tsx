@@ -1,5 +1,10 @@
+'use client'
+
 import Link from 'next/link'
+import { useMemo, useState } from 'react'
 import type { LevelType } from '@/features/levels/queries'
+import type { LevelCompletionSort } from '@/features/levels/queries'
+import type { PlayerCompletionSort } from '@/features/players/queries'
 import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 type PlayerInfoCardsProps = {
@@ -74,7 +79,7 @@ function InfoCard({ label, children }: { label: string; children: React.ReactNod
   )
 }
 
-type PlayerCompletion = {
+export type PlayerCompletion = {
   times: number
   completedAt: Date | null
   videoUrl: string | null
@@ -88,7 +93,7 @@ type PlayerCompletion = {
   }
 }
 
-type LevelCompletion = {
+export type LevelCompletion = {
   times: number
   completedAt: Date | null
   videoUrl: string | null
@@ -103,7 +108,6 @@ type CompletionTableProps =
   | {
       type: 'player'
       completions: PlayerCompletion[]
-      dateSortHref: string
     }
   | {
       type: 'level'
@@ -120,15 +124,7 @@ export function CompletionTable(props: CompletionTableProps) {
               <tr>
                 <th className="w-20 px-5 py-4 font-semibold">Rank</th>
                 <th className="px-5 py-4 font-semibold">Level</th>
-                <th className="px-5 py-4 text-right font-semibold">
-                  <Link
-                    href={props.dateSortHref}
-                    className="inline-flex items-center gap-1 text-[#8c97b2] no-underline hover:text-[#c6beff]"
-                    title="Sort by chronological completion date"
-                  >
-                    Completed
-                  </Link>
-                </th>
+                <th className="px-5 py-4 text-right font-semibold">Completed</th>
                 <th className="px-5 py-4 text-right font-semibold">Video</th>
               </tr>
             </thead>
@@ -231,6 +227,123 @@ export function CompletionTable(props: CompletionTableProps) {
         )}
       </div>
     </div>
+  )
+}
+
+type SortControlsProps = {
+  sort: PlayerCompletionSort | LevelCompletionSort
+  options: Array<{ value: PlayerCompletionSort | LevelCompletionSort; label: string }>
+  onChange: (sort: PlayerCompletionSort | LevelCompletionSort) => void
+}
+
+function SortControls({ sort, options, onChange }: SortControlsProps) {
+  return (
+    <div className="flex items-center gap-2 text-sm text-[#8c97b2]">
+      <span>Sort by</span>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          onClick={() => onChange(option.value)}
+          className={`cursor-pointer rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === option.value ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function SortableCompletionRecords(
+  props:
+    | {
+        type: 'player'
+        completions: PlayerCompletion[]
+        initialSort: PlayerCompletionSort
+        emptyMessage: string
+      }
+    | {
+        type: 'level'
+        completions: LevelCompletion[]
+        initialSort: LevelCompletionSort
+        emptyMessage: string
+      },
+) {
+  const [sort, setSort] = useState(props.initialSort)
+
+  const sortedCompletions = useMemo(() => {
+    if (props.type === 'player') {
+      const completions = [...props.completions]
+      const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: false })
+
+      if (sort === 'alphabetical') {
+        completions.sort((left, right) => (
+          collator.compare(left.level.name, right.level.name) || left.level.rank - right.level.rank
+        ))
+      } else if (sort === 'date') {
+        completions.sort((left, right) => {
+          const leftDate = left.completedAt?.getTime() ?? Number.POSITIVE_INFINITY
+          const rightDate = right.completedAt?.getTime() ?? Number.POSITIVE_INFINITY
+
+          return leftDate - rightDate || left.level.rank - right.level.rank
+        })
+      } else {
+        completions.sort((left, right) => left.level.rank - right.level.rank || collator.compare(left.level.name, right.level.name))
+      }
+      return completions
+    }
+
+    const completions = [...props.completions]
+    const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: false })
+
+    if (sort === 'alphabetical') {
+      completions.sort((left, right) => collator.compare(left.player.name, right.player.name))
+    } else {
+      completions.sort((left, right) => {
+        const leftDate = left.completedAt?.getTime() ?? Number.POSITIVE_INFINITY
+        const rightDate = right.completedAt?.getTime() ?? Number.POSITIVE_INFINITY
+
+        return leftDate - rightDate || collator.compare(left.player.name, right.player.name)
+      })
+    }
+
+    return completions
+  }, [props.completions, props.type, sort])
+
+  const isPlayer = props.type === 'player'
+
+  return (
+    <section className="mt-8">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <h2 className="m-0 text-2xl font-bold sm:text-3xl">
+          {isPlayer ? 'Completed Levels' : 'Completion Records'}
+        </h2>
+        <SortControls
+          sort={sort}
+          onChange={setSort}
+          options={isPlayer
+            ? [
+                { value: 'rank', label: 'rank' },
+                { value: 'alphabetical', label: 'alphabetically' },
+                { value: 'date', label: 'date' },
+              ]
+            : [
+                { value: 'alphabetical', label: 'alphabetically' },
+                { value: 'date', label: 'date' },
+              ]}
+        />
+      </div>
+
+      {sortedCompletions.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
+          {props.emptyMessage}
+        </div>
+      ) : isPlayer ? (
+        <CompletionTable type="player" completions={sortedCompletions as PlayerCompletion[]} />
+      ) : (
+        <CompletionTable type="level" completions={sortedCompletions as LevelCompletion[]} />
+      )}
+    </section>
   )
 }
 

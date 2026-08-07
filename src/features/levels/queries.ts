@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 
 export type LevelType = 'Classic' | 'Platformer'
+export type LevelCompletionSort = 'alphabetical' | 'date'
 
 export function getNextAvailableRank(type: LevelType) {
   return prisma.level
@@ -43,7 +44,10 @@ export function listRankedLevels(type: LevelType) {
   })
 }
 
-export function getLevelBySlugWithPlayers(slug: string) {
+export function getLevelBySlugWithPlayers(
+  slug: string,
+  sort: LevelCompletionSort = 'date',
+) {
   return prisma.level.findUnique({
     where: {
       slug,
@@ -76,19 +80,33 @@ export function getLevelBySlugWithPlayers(slug: string) {
             },
           },
         },
-        orderBy: [
-          {
-            completedAt: {
-              sort: 'asc',
-              nulls: 'last',
-            },
-          },
-          {
-            player: {
-              name: 'asc',
-            },
-          },
-        ],
+        orderBy: sort === 'alphabetical'
+          ? [
+              {
+                player: {
+                  name: 'asc' as const,
+                },
+              },
+              {
+                completedAt: {
+                  sort: 'asc' as const,
+                  nulls: 'last' as const,
+                },
+              },
+            ]
+          : [
+              {
+                completedAt: {
+                  sort: 'asc' as const,
+                  nulls: 'last' as const,
+                },
+              },
+              {
+                player: {
+                  name: 'asc' as const,
+                },
+              },
+            ],
       },
       _count: {
         select: {

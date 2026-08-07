@@ -7,7 +7,7 @@ import {
   type PlayerCompletionSort,
 } from '@/features/players/queries'
 import { PlayerCompletionToggle } from '@/components/public/player-completion-toggle'
-import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
+import { ProfileInfoCards, SortableCompletionRecords } from '@/components/public/profile-components'
 import type { LevelType } from '@/features/levels/queries'
 
 export async function generateMetadata({
@@ -83,21 +83,6 @@ export default async function PlayerProfilePage({
     null,
   )
 
-  const typeQuery = levelType === 'Platformer' ? 'type=platformer' : ''
-  const sortHref = (nextSort: PlayerCompletionSort) => {
-    const sortQuery = nextSort === 'rank'
-      ? ''
-      : `sort=${nextSort === 'alphabetical' ? 'alphabetically' : nextSort}`
-    const query = [typeQuery, sortQuery]
-      .filter(Boolean)
-      .join('&')
-
-    return `/players/${player.slug}${query ? `?${query}` : ''}`
-  }
-  const rankSortHref = sortHref('rank')
-  const alphabeticalSortHref = sortHref('alphabetical')
-  const dateSortHref = sortHref('date')
-
   return (
     <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
       <div className="mx-auto w-full max-w-280">
@@ -167,49 +152,12 @@ export default async function PlayerProfilePage({
           />
         </header>
 
-        <section className="mt-8">
-          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="m-0 text-2xl font-bold sm:text-3xl">
-                Completed {levelType} Levels
-              </h2>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-[#8c97b2]">
-              <span>Sort by</span>
-              <Link
-                href={rankSortHref}
-                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'rank' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
-              >
-                rank
-              </Link>
-              <Link
-                href={alphabeticalSortHref}
-                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'alphabetical' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
-              >
-                alphabetically
-              </Link>
-              <Link
-                href={dateSortHref}
-                className={`rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === 'date' ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
-                title="Sort by chronological completion date"
-              >
-                date
-              </Link>
-            </div>
-          </div>
-
-          {completions.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
-              {player.name} has no {levelType} completion records yet.
-            </div>
-          ) : (
-            <CompletionTable
-              type="player"
-              completions={completions}
-              dateSortHref={dateSortHref}
-            />
-          )}
-        </section>
+        <SortableCompletionRecords
+          type="player"
+          completions={completions}
+          initialSort={sort}
+          emptyMessage={`${player.name} has no ${levelType} completion records yet.`}
+        />
       </div>
     </main>
   )

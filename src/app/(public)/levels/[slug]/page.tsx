@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { CompletionTable, ProfileInfoCards } from '@/components/public/profile-components'
-import { getLevelBySlugWithPlayers } from '@/features/levels/queries'
+import { ProfileInfoCards, SortableCompletionRecords } from '@/components/public/profile-components'
+import { getLevelBySlugWithPlayers, type LevelCompletionSort } from '@/features/levels/queries'
 import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export async function generateMetadata({
@@ -44,11 +44,17 @@ function LevelPlaceholder() {
 
 export default async function LevelProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ sort?: string }>
 }) {
   const { slug } = await params
-  const level = await getLevelBySlugWithPlayers(slug)
+  const requestedSort = (await searchParams).sort
+  const sort: LevelCompletionSort = requestedSort === 'alphabetically' || requestedSort === 'alphabetical'
+    ? 'alphabetical'
+    : 'date'
+  const level = await getLevelBySlugWithPlayers(slug, sort)
 
   if (!level) {
     notFound()
@@ -131,23 +137,12 @@ export default async function LevelProfilePage({
           />
         </header>
 
-        <section className="mt-8">
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <h2 className="m-0 text-2xl font-bold sm:text-3xl">
-                Completion Records
-              </h2>
-            </div>
-          </div>
-
-          {level.completions.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
-              No completion records have been added yet. Check back very soon...
-            </div>
-          ) : (
-            <CompletionTable type="level" completions={level.completions} />
-          )}
-        </section>
+        <SortableCompletionRecords
+          type="level"
+          completions={level.completions}
+          initialSort={sort}
+          emptyMessage="No completion records have been added yet. Check back very soon..."
+        />
       </div>
     </main>
   )
