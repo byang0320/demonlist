@@ -7,13 +7,19 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not configured')
 }
 
-const adapter = new PrismaPg({ connectionString })
 const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClient | undefined
+  adapter: PrismaPg | undefined
+  prisma: PrismaClient | undefined
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({adapter});
+const adapter = globalForPrisma.adapter ?? new PrismaPg({
+  connectionString,
+  max: 1,
+  connectionTimeoutMillis: 5_000,
+  idleTimeoutMillis: 10_000,
+})
 
-if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prisma
-}
+export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter })
+
+globalForPrisma.adapter = adapter
+globalForPrisma.prisma = prisma
