@@ -394,7 +394,7 @@ function LevelPlaceholder({ className }: { className: string }) {
 
 function formatCompletionDate(date: Date | null) {
   if (!date) {
-    return 'Date not recorded'
+    return <span className="text-sm text-[#59627b]">—</span>
   }
 
   return new Intl.DateTimeFormat('en-US', {
