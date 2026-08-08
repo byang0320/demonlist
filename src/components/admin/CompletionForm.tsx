@@ -34,15 +34,14 @@ export type CompletionFormValues = {
   notes: string
 }
 
-const inputClassName =
-  'mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15'
+const inputClassName = 'form-input'
 
 function FieldError({ errors }: { errors?: string[] }) {
   if (!errors?.length) {
     return null
   }
 
-  return <p className="mt-2 text-sm text-red-300">{errors[0]}</p>
+  return <p className="form-error">{errors[0]}</p>
 }
 
 export function SearchDropdown({
@@ -103,7 +102,7 @@ export function SearchDropdown({
   }, [options, renderSelected, search])
 
   return (
-    <label ref={containerRef} className="relative text-sm font-semibold text-[#d7dcf0]">
+    <label ref={containerRef} className="form-label form-autocomplete-label">
       {label}
       <input
         autoComplete="off"
@@ -119,14 +118,14 @@ export function SearchDropdown({
       />
       <input type="hidden" name={name} value={value} />
       {value && (
-        <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+        <p className="form-hint">
           Selected: {renderSelected(value)}
         </p>
       )}
       {open && (
         <div
           id={`${name}-options`}
-          className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-[#171e35] p-1 shadow-2xl"
+          className="autocomplete-menu"
           role="listbox"
         >
           {filteredOptions.length > 0 ? filteredOptions.map((option) => (
@@ -137,12 +136,12 @@ export function SearchDropdown({
               aria-selected={option.id === value}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => onSelect(option.id)}
-              className="block w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-[#9c8cff]/15 focus:bg-[#9c8cff]/15 focus:outline-none"
+              className="autocomplete-option"
             >
               {renderOption(option)}
             </button>
           )) : (
-            <p className="px-3 py-3 text-sm font-normal text-[#8c97b2]">No matches found.</p>
+            <p className="autocomplete-empty">No matches found.</p>
           )}
         </div>
       )}
@@ -193,30 +192,30 @@ export default function CompletionForm({
       key={submittedValues ? JSON.stringify(submittedValues) : 'initial'}
       action={formAction}
       autoComplete="off"
-      className="mt-8 space-y-8"
+      className="form-layout"
     >
       {state.formError && (
-        <p className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200" role="alert">
+        <p className="form-error-summary" role="alert">
           {state.formError}
         </p>
       )}
 
-      <section className="grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">
+      <section className="form-section">
         <div>
-          <h2 className="m-0 text-xl font-bold">Completion Record</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-[#b9c2d8]">
+          <h2 className="form-section-title">Completion Record</h2>
+          <p className="form-intro">
             Did you beat a level? Congratulations! Submit your record here so that it appears on both your profile and the level.
           </p>
-          <p className="mt-2 text-xs leading-5 text-[#8c97b2]">
+          <p className="form-hint-leading">
             Before doing so, make sure that both the level you beat and your player profile have already been created.{' '}
-            <a className="text-[#c6beff] underline underline-offset-4 hover:text-white" href="/admin/levels/new">Create New Level</a>{' '}
+            <a className="form-hint-link" href="/admin/levels/new">Create New Level</a>{' '}
             <span>(if you are the first person to beat it)</span>{' '}
-            <a className="text-[#c6beff] underline underline-offset-4 hover:text-white" href="/admin/players/new">Create New Player</a>{' '}
+            <a className="form-hint-link" href="/admin/players/new">Create New Player</a>{' '}
             <span>(if you have not created your Stream VC profile yet)</span>
           </p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="form-grid">
           <SearchDropdown
             label="Level"
             name="levelId"
@@ -238,7 +237,7 @@ export default function CompletionForm({
             open={levelOpen}
             renderOption={(option) => {
               const level = levelById.get(option.id)
-              return level ? <><span className="block">{level.name}</span><span className="block text-xs font-normal text-[#8c97b2]">by {level.publishedBy}</span></> : null
+              return level ? <><span className="form-option-name">{level.name}</span><span className="form-option-detail">by {level.publishedBy}</span></> : null
             }}
             renderSelected={levelLabel}
             error={state.fieldErrors?.levelId}
@@ -268,8 +267,8 @@ export default function CompletionForm({
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          <label className="text-sm font-semibold text-[#d7dcf0]">
+        <div className="form-grid">
+          <label className="form-label">
             Original completion date
             <input
               autoComplete="off"
@@ -280,7 +279,7 @@ export default function CompletionForm({
             />
             <FieldError errors={state.fieldErrors?.completedAt} />
           </label>
-          <label className="text-sm font-semibold text-[#d7dcf0]">
+          <label className="form-label">
             How many times did you beat this?
             <input
               autoComplete="off"
@@ -292,12 +291,12 @@ export default function CompletionForm({
               required
               defaultValue={submittedValues?.times ?? initialValues?.times ?? '1'}
             />
-            <p className="mt-2 text-xs font-normal text-[#8c97b2]">Enter 1 for a single completion. This box is for people such as Star who have completed Reverie upwards of 100 times.</p>
+            <p className="form-hint">Enter 1 for a single completion. This box is for people such as Star who have completed Reverie upwards of 100 times.</p>
             <FieldError errors={state.fieldErrors?.times} />
           </label>
         </div>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Video URL
           <input
             autoComplete="off"
@@ -310,11 +309,11 @@ export default function CompletionForm({
           <FieldError errors={state.fieldErrors?.videoUrl} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Other notes
           <textarea
             autoComplete="off"
-            className={`${inputClassName} min-h-32 resize-y`}
+            className={`${inputClassName} form-textarea-small`}
             name="notes"
             maxLength={2000}
             defaultValue={submittedValues?.notes ?? initialValues?.notes ?? ''}
@@ -324,9 +323,9 @@ export default function CompletionForm({
         </label>
       </section>
 
-      <div className="flex justify-end">
+      <div className="form-actions">
         <button
-          className="inline-flex min-h-12 cursor-pointer items-center rounded-xl bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60"
+          className="form-submit"
           type="submit"
           disabled={pending}
         >

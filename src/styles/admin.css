@@ -1,0 +1,216 @@
+@layer components {
+  /* Fixed wrapper for the Sign Out control on authenticated admin pages. */
+  .admin-auth-overlay {
+    @apply pointer-events-none fixed right-4 top-4 z-50 sm:right-6 sm:top-6;
+  }
+
+  /* Pointer-events bridge that makes the Sign Out button clickable. */
+  .admin-auth-overlay-inner {
+    @apply pointer-events-auto;
+  }
+
+  /* Sign Out button shown in the top-right corner of admin pages. */
+  .admin-auth-button {
+    @apply cursor-pointer rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#b9c2d8] transition hover:border-[#ae9dff]/50 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Wide content wrapper for admin dashboards and management lists. */
+  .admin-page-content {
+    @apply mx-auto w-full max-w-280;
+  }
+
+  /* Narrow content wrapper for admin create/edit forms. */
+  .admin-form-content {
+    @apply mx-auto w-full max-w-240;
+  }
+
+  /* Header spacing for the admin dashboard. */
+  .admin-page-header {
+    @apply mb-8;
+  }
+
+  /* Split header layout for admin list pages with a create button. */
+  .admin-page-header-split {
+    @apply mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  /* Standard admin page heading. */
+  .admin-page-title {
+    @apply mt-3 text-4xl font-bold sm:text-6xl;
+  }
+
+  /* Dashboard heading variant without the standard top margin. */
+  .admin-page-title-no-margin {
+    @apply m-0;
+  }
+
+  /* Wrapped admin heading variant for long player/level names. */
+  .admin-page-title-wrapped {
+    @apply mt-3 break-words text-4xl font-bold sm:text-6xl;
+  }
+
+  /* Supporting description beneath admin page headings. */
+  .admin-page-description {
+    @apply mt-4 max-w-2xl text-base leading-7 text-[#b9c2d8];
+  }
+
+  /* Create-new action link in admin list-page headers. */
+  .admin-create-link {
+    @apply inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto;
+  }
+
+  /* Filter panel on the admin completions page. */
+  .admin-filter-panel {
+    @apply mb-8 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+  }
+
+  /* Heading row inside the completion filter panel. */
+  .admin-filter-header {
+    @apply mb-5 flex items-center justify-between gap-4;
+  }
+
+  /* Clear-filters button in the completion filter panel. */
+  .admin-clear-filters {
+    @apply cursor-pointer text-xs font-semibold text-[#8c97b2] underline underline-offset-4 transition hover:text-white;
+  }
+
+  /* Secondary management links on the admin dashboard. */
+  .admin-action-link {
+    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#ae9dff]/30 bg-[#111725]/80 px-5 py-4 text-center text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:text-base;
+  }
+
+  /* Primary create-completion link on the admin dashboard. */
+  .admin-action-link-primary {
+    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#c6beff] bg-[#9c8cff] px-5 py-4 text-center text-sm font-bold text-[#0b0d18] no-underline shadow-lg shadow-[#9c8cff]/10 transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 sm:text-base;
+  }
+
+  /* Responsive statistics grid on the admin dashboard. */
+  .admin-stat-grid {
+    @apply grid gap-3 md:grid-cols-4;
+  }
+
+  /* Combined Classic/Platformer statistics card. */
+  .admin-stat-group {
+    @apply grid grid-cols-2 divide-x divide-white/10 rounded-2xl border border-white/10 bg-[#111725]/80 md:col-span-2;
+  }
+
+  /* Standalone Registered Players or Completions statistic card. */
+  .admin-stat-card {
+    @apply rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-6;
+  }
+
+  /* Individual Classic or Platformer statistic cell. */
+  .admin-stat-group-cell {
+    @apply p-5 sm:p-6;
+  }
+
+  /* Uppercase label above an admin statistic. */
+  .admin-stat-label {
+    @apply m-0 text-xs font-bold uppercase tracking-[0.08em] text-[#8c97b2];
+  }
+
+  /* Large numeric value in an admin statistic card. */
+  .admin-stat-number {
+    @apply mt-3 text-4xl font-bold tracking-[-0.05em] text-white;
+  }
+
+  /* Small suffix such as “active” beneath a statistic. */
+  .admin-stat-suffix {
+    @apply mt-1 text-xs text-[#8c97b2];
+  }
+
+  /* Management section spacing on the admin dashboard. */
+  .admin-management-section {
+    @apply mt-8;
+  }
+
+  /* Heading for level, player, or completion management sections. */
+  .admin-management-title {
+    @apply mb-4 text-2xl font-bold sm:text-3xl;
+  }
+
+  /* Two-column action-link grid on the admin dashboard. */
+  .admin-management-grid {
+    @apply grid grid-cols-2 gap-3;
+  }
+
+  /* Explanatory text above completion-management actions. */
+  .admin-management-description {
+    @apply -mt-2 mb-4 text-sm text-[#8c97b2];
+  }
+
+  /* Stacked list wrapper for admin completion records. */
+  .admin-record-list {
+    @apply grid gap-3;
+  }
+
+  /* Clickable completion record card in the admin completions list. */
+  .admin-record-card {
+    @apply block rounded-2xl border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Main sentence inside an admin completion record card. */
+  .admin-record-card-text {
+    @apply m-0 text-base leading-7;
+  }
+
+  /* Completion ID metadata beneath an admin record. */
+  .admin-record-card-meta {
+    @apply mt-2 m-0 text-xs text-[#8c97b2];
+  }
+
+  /* Stacked list wrapper for admin player records. */
+  .admin-player-list {
+    @apply grid gap-3;
+  }
+
+  /* Row containing a player link and its Edit button. */
+  .admin-player-row {
+    @apply flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:border-[#ae9dff]/55 hover:bg-[#171e35];
+  }
+
+  /* Public player-profile link inside the admin player list. */
+  .admin-player-link {
+    @apply flex min-w-0 flex-1 items-center gap-4 no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Flexible text column inside an admin player row. */
+  .admin-player-copy {
+    @apply min-w-0 flex-1;
+  }
+
+  /* Avatar shown beside each player in the admin player list. */
+  .admin-player-avatar {
+    @apply grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff];
+  }
+
+  /* Player name in an admin player row. */
+  .admin-player-name {
+    @apply block truncate font-bold;
+  }
+
+  /* Hover color for the player name in an admin player row. */
+  .admin-player-link:hover .admin-player-name {
+    @apply text-[#c6beff];
+  }
+
+  /* Completion-count caption beneath an admin player name. */
+  .admin-player-count {
+    @apply mt-1 block text-xs text-[#8c97b2];
+  }
+
+  /* Arrow at the end of an admin player row. */
+  .admin-player-arrow {
+    @apply text-lg text-[#8c97b2] transition;
+  }
+
+  /* Hover movement/color for the admin player-row arrow. */
+  .admin-player-link:hover .admin-player-arrow {
+    @apply translate-x-1 text-[#c6beff];
+  }
+
+  /* Edit button beside each admin player record. */
+  .admin-edit-link {
+    @apply shrink-0 rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
+  }
+}

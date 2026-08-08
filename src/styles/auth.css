@@ -1,0 +1,41 @@
+@layer components {
+  /* Admin login page shell. */
+  .auth-page {
+    @apply relative grid min-h-screen place-items-center bg-[#080b14] px-5 text-[#f4f6ff];
+  }
+
+  /* Back-home link shown on the admin login page. */
+  .auth-back-link {
+    @apply absolute left-5 top-6 inline-flex items-center gap-2 text-sm font-semibold text-[#69738e] no-underline transition hover:text-[#b9c2d8] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Centered admin login card. */
+  .auth-card {
+    @apply w-full max-w-md rounded-3xl border border-white/10 bg-[#111725]/90 p-8 text-center shadow-2xl shadow-black/20;
+  }
+
+  /* Product-name kicker at the top of the admin login card. */
+  .auth-kicker {
+    @apply text-xs font-bold uppercase tracking-[0.10em] text-[#c6beff];
+  }
+
+  /* Admin login heading. */
+  .auth-title {
+    @apply mt-3 text-3xl font-bold;
+  }
+
+  /* Login instructions beneath the admin login heading. */
+  .auth-description {
+    @apply mt-3 text-sm leading-6 text-[#b9c2d8];
+  }
+
+  /* Google sign-in button on the admin login page. */
+  .google-button {
+    @apply mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-md border border-[#dadce0] bg-white px-5 text-sm font-medium tracking-[0.01em] text-[#3c4043] shadow-[0_1px_2px_rgba(60,64,67,0.15)] transition hover:bg-[#f8fafd] hover:shadow-[0_1px_3px_rgba(60,64,67,0.25)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4285f4]/30;
+  }
+
+  /* Google logo inside the sign-in button. */
+  .google-icon {
+    @apply h-5 w-5;
+  }
+}

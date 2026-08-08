@@ -5,28 +5,28 @@ import { signIn } from 'next-auth/react'
 
 export default function AdminLoginPage() {
   return (
-    <main className="relative grid min-h-screen place-items-center bg-[#080b14] px-5 text-[#f4f6ff]">
+    <main className="auth-page">
       <Link
         href="/"
-        className="absolute left-5 top-6 inline-flex items-center gap-2 text-sm font-semibold text-[#69738e] no-underline transition hover:text-[#b9c2d8] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+        className="auth-back-link"
       >
         <span aria-hidden="true">←</span> Back Home
       </Link>
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#111725]/90 p-8 text-center shadow-2xl shadow-black/20">
-        <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#c6beff]">
+      <section className="auth-card">
+        <p className="auth-kicker">
           Stream VC Demonlist
         </p>
-        <h1 className="mt-3 text-3xl font-bold">Admin Login</h1>
-        <p className="mt-3 text-sm leading-6 text-[#b9c2d8]">
+        <h1 className="auth-title">Admin Login</h1>
+        <p className="auth-description">
           Sign in with an authorized Google account to manage the demonlist.
         </p>
         <button
           type="button"
           onClick={() => signIn('google', { callbackUrl: '/admin' })}
-          className="mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-md border border-[#dadce0] bg-white px-5 text-sm font-medium tracking-[0.01em] text-[#3c4043] shadow-[0_1px_2px_rgba(60,64,67,0.15)] transition hover:bg-[#f8fafd] hover:shadow-[0_1px_3px_rgba(60,64,67,0.25)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4285f4]/30"
+          className="google-button"
           style={{ fontFamily: 'Roboto, Arial, sans-serif' }}
         >
-          <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24">
+          <svg aria-hidden="true" className="google-icon" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.96h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.69 2.91-4.18 2.91-7.26Z"

@@ -27,15 +27,14 @@ type PlayerFormAction = (
   formData: FormData,
 ) => Promise<PlayerActionState>
 
-const inputClassName =
-  'mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15'
+const inputClassName = 'form-input'
 
 function FieldError({ errors }: { errors?: string[] }) {
   if (!errors?.length) {
     return null
   }
 
-  return <p className="mt-2 text-sm text-red-300">{errors[0]}</p>
+  return <p className="form-error">{errors[0]}</p>
 }
 
 export default function PlayerForm({
@@ -64,23 +63,23 @@ export default function PlayerForm({
       key={submittedValues ? JSON.stringify(submittedValues) : 'initial'}
       action={formAction}
       autoComplete="off"
-      className="mt-8 space-y-8"
+      className="form-layout"
     >
       {state.formError && (
         <p
-          className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+          className="form-error-summary"
           role="alert"
         >
           {state.formError}
         </p>
       )}
 
-      <section className="grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:grid-cols-2 sm:p-7">
-        <div className="sm:col-span-2">
-          <h2 className="m-0 text-xl font-bold">Player Information</h2>
+      <section className="form-section form-section-grid">
+        <div className="form-section-full">
+          <h2 className="form-section-title">Player Information</h2>
         </div>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Name
           <input
             autoComplete="off"
@@ -101,7 +100,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.name} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Slug
           <input
             autoComplete="off"
@@ -114,17 +113,17 @@ export default function PlayerForm({
             defaultValue={submittedValues?.slug ?? initialValues?.slug ?? ''}
             placeholder="No need to edit this manually!"
           />
-          <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+          <p className="form-hint">
             This will become your profile URL: /players/{submittedValues?.slug ?? (slugPreview || '[slug]')}
           </p>
           <FieldError errors={state.fieldErrors?.slug} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+        <label className="form-label form-section-full">
           Bio
           <textarea
             autoComplete="off"
-            className={`${inputClassName} min-h-40 resize-y`}
+            className={`${inputClassName} form-textarea`}
             name="bio"
             maxLength={5000}
             defaultValue={submittedValues?.bio ?? initialValues?.bio ?? ''}
@@ -133,7 +132,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.bio} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+        <label className="form-label form-section-full">
           Avatar URL
           <input
             autoComplete="off"
@@ -143,13 +142,13 @@ export default function PlayerForm({
             defaultValue={submittedValues?.avatarUrl ?? initialValues?.avatarUrl ?? ''}
             placeholder="Paste an image link... (to be changed) (optional)"
           />
-          <p className="mt-2 text-xs font-normal leading-5 text-[#8c97b2]">
+          <p className="form-hint-leading">
             Any image link from the internet will work, but I&apos;ve found that Twitter has the highest quality. To use your Twitter profile picture, navigate to your Twitter profile, right click on the profile picture and click &quot;Copy image address&quot;. In the future, I might add the option to upload your own profile picture here... there just isn&apos;t enough database storage space to currently do that.
           </p>
           <FieldError errors={state.fieldErrors?.avatarUrl} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Discord username
           <input
             autoComplete="off"
@@ -163,7 +162,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.discordHandle} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           YouTube URL
           <input
             autoComplete="off"
@@ -176,7 +175,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.youtubeUrl} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Twitch URL
           <input
             autoComplete="off"
@@ -189,7 +188,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.twitchUrl} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Twitter URL
           <input
             autoComplete="off"
@@ -202,7 +201,7 @@ export default function PlayerForm({
           <FieldError errors={state.fieldErrors?.twitterUrl} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Country
           <select
             autoComplete="off"
@@ -222,7 +221,7 @@ export default function PlayerForm({
         </label>
 
         {country1 && (
-          <label className="text-sm font-semibold text-[#d7dcf0]">
+          <label className="form-label">
             Country 2
             <select
               autoComplete="off"
@@ -242,9 +241,9 @@ export default function PlayerForm({
         )}
       </section>
 
-      <div className="flex justify-end">
+      <div className="form-actions">
         <button
-          className="inline-flex min-h-12 cursor-pointer items-center rounded-xl bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60"
+          className="form-submit"
           type="submit"
           disabled={pending}
         >

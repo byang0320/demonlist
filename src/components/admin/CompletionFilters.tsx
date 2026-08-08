@@ -64,20 +64,20 @@ export default function CompletionFilters({
   }
 
   return (
-    <section className="mb-8 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">
-      <div className="mb-5 flex items-center justify-between gap-4">
-        <h2 className="m-0 text-xl font-bold">Filter completions</h2>
+    <section className="admin-filter-panel">
+      <div className="admin-filter-header">
+        <h2 className="form-section-title">Filter completions</h2>
         {(levelId || playerId) && (
           <button
             type="button"
             onClick={clearFilters}
-            className="cursor-pointer text-xs font-semibold text-[#8c97b2] underline underline-offset-4 transition hover:text-white"
+            className="admin-clear-filters"
           >
             Clear filters
           </button>
         )}
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="form-grid">
         <SearchDropdown
           label="Level"
           name="levelId"
@@ -100,7 +100,7 @@ export default function CompletionFilters({
           open={levelOpen}
           renderOption={(option) => {
             const level = levelById.get(option.id)
-            return level ? <><span className="block">{level.name}</span><span className="block text-xs font-normal text-[#8c97b2]">by {level.publishedBy}</span></> : null
+            return level ? <><span className="form-option-name">{level.name}</span><span className="form-option-detail">by {level.publishedBy}</span></> : null
           }}
           renderSelected={levelLabel}
         />

@@ -10,63 +10,63 @@ export default async function AdminPlayersPage() {
   const players = await listPlayersForAdmin()
 
   return (
-    <main className="min-h-screen bg-[#080b14] px-4 py-8 text-[#f4f6ff] sm:px-6 sm:py-12">
-      <div className="mx-auto w-full max-w-280">
+    <main className="admin-page">
+      <div className="admin-page-content">
         <Link
           href="/admin"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+          className="back-link"
         >
           <span aria-hidden="true">←</span> Back to Admin Panel
         </Link>
-        <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <header className="admin-page-header-split">
           <div>
-            <h1 className="mt-3 text-4xl font-bold sm:text-6xl">Manage Players</h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[#b9c2d8]">
+            <h1 className="admin-page-title">Manage Players</h1>
+            <p className="admin-page-description">
               View and edit Stream VC player profiles.
             </p>
           </div>
           <Link
             href="/admin/players/new"
-            className="inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto"
+            className="admin-create-link"
           >
             + Create New Player
           </Link>
         </header>
 
         {players.length > 0 ? (
-          <div className="grid gap-3">
+          <div className="admin-player-list">
             {players.map((player) => (
               <div
                 key={player.slug}
-                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:border-[#ae9dff]/55 hover:bg-[#171e35]"
+                className="admin-player-row"
               >
                 <Link
                   href={`/players/${player.slug}`}
-                  className="group flex min-w-0 flex-1 items-center gap-4 no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+                  className="admin-player-link"
                 >
                   <span
-                    className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff]"
+                    className="admin-player-avatar"
                     style={player.avatarUrl ? { backgroundImage: `url(${player.avatarUrl})` } : undefined}
                     aria-hidden="true"
                   >
                     {!player.avatarUrl && player.name.slice(0, 1).toUpperCase()}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-bold group-hover:text-[#c6beff]">
+                  <span className="admin-player-copy">
+                    <span className="admin-player-name">
                       {player.name}
                     </span>
-                    <span className="mt-1 block text-xs text-[#8c97b2]">
+                    <span className="admin-player-count">
                       {player._count.completions}{' '}
                       {player._count.completions === 1 ? 'completion' : 'completions'}
                     </span>
                   </span>
-                  <span className="text-lg text-[#8c97b2] transition group-hover:translate-x-1 group-hover:text-[#c6beff]" aria-hidden="true">
+                  <span className="admin-player-arrow" aria-hidden="true">
                     →
                   </span>
                 </Link>
                 <Link
                   href={`/admin/players/${player.slug}/edit`}
-                  className="shrink-0 rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm"
+                  className="admin-edit-link"
                 >
                   Edit
                 </Link>
@@ -74,7 +74,7 @@ export default async function AdminPlayersPage() {
             ))}
           </div>
         ) : (
-          <p className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
+          <p className="empty-state">
             No Stream VC players yet.
           </p>
         )}

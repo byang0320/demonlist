@@ -32,13 +32,13 @@ export function DemonListToggle({
 
   return (
     <>
-      <div className="mb-6">
-        <div className="flex w-full overflow-hidden rounded-2xl border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8]">
+      <div className="demonlist-toggle-wrapper">
+        <div className="demonlist-toggle">
           <button
             type="button"
             aria-pressed={!isPlatformer}
             onClick={() => selectType('Classic')}
-            className={`min-h-12 flex-1 px-4 py-3 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${!isPlatformer ? 'bg-[#9c8cff]/20 text-white' : 'hover:bg-white/[0.04] hover:text-white'} cursor-pointer`}
+            className={`demonlist-toggle-button ${!isPlatformer ? 'demonlist-toggle-button-active' : 'demonlist-toggle-button-inactive'}`}
           >
             Classic ({classicCount})
           </button>
@@ -46,12 +46,12 @@ export function DemonListToggle({
             type="button"
             aria-pressed={isPlatformer}
             onClick={() => selectType('Platformer')}
-            className={`min-h-12 flex-1 border-l border-[#ae9dff]/35 px-4 py-3 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${isPlatformer ? 'bg-[#9c8cff]/20 text-white' : 'hover:bg-white/[0.04] hover:text-white'} cursor-pointer`}
+            className={`demonlist-toggle-button demonlist-toggle-button-platformer ${isPlatformer ? 'demonlist-toggle-button-active' : 'demonlist-toggle-button-inactive'}`}
           >
             Platformer ({platformerCount})
           </button>
         </div>
-        <p className="mt-2 text-sm leading-6 text-[#8c97b2]" aria-live="polite">
+        <p className="demonlist-description" aria-live="polite">
           {isPlatformer
             ? 'All levels on the Platformer Demonlist were rated either Extreme Demon or Insane Demon at the time they were placed.'
             : 'All levels on the Classic Demonlist were rated Extreme Demon at the time they were placed.'}

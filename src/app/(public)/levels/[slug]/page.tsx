@@ -26,7 +26,7 @@ export const dynamic = 'force-dynamic'
 
 function LevelPlaceholder() {
   return (
-    <svg aria-hidden="true" className="h-12 w-12" viewBox="0 0 48 48" fill="none">
+    <svg aria-hidden="true" className="level-placeholder-large" viewBox="0 0 48 48" fill="none">
       <path
         d="M24 5 40.5 14.5v19L24 43 7.5 33.5v-19L24 5Z"
         stroke="currentColor"
@@ -63,7 +63,7 @@ export default async function LevelProfilePage({
   const thumbnailUrl = getYouTubeThumbnailUrl(level.videoUrl)
   const thumbnail = (
     <div
-      className="grid aspect-video w-full place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)]"
+      className="profile-thumbnail"
       style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
       aria-hidden="true"
     >
@@ -72,43 +72,43 @@ export default async function LevelProfilePage({
   )
 
   return (
-    <main className="min-h-screen bg-[#080b14] bg-[radial-gradient(circle_at_15%_0%,rgba(109,90,218,0.2),transparent_32rem)] px-3 py-6 text-[#f4f6ff] sm:px-5 sm:py-12">
-      <div className="mx-auto w-full max-w-280">
+    <main className="public-page">
+      <div className="content-width">
         <Link
           href={level.type === "Classic" ? "/demonlist" : "/demonlist?type=platformer"}
-          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#b9c2d8] no-underline transition hover:text-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+          className="back-link"
         >
           <span aria-hidden="true">←</span> Back to {level.type === "Classic" ? "Demonlist" : "Platformer Demonlist"}
         </Link>
 
-        <header className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20">
-          <div className="grid grid-cols-[max-content_minmax(0,1fr)_12rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_15rem] sm:gap-8 sm:p-8">
-            <div className="flex h-full w-max items-center justify-start whitespace-nowrap border-r border-white/10 pr-4 text-left text-7xl font-extrabold leading-none tracking-[-0.08em] text-[#c6beff] sm:pr-8 sm:text-9xl">
+        <header className="profile-header">
+          <div className="level-profile-header-content">
+            <div className="level-profile-rank">
               {level.rank}
             </div>
 
-            <div className="min-w-0">
-              <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-bold tracking-[0.05em] text-[#c6beff]">
-                <span className="rounded-full bg-[#9c8cff]/15 px-3 py-1">{level.type}</span>
+            <div className="profile-copy">
+              <div className="level-profile-meta">
+                <span className="level-profile-type">{level.type}</span>
                 {level.demoted && (
-                  <span className="rounded-full bg-red-500/15 px-3 py-1 text-red-300">
+                  <span className="level-profile-badge">
                     Demoted
                   </span>
                 )}
                 {level.unrated && (
-                  <span className="rounded-full bg-red-500/15 px-3 py-1 text-red-300">
+                  <span className="level-profile-badge">
                     Unrated
                   </span>
                 )}
               </div>
-              <h1 className="break-words text-4xl font-bold leading-none sm:text-6xl">
+              <h1 className="profile-title">
                 {level.name}
               </h1>
-              <p className="mt-4 text-base text-[#b9c2d8]">
+              <p className="level-profile-publisher">
                 Published by {level.publishedBy}
               </p>
               {(level.createdBy || level.verifiedBy) && (
-                <p className="text-base text-[#b9c2d8]">
+                <p className="level-profile-creator">
                   {level.createdBy
                     ? `Created by ${level.createdBy}${level.verifiedBy ? `, verified by ${level.verifiedBy}` : ''}`
                     : `Verified by ${level.verifiedBy}`}
@@ -121,13 +121,13 @@ export default async function LevelProfilePage({
                 href={level.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block w-48 rounded-2xl no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60"
+                className="level-profile-video-link"
                 aria-label={`Watch the verification video for ${level.name}`}
               >
                 {thumbnail}
               </a>
             ) : (
-              <div className="w-48 sm:w-60">{thumbnail}</div>
+              <div className="level-profile-video-container">{thumbnail}</div>
             )}
           </div>
 

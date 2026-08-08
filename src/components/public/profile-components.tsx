@@ -26,28 +26,28 @@ type LevelInfoCardsProps = {
 export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsProps) {
   if (props.type === 'player') {
     return (
-      <div className="grid gap-3 border-t border-white/10 p-5 sm:grid-cols-2 sm:p-8">
+      <div className="profile-info-cards">
         <InfoCard label={`Total ${props.levelType} completions`}>
-          <p className="mt-2 text-3xl font-bold tracking-[-0.05em] text-white">
+          <p className="profile-info-card-number">
             {props.completionCount}
           </p>
         </InfoCard>
         {props.hardestLevel ? (
           <Link
             href={`/levels/${props.hardestLevel.slug}`}
-            className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+            className="profile-hardest-link"
           >
-            <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
+            <p className="eyebrow">
               Hardest {props.levelType} Level Completed
             </p>
-            <p className="mt-2 break-words text-3xl font-bold leading-tight">
-              <span className="text-[#c6beff]">{props.hardestLevel.rank}.</span>{' '}
+            <p className="profile-hardest-title">
+              <span className="profile-hardest-rank">{props.hardestLevel.rank}.</span>{' '}
               {props.hardestLevel.name}
             </p>
           </Link>
         ) : (
           <InfoCard label={`Hardest ${props.levelType} Level Completed`}>
-            <p className="mt-2 text-lg font-semibold text-[#59627b]">
+            <p className="profile-hardest-empty">
               No {props.levelType} completions yet
             </p>
           </InfoCard>
@@ -57,12 +57,12 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
   }
 
   return (
-    <div className="grid gap-6 border-t border-white/10 p-5 sm:p-8">
+    <div className="level-description-card">
       <div>
-        <p className="mb-2 text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">
+        <p className="eyebrow level-description-label">
           Description
         </p>
-        <p className="m-0 w-full whitespace-pre-wrap text-base leading-7 text-[#d7dcf0]">
+        <p className="level-description">
           {props.description || '(No description provided)'}
         </p>
       </div>
@@ -72,8 +72,8 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
 
 function InfoCard({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <p className="text-xs font-bold uppercase tracking-[0.10em] text-[#8c97b2]">{label}</p>
+    <div className="profile-info-card">
+      <p className="eyebrow">{label}</p>
       {children}
     </div>
   )
@@ -116,54 +116,54 @@ type CompletionTableProps =
 
 export function CompletionTable(props: CompletionTableProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80">
-      <div className="overflow-x-auto">
+    <div className="completion-table-shell">
+      <div className="completion-table-scroll">
         {props.type === 'player' ? (
-          <table className="w-full min-w-145 border-collapse text-left">
-            <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
+          <table className="completion-table">
+            <thead className="completion-table-head">
               <tr>
-                <th className="w-20 px-5 py-4 font-semibold">Rank</th>
-                <th className="px-5 py-4 font-semibold">Level</th>
-                <th className="px-5 py-4 text-right font-semibold">Completed</th>
-                <th className="px-5 py-4 text-right font-semibold">Video</th>
+                <th className="completion-table-heading completion-table-heading-rank">Rank</th>
+                <th className="completion-table-heading">Level</th>
+                <th className="completion-table-heading completion-table-heading-right">Completed</th>
+                <th className="completion-table-heading completion-table-heading-right">Video</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="completion-table-body">
               {props.completions.map((completion) => (
-                <tr key={completion.level.id} className="group relative transition hover:bg-white/[0.03]">
-                  <td className="px-5 py-4 text-2xl font-extrabold tracking-[-0.06em] text-[#c6beff]">
+                <tr key={completion.level.id} className="completion-table-row">
+                  <td className="completion-table-rank">
                     {completion.level.rank}
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="completion-table-cell">
                     <Link
                       href={`/levels/${completion.level.slug}`}
                       aria-label={`View level ${completion.level.name}`}
-                      className="text-[#c6beff] no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+                      className="completion-table-level-link"
                     >
-                      <span className="relative z-10 flex items-center gap-3 font-semibold text-white group-hover:text-[#c6beff]">
+                      <span className="completion-table-link-content">
                         <LevelThumbnail videoUrl={completion.level.videoUrl} />
-                        <span className="truncate">
+                        <span className="completion-table-level-name">
                           {completion.level.name}
                           {completion.times >= 2 ? ` (x${completion.times})` : ''}
                         </span>
                       </span>
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-5 py-4 text-right text-sm text-[#b9c2d8]">
+                  <td className="completion-table-date">
                     {formatCompletionDate(completion.completedAt)}
                   </td>
-                  <td className="relative z-10 px-5 py-4 text-right">
+                  <td className="completion-table-video">
                     {completion.videoUrl ? (
                       <a
                         href={completion.videoUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm font-semibold text-[#c6beff] underline decoration-[#9c8cff]/50 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+                        className="completion-video-link"
                       >
                         YouTube ↗︎
                       </a>
                     ) : (
-                      <span className="text-sm text-[#59627b]">—</span>
+                      <span className="completion-video-empty">—</span>
                     )}
                   </td>
                 </tr>
@@ -171,53 +171,53 @@ export function CompletionTable(props: CompletionTableProps) {
             </tbody>
           </table>
         ) : (
-          <table className="w-full min-w-145 border-collapse text-left">
-            <thead className="border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2]">
+          <table className="completion-table">
+            <thead className="completion-table-head">
               <tr>
-                <th className="px-5 py-4 font-semibold">Player</th>
-                <th className="px-5 py-4 font-semibold">Completed</th>
-                <th className="px-5 py-4 text-right font-semibold">Video</th>
+                <th className="completion-table-heading">Player</th>
+                <th className="completion-table-heading">Completed</th>
+                <th className="completion-table-heading completion-table-heading-right">Video</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="completion-table-body">
               {props.completions.map((completion) => (
                 <tr
                   key={`${completion.player.slug}-${completion.completedAt?.toISOString() ?? 'undated'}`}
-                  className="group relative transition hover:bg-white/[0.03]"
+                  className="completion-table-row"
                 >
-                  <td className="px-5 py-4">
+                  <td className="completion-table-cell">
                     <Link
                       href={`/players/${completion.player.slug}`}
                       aria-label={`View player ${completion.player.name}`}
-                      className="flex items-center gap-3 font-semibold text-white no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+                      className="completion-table-player-link"
                     >
-                      <span className="relative z-10 flex items-center gap-3 group-hover:text-[#c6beff]">
+                      <span className="completion-table-link-content">
                         <PlayerAvatar
                           name={completion.player.name}
                           avatarUrl={completion.player.avatarUrl}
                         />
-                        <span className="truncate">
+                        <span className="completion-table-level-name">
                           {completion.player.name}
                           {completion.times >= 2 ? ` (x${completion.times})` : ''}
                         </span>
                       </span>
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-5 py-4 text-sm text-[#b9c2d8]">
+                  <td className="completion-table-date completion-table-date-left">
                     {formatCompletionDate(completion.completedAt)}
                   </td>
-                  <td className="relative z-10 px-5 py-4 text-right">
+                  <td className="completion-table-video">
                     {completion.videoUrl ? (
                       <a
                         href={completion.videoUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm font-semibold text-[#c6beff] underline decoration-[#9c8cff]/50 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25"
+                        className="completion-video-link"
                       >
                         YouTube ↗︎
                       </a>
                     ) : (
-                      <span className="text-sm text-[#59627b]">—</span>
+                      <span className="completion-video-empty">—</span>
                     )}
                   </td>
                 </tr>
@@ -238,14 +238,14 @@ type SortControlsProps = {
 
 function SortControls({ sort, options, onChange }: SortControlsProps) {
   return (
-    <div className="flex items-center gap-2 text-sm text-[#8c97b2]">
+    <div className="sort-controls">
       <span>Sort by</span>
       {options.map((option) => (
         <button
           key={option.value}
           type="button"
           onClick={() => onChange(option.value)}
-          className={`cursor-pointer rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${sort === option.value ? 'bg-[#9c8cff]/15 font-semibold text-[#c6beff]' : 'hover:text-white'}`}
+          className={`sort-button ${sort === option.value ? 'sort-button-active' : 'sort-button-inactive'}`}
         >
           {option.label}
         </button>
@@ -313,9 +313,9 @@ export function SortableCompletionRecords(
   const isPlayer = props.type === 'player'
 
   return (
-    <section className="mt-8">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="m-0 text-2xl font-bold sm:text-3xl">
+    <section className="completion-records-section">
+      <div className="completion-records-heading">
+        <h2 className="completion-records-title">
           {isPlayer ? 'Completed Levels' : 'Completion Records'}
         </h2>
         <SortControls
@@ -335,7 +335,7 @@ export function SortableCompletionRecords(
       </div>
 
       {sortedCompletions.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2]">
+        <div className="empty-state">
           {props.emptyMessage}
         </div>
       ) : isPlayer ? (
@@ -352,11 +352,11 @@ function LevelThumbnail({ videoUrl }: { videoUrl: string | null }) {
 
   return (
     <span
-      className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80"
+      className="profile-thumbnail-small"
       style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
       aria-hidden="true"
     >
-      {!thumbnailUrl && <LevelPlaceholder className="h-7 w-7" />}
+      {!thumbnailUrl && <LevelPlaceholder className="level-placeholder-table" />}
     </span>
   )
 }
@@ -364,7 +364,7 @@ function LevelThumbnail({ videoUrl }: { videoUrl: string | null }) {
 function PlayerAvatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
   return (
     <span
-      className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-[#252d49] bg-cover bg-center text-sm font-bold text-[#c6beff]"
+      className="profile-table-avatar"
       style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
       role="img"
       aria-label={`${name}'s avatar`}
@@ -394,7 +394,7 @@ function LevelPlaceholder({ className }: { className: string }) {
 
 function formatCompletionDate(date: Date | null) {
   if (!date) {
-    return <span className="text-sm text-[#59627b]">—</span>
+    return <span className="completion-video-empty">—</span>
   }
 
   return new Intl.DateTimeFormat('en-US', {

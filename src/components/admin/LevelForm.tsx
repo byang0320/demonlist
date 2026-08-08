@@ -33,15 +33,14 @@ type LevelFormAction = (
   formData: FormData,
 ) => Promise<LevelActionState>
 
-const inputClassName =
-  'mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15'
+const inputClassName = 'form-input'
 
 function FieldError({ errors }: { errors?: string[] }) {
   if (!errors?.length) {
     return null
   }
 
-  return <p className="mt-2 text-sm text-red-300">{errors[0]}</p>
+  return <p className="form-error">{errors[0]}</p>
 }
 
 export default function LevelForm({
@@ -145,24 +144,24 @@ export default function LevelForm({
       key={submittedValues ? JSON.stringify(submittedValues) : 'initial'}
       action={formAction}
       autoComplete="off"
-      className="mt-8 space-y-8"
+      className="form-layout"
     >
       {state.formError && (
         <p
-          className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+          className="form-error-summary"
           role="alert"
         >
           {state.formError}
         </p>
       )}
 
-      <section className="grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:grid-cols-2 sm:p-7">
-        <div className="sm:col-span-2">
-          <h2 className="m-0 text-xl font-bold">Level Information</h2>
+      <section className="form-section form-section-grid">
+        <div className="form-section-full">
+          <h2 className="form-section-title">Level Information</h2>
         </div>
 
-        <div className={`grid gap-4 sm:col-span-2 ${allowAutofill ? 'sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end' : ''}`}>
-          <label className="text-sm font-semibold text-[#d7dcf0]">
+        <div className={`form-row ${allowAutofill ? 'form-row-autofill' : ''}`}>
+          <label className="form-label">
             Level ID
             <input
               autoComplete="off"
@@ -185,18 +184,18 @@ export default function LevelForm({
               type="button"
               onClick={autofillFromGDLevel}
               disabled={autofilling || autofilled}
-              className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60"
+              className="form-secondary-button"
             >
               {autofilling ? 'Autofilling…' : autofilled ? 'Autofilled' : 'Autofill'}
             </button>
           )}
           {allowAutofill && (
-            <div className="sm:col-span-2">
-              <p className="text-xs leading-5 text-[#8c97b2]">
+            <div className="form-section-full">
+              <p className="form-hint-no-margin">
                 Enter the Geometry Dash level ID to pull its name, description, publisher, and type from the GDBrowser API. All fields remain editable after autofilling.
               </p>
               {autofillMessage && (
-                <p className="mt-2 text-xs leading-5 text-[#8c97b2]" aria-live="polite">
+                <p className="form-hint-leading" aria-live="polite">
                   {autofillMessage}
                 </p>
               )}
@@ -204,7 +203,7 @@ export default function LevelForm({
           )}
         </div>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Name
           <input
             autoComplete="off"
@@ -225,7 +224,7 @@ export default function LevelForm({
           <FieldError errors={state.fieldErrors?.name} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Slug
           <input
             autoComplete="off"
@@ -238,13 +237,13 @@ export default function LevelForm({
             defaultValue={submittedValues?.slug ?? initialValues?.slug ?? ''}
             placeholder="No need to edit this manually!"
           />
-          <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+          <p className="form-hint">
             This will become the URL: /levels/{submittedValues?.slug ?? (slugPreview || '[slug]')}. If it is already taken, the publisher name will be appended automatically.
           </p>
           <FieldError errors={state.fieldErrors?.slug} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Level type
           <select
             autoComplete="off"
@@ -258,7 +257,7 @@ export default function LevelForm({
             <option value="Platformer">Platformer</option>
           </select>
           {typeLocked && <input autoComplete="off" name="type" type="hidden" value={type} />}
-          <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+          <p className="form-hint">
             {typeLocked
               ? 'You cannot change the level type retroactively. Delete this and create a new level if you need to change the type.'
               : 'Make sure the correct level type is chosen; it cannot be changed later.'}
@@ -266,7 +265,7 @@ export default function LevelForm({
           <FieldError errors={state.fieldErrors?.type} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Status
           <select autoComplete="off" className={inputClassName} name="status" defaultValue={submittedValues?.status ?? initialValues?.status ?? 'ACTIVE'}>
             <option value="ACTIVE">Active</option>
@@ -275,73 +274,73 @@ export default function LevelForm({
           <FieldError errors={state.fieldErrors?.status} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Proposed rank
           <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue={submittedValues?.rank ?? initialValues?.rank ?? 1} placeholder="e.g. 67" />
-          <p className="mt-2 text-xs font-normal text-[#8c97b2]">
+          <p className="form-hint">
             {typeLocked
               ? 'If changed, the ranks of other levels will be adjusted automatically!'
               : 'Active levels at this rank and below will move down one position.'}
           </p>
-          <p className="mt-1 text-xs font-normal text-[#8c97b2]">
+          <p className="form-hint-tight">
             This should be between 1 and {maxRank}
           </p>
           <FieldError errors={state.fieldErrors?.rank} />
         </label>
 
-        <div className="flex flex-col justify-end gap-3 pb-1">
-          <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
+        <div className="form-toggle-stack">
+          <label className="form-toggle-row form-toggle-copy">
             <input autoComplete="off" type="hidden" name="demoted" value="false" />
-            <input autoComplete="off" defaultChecked={submittedValues?.demoted === 'true' || (submittedValues?.demoted === undefined && (initialValues?.demoted ?? false))} className="h-4 w-4 accent-[#9c8cff]" name="demoted" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={submittedValues?.demoted === 'true' || (submittedValues?.demoted === undefined && (initialValues?.demoted ?? false))} className="form-checkbox" name="demoted" type="checkbox" value="true" />
             Demoted
           </label>
-          <label className="flex items-center gap-3 text-sm font-semibold text-[#d7dcf0]">
+          <label className="form-toggle-row form-toggle-copy">
             <input autoComplete="off" type="hidden" name="unrated" value="false" />
-            <input autoComplete="off" defaultChecked={submittedValues?.unrated === 'true' || (submittedValues?.unrated === undefined && (initialValues?.unrated ?? false))} className="h-4 w-4 accent-[#9c8cff]" name="unrated" type="checkbox" value="true" />
+            <input autoComplete="off" defaultChecked={submittedValues?.unrated === 'true' || (submittedValues?.unrated === undefined && (initialValues?.unrated ?? false))} className="form-checkbox" name="unrated" type="checkbox" value="true" />
             Unrated
           </label>
         </div>
       </section>
 
-      <section className="grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7">
-        <div className="sm:col-span-2">
-          <h2 className="m-0 text-xl font-bold">Metadata</h2>
+      <section className="form-section form-section-grid">
+        <div className="form-section-full">
+          <h2 className="form-section-title">Metadata</h2>
         </div>
 
-        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+        <label className="form-label form-section-full">
           Published by
           <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} defaultValue={submittedValues?.publishedBy ?? initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" />
           <FieldError errors={state.fieldErrors?.publishedBy} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Created by
           <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (optional)"/>
           <FieldError errors={state.fieldErrors?.createdBy} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0]">
+        <label className="form-label">
           Verified by
           <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (optional)" />
           <FieldError errors={state.fieldErrors?.verifiedBy} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+        <label className="form-label form-section-full">
           Level Description (copied from in-game)
-          <textarea autoComplete="off" className={`${inputClassName} min-h-32 resize-y`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (optional)" />
+          <textarea autoComplete="off" className={`${inputClassName} form-textarea-small`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (optional)" />
           <FieldError errors={state.fieldErrors?.description} />
         </label>
 
-        <label className="text-sm font-semibold text-[#d7dcf0] sm:col-span-2">
+        <label className="form-label form-section-full">
           Level Verification Video (YouTube link)
           <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. The thumbnail will be derived from this video. (optional)" />
           <FieldError errors={state.fieldErrors?.videoUrl} />
         </label>
       </section>
 
-      <div className="flex justify-end">
+      <div className="form-actions">
         <button
-          className="inline-flex min-h-12 items-center rounded-xl bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60 cursor-pointer"
+          className="form-submit"
           type="submit"
           disabled={pending}
         >

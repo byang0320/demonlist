@@ -34,13 +34,13 @@ export function PlayerCompletionToggle({
   }
 
   return (
-    <div className="border-t border-white/10 px-5 pb-5 pt-5 sm:px-8 sm:pb-8 sm:pt-8">
-      <div className="flex w-full overflow-hidden rounded-2xl border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8]">
+    <div className="completion-toggle-section">
+      <div className="completion-toggle">
         <button
           type="button"
           aria-pressed={!isPlatformer}
           onClick={() => selectType('Classic')}
-          className={`min-h-12 flex-1 px-4 py-3 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${!isPlatformer ? 'bg-[#9c8cff]/20 text-white' : 'hover:bg-white/[0.04] hover:text-white'} cursor-pointer`}
+          className={`completion-toggle-button ${!isPlatformer ? 'completion-toggle-button-active' : 'completion-toggle-button-inactive'}`}
         >
           Classic ({classicCount})
         </button>
@@ -48,7 +48,7 @@ export function PlayerCompletionToggle({
           type="button"
           aria-pressed={isPlatformer}
           onClick={() => selectType('Platformer')}
-          className={`min-h-12 flex-1 border-l border-[#ae9dff]/35 px-4 py-3 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 ${isPlatformer ? 'bg-[#9c8cff]/20 text-white' : 'hover:bg-white/[0.04] hover:text-white'} cursor-pointer`}
+          className={`completion-toggle-button completion-toggle-button-platformer ${isPlatformer ? 'completion-toggle-button-active' : 'completion-toggle-button-inactive'}`}
         >
           Platformer ({platformerCount})
         </button>

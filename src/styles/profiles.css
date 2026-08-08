@@ -1,0 +1,346 @@
+@layer components {
+  /* Shared card shell for player and level profile headers. */
+  .profile-header {
+    @apply overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20;
+  }
+
+  /* Responsive content layout inside a player profile header. */
+  .player-profile-header-content {
+    @apply grid gap-6 p-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-8 sm:p-8;
+  }
+
+  /* Responsive content layout inside a level profile header. */
+  .level-profile-header-content {
+    @apply grid grid-cols-[max-content_minmax(0,1fr)_12rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_15rem] sm:gap-8 sm:p-8;
+  }
+
+  /* Flexible text column inside either profile header. */
+  .profile-copy {
+    @apply min-w-0;
+  }
+
+  /* Accent label such as “Player profile”. */
+  .profile-label {
+    @apply mb-3 text-xs font-bold uppercase tracking-[0.10em] text-[#c6beff];
+  }
+
+  /* Main player/level profile title. */
+  .profile-title {
+    @apply break-words text-4xl font-bold leading-none sm:text-6xl;
+  }
+
+  /* Biography text on player profiles. */
+  .profile-bio {
+    @apply mt-5 max-w-2xl whitespace-pre-wrap text-base leading-7 text-[#b9c2d8];
+  }
+
+  /* Row of Discord/social links on player profiles. */
+  .profile-links {
+    @apply mt-5 flex flex-wrap items-center gap-2;
+  }
+
+  /* Non-link profile metadata, currently the Discord handle. */
+  .profile-link-muted {
+    @apply rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-[#b9c2d8];
+  }
+
+  /* Clickable YouTube/Twitch/Twitter links on player profiles. */
+  .profile-link {
+    @apply rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Large player avatar in a player profile header. */
+  .profile-avatar-large {
+    @apply h-28 w-28 text-3xl sm:h-36 sm:w-36;
+  }
+
+  /* Small player avatar used in compact profile contexts. */
+  .profile-avatar-small {
+    @apply h-10 w-10 rounded-xl text-sm;
+  }
+
+  /* Shared avatar base styling. */
+  .profile-avatar {
+    @apply grid shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center font-bold text-[#c6beff];
+  }
+
+  /* Player completion-summary card row beneath a profile header. */
+  .profile-info-cards {
+    @apply grid gap-3 border-t border-white/10 p-5 sm:grid-cols-2 sm:p-8;
+  }
+
+  /* Individual bordered card inside the player completion-summary row. */
+  .profile-info-card {
+    @apply rounded-2xl border border-white/10 bg-white/[0.03] p-4;
+  }
+
+  /* Large completion count inside a profile info card. */
+  .profile-info-card-number {
+    @apply mt-2 text-3xl font-bold tracking-[-0.05em] text-white;
+  }
+
+  /* Clickable hardest-level card on player profiles. */
+  .profile-hardest-link {
+    @apply block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Hardest-level name inside a player profile card. */
+  .profile-hardest-title {
+    @apply mt-2 break-words text-3xl font-bold leading-tight;
+  }
+
+  /* Rank accent inside a hardest-level title. */
+  .profile-hardest-rank {
+    @apply text-[#c6beff];
+  }
+
+  /* Empty hardest-level message on a player profile. */
+  .profile-hardest-empty {
+    @apply mt-2 text-lg font-semibold text-[#59627b];
+  }
+
+  /* Description card beneath a level profile header. */
+  .level-description-card {
+    @apply grid gap-6 border-t border-white/10 p-5 sm:p-8;
+  }
+
+  /* Label above a level description. */
+  .level-description-label {
+    @apply mb-2;
+  }
+
+  /* Level description text on a level profile. */
+  .level-description {
+    @apply m-0 w-full whitespace-pre-wrap text-base leading-7 text-[#d7dcf0];
+  }
+
+  /* Section containing profile completion records. */
+  .completion-records-section {
+    @apply mt-8;
+  }
+
+  /* Heading row containing the records title and sort controls. */
+  .completion-records-heading {
+    @apply mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  /* “Completed Levels” or “Completion Records” heading. */
+  .completion-records-title {
+    @apply m-0 text-2xl font-bold sm:text-3xl;
+  }
+
+  /* Sort-by control row on player and level profiles. */
+  .sort-controls {
+    @apply flex items-center gap-2 text-sm text-[#8c97b2];
+  }
+
+  /* Shared button styling for profile sort controls. */
+  .sort-button {
+    @apply cursor-pointer rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Selected sort option on a profile. */
+  .sort-button-active {
+    @apply bg-[#9c8cff]/15 font-semibold text-[#c6beff];
+  }
+
+  /* Unselected sort option on a profile. */
+  .sort-button-inactive {
+    @apply hover:text-white;
+  }
+
+  /* Outer shell around profile completion tables. */
+  .completion-table-shell {
+    @apply overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80;
+  }
+
+  /* Horizontal scrolling wrapper for narrow screens. */
+  .completion-table-scroll {
+    @apply overflow-x-auto;
+  }
+
+  /* Shared table sizing and alignment for player/level completion tables. */
+  .completion-table {
+    @apply w-full min-w-145 border-collapse text-left;
+  }
+
+  /* Header styling for completion tables. */
+  .completion-table-head {
+    @apply border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.07em] text-[#8c97b2];
+  }
+
+  /* Standard completion-table heading cell. */
+  .completion-table-heading {
+    @apply px-5 py-4 font-semibold;
+  }
+
+  /* Fixed width for the player-table rank heading. */
+  .completion-table-heading-rank {
+    @apply w-20;
+  }
+
+  /* Right alignment for Completed and Video headings. */
+  .completion-table-heading-right {
+    @apply text-right;
+  }
+
+  /* Divider styling for completion-table body rows. */
+  .completion-table-body {
+    @apply divide-y divide-white/10;
+  }
+
+  /* Hoverable completion-table row. */
+  .completion-table-row {
+    @apply relative transition hover:bg-white/[0.03];
+  }
+
+  /* Rank cell in a player completion table. */
+  .completion-table-rank {
+    @apply px-5 py-4 text-2xl font-extrabold tracking-[-0.06em] text-[#c6beff];
+  }
+
+  /* Standard data cell in a completion table. */
+  .completion-table-cell {
+    @apply px-5 py-4;
+  }
+
+  /* Right-aligned completion date cell in a player table. */
+  .completion-table-date {
+    @apply whitespace-nowrap px-5 py-4 text-right text-sm text-[#b9c2d8];
+  }
+
+  /* Left-aligned completion date cell in a level table. */
+  .completion-table-date-left {
+    @apply text-left;
+  }
+
+  /* Right-aligned video cell in a completion table. */
+  .completion-table-video {
+    @apply relative z-10 px-5 py-4 text-right;
+  }
+
+  /* Full-row level link inside a player completion table. */
+  .completion-table-level-link {
+    @apply text-[#c6beff] no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Full-row player link inside a level completion table. */
+  .completion-table-player-link {
+    @apply flex items-center gap-3 font-semibold text-white no-underline after:absolute after:inset-0 after:z-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Thumbnail/name content layered above the full-row link hit area. */
+  .completion-table-link-content {
+    @apply relative z-10 flex items-center gap-3 font-semibold text-white;
+  }
+
+  /* Hover color for thumbnail/name content in a completion row. */
+  .completion-table-row:hover .completion-table-link-content {
+    @apply text-[#c6beff];
+  }
+
+  /* Truncated level/player name inside a completion row. */
+  .completion-table-level-name {
+    @apply truncate;
+  }
+
+  /* YouTube link in completion tables. */
+  .completion-video-link {
+    @apply text-sm font-semibold text-[#c6beff] underline decoration-[#9c8cff]/50 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Placeholder shown when a completion has no video. */
+  .completion-video-empty {
+    @apply text-sm text-[#59627b];
+  }
+
+  /* Large rank column on a level profile header. */
+  .level-profile-rank {
+    @apply flex h-full w-max items-center justify-start whitespace-nowrap border-r border-white/10 pr-4 text-left text-7xl font-extrabold leading-none tracking-[-0.08em] text-[#c6beff] sm:pr-8 sm:text-9xl;
+  }
+
+  /* Type/demotion/unrated metadata row on a level profile. */
+  .level-profile-meta {
+    @apply mb-4 flex flex-wrap items-center gap-2 text-xs font-bold tracking-[0.05em] text-[#c6beff];
+  }
+
+  /* Classic/Platformer badge on a level profile. */
+  .level-profile-type {
+    @apply rounded-full bg-[#9c8cff]/15 px-3 py-1;
+  }
+
+  /* Demoted or Unrated badge on a level profile. */
+  .level-profile-badge {
+    @apply rounded-full bg-red-500/15 px-3 py-1 text-red-300;
+  }
+
+  /* Publisher line on a level profile. */
+  .level-profile-publisher {
+    @apply mt-4 text-base text-[#b9c2d8];
+  }
+
+  /* Creator/verifier line on a level profile. */
+  .level-profile-creator {
+    @apply text-base text-[#b9c2d8];
+  }
+
+  /* Clickable verification-video thumbnail wrapper. */
+  .level-profile-video-link {
+    @apply block w-48 rounded-2xl no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60;
+  }
+
+  /* Non-clickable verification-video thumbnail wrapper. */
+  .level-profile-video-container {
+    @apply w-48 sm:w-60;
+  }
+
+  /* Large verification thumbnail on a level profile. */
+  .profile-thumbnail {
+    @apply grid aspect-video w-full place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)];
+  }
+
+  /* Small verification thumbnail inside completion tables. */
+  .profile-thumbnail-small {
+    @apply grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80;
+  }
+
+  /* Section containing the Classic/Platformer completion toggle. */
+  .completion-toggle-section {
+    @apply border-t border-white/10 px-5 pb-5 pt-5 sm:px-8 sm:pb-8 sm:pt-8;
+  }
+
+  /* Completion toggle container on player profiles. */
+  .completion-toggle {
+    @apply flex w-full overflow-hidden rounded-2xl border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8];
+  }
+
+  /* Individual Classic/Platformer completion toggle button. */
+  .completion-toggle-button {
+    @apply min-h-12 flex-1 px-4 py-3 cursor-pointer transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+  }
+
+  /* Divider applied to the Platformer completion-toggle button. */
+  .completion-toggle-button-platformer {
+    @apply border-l border-[#ae9dff]/35;
+  }
+
+  /* Selected state for the profile completion toggle. */
+  .completion-toggle-button-active {
+    @apply bg-[#9c8cff]/20 text-white;
+  }
+
+  /* Hover state for an unselected profile completion toggle. */
+  .completion-toggle-button-inactive {
+    @apply hover:bg-white/[0.04] hover:text-white;
+  }
+
+  /* Placeholder icon size inside a completion-table thumbnail. */
+  .level-placeholder-table {
+    @apply h-7 w-7;
+  }
+
+  /* Compact avatar used in level completion tables. */
+  .profile-table-avatar {
+    @apply grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-[#252d49] bg-cover bg-center text-sm font-bold text-[#c6beff];
+  }
+}

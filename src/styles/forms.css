@@ -1,0 +1,167 @@
+@layer components {
+  /* Outer layout for all admin create/edit forms. */
+  .form-layout {
+    @apply mt-8 space-y-8;
+  }
+
+  /* Standard bordered form section, used by completion forms. */
+  .form-section {
+    @apply grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+  }
+
+  /* Two-column form-section variant used by level and player forms. */
+  .form-section-grid {
+    @apply sm:grid-cols-2;
+  }
+
+  /* Makes a form heading or field span the full form grid. */
+  .form-section-full {
+    @apply sm:col-span-2;
+  }
+
+  /* Section headings inside admin forms and filter panels. */
+  .form-section-title {
+    @apply m-0 text-xl font-bold;
+  }
+
+  /* Labels for admin form controls. */
+  .form-label {
+    @apply text-sm font-semibold text-[#d7dcf0];
+  }
+
+  /* Adds positioning context for searchable autocomplete labels. */
+  .form-autocomplete-label {
+    @apply relative;
+  }
+
+  /* Shared input/select styling for admin forms and filters. */
+  .form-input {
+    @apply mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
+  }
+
+  /* Taller textarea variant used for player biographies. */
+  .form-textarea {
+    @apply min-h-40 resize-y;
+  }
+
+  /* Shorter textarea variant used for completion and level descriptions. */
+  .form-textarea-small {
+    @apply min-h-32 resize-y;
+  }
+
+  /* Short helper text beneath individual form fields. */
+  .form-hint {
+    @apply mt-2 text-xs font-normal text-[#8c97b2];
+  }
+
+  /* Multi-line helper text with increased line height. */
+  .form-hint-leading {
+    @apply mt-2 text-xs font-normal leading-5 text-[#8c97b2];
+  }
+
+  /* Helper text variant without top margin. */
+  .form-hint-no-margin {
+    @apply text-xs leading-5 text-[#8c97b2];
+  }
+
+  /* Compact helper text used for secondary rank guidance. */
+  .form-hint-tight {
+    @apply mt-1 text-xs font-normal text-[#8c97b2];
+  }
+
+  /* Introductory copy at the top of a completion form. */
+  .form-intro {
+    @apply mt-3 max-w-3xl text-sm leading-6 text-[#b9c2d8];
+  }
+
+  /* Inline links inside admin form instructions. */
+  .form-hint-link {
+    @apply text-[#c6beff] underline underline-offset-4 hover:text-white;
+  }
+
+  /* First line of an autocomplete option. */
+  .form-option-name,
+  .form-option-detail {
+    @apply block;
+  }
+
+  /* Secondary publisher/detail line in autocomplete options. */
+  .form-option-detail {
+    @apply text-xs font-normal text-[#8c97b2];
+  }
+
+  /* Inline validation message for one form field. */
+  .form-error {
+    @apply mt-2 text-sm text-red-300;
+  }
+
+  /* Top-level validation summary for a form submission. */
+  .form-error-summary {
+    @apply rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200;
+  }
+
+  /* Geometry Dash level-ID row in the level form. */
+  .form-row {
+    @apply grid gap-4 sm:col-span-2;
+  }
+
+  /* Adds the autofill button column to the level-ID row. */
+  .form-row-autofill {
+    @apply sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end;
+  }
+
+  /* Generic two-column field grid used by forms and completion filters. */
+  .form-grid {
+    @apply grid gap-5 sm:grid-cols-2;
+  }
+
+  /* Right-aligned action area below an admin form. */
+  .form-actions {
+    @apply flex justify-end;
+  }
+
+  /* Primary create/save submit button in admin forms. */
+  .form-submit {
+    @apply inline-flex min-h-12 cursor-pointer items-center rounded-xl bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60;
+  }
+
+  /* Secondary autofill/action button in the level form. */
+  .form-secondary-button {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* Checkbox label row for level flags such as Demoted and Unrated. */
+  .form-toggle-row {
+    @apply flex items-center gap-3;
+  }
+
+  /* Vertical stack containing the level flag checkboxes. */
+  .form-toggle-stack {
+    @apply flex flex-col justify-end gap-3 pb-1;
+  }
+
+  /* Typography for checkbox labels. */
+  .form-toggle-copy {
+    @apply text-sm font-semibold text-[#d7dcf0];
+  }
+
+  /* Checkbox dimensions and accent color for level flags. */
+  .form-checkbox {
+    @apply h-4 w-4 accent-[#9c8cff];
+  }
+
+  /* Floating search-results menu for level/player autocomplete fields. */
+  .autocomplete-menu {
+    @apply absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-[#171e35] p-1 shadow-2xl;
+  }
+
+  /* Selectable option button inside an autocomplete menu. */
+  .autocomplete-option {
+    @apply block w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-[#9c8cff]/15 focus:bg-[#9c8cff]/15 focus:outline-none;
+  }
+
+  /* Empty-state message inside an autocomplete menu. */
+  .autocomplete-empty {
+    @apply px-3 py-3 text-sm font-normal text-[#8c97b2];
+  }
+}
