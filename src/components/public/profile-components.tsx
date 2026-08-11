@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 import type { LevelType } from '@/features/levels/queries'
 import type { LevelCompletionSort } from '@/features/levels/queries'
 import type { PlayerCompletionSort } from '@/features/players/queries'
-import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 type PlayerInfoCardsProps = {
   type: 'player'
@@ -141,7 +140,6 @@ export function CompletionTable(props: CompletionTableProps) {
                       className="completion-table-level-link"
                     >
                       <span className="completion-table-link-content">
-                        <LevelThumbnail videoUrl={completion.level.videoUrl} />
                         <span className="completion-table-level-name">
                           {completion.level.name}
                           {completion.times >= 2 ? ` (x${completion.times})` : ''}
@@ -347,20 +345,6 @@ export function SortableCompletionRecords(
   )
 }
 
-function LevelThumbnail({ videoUrl }: { videoUrl: string | null }) {
-  const thumbnailUrl = getYouTubeThumbnailUrl(videoUrl)
-
-  return (
-    <span
-      className="profile-thumbnail-small"
-      style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
-      aria-hidden="true"
-    >
-      {!thumbnailUrl && <LevelPlaceholder className="level-placeholder-table" />}
-    </span>
-  )
-}
-
 function PlayerAvatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
   return (
     <span
@@ -371,24 +355,6 @@ function PlayerAvatar({ name, avatarUrl }: { name: string; avatarUrl: string | n
     >
       {!avatarUrl && name.slice(0, 1).toUpperCase()}
     </span>
-  )
-}
-
-function LevelPlaceholder({ className }: { className: string }) {
-  return (
-    <svg aria-hidden="true" className={className} viewBox="0 0 48 48" fill="none">
-      <path
-        d="M24 5 40.5 14.5v19L24 43 7.5 33.5v-19L24 5Z"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
-      <path
-        d="m15 18 9-5 9 5-9 5-9-5Zm0 7 9 5 9-5M15 25v7l9 5 9-5v-7"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
   )
 }
 

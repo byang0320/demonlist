@@ -299,11 +299,6 @@
     @apply grid aspect-video w-full place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)];
   }
 
-  /* Small verification thumbnail inside completion tables. */
-  .profile-thumbnail-small {
-    @apply grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80;
-  }
-
   /* Section containing the Classic/Platformer completion toggle. */
   .completion-toggle-section {
     @apply border-t border-white/10 px-5 pb-5 pt-5 sm:px-8 sm:pb-8 sm:pt-8;
@@ -332,11 +327,6 @@
   /* Hover state for an unselected profile completion toggle. */
   .completion-toggle-button-inactive {
     @apply hover:bg-white/[0.04] hover:text-white;
-  }
-
-  /* Placeholder icon size inside a completion-table thumbnail. */
-  .level-placeholder-table {
-    @apply h-7 w-7;
   }
 
   /* Compact avatar used in level completion tables. */
