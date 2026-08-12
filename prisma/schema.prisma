@@ -24,6 +24,12 @@ model AdminUser {
   updatedAt DateTime  @updatedAt
 }
 
+model AdminNote {
+  id        String   @id @default("global")
+  content   String   @default("")
+  updatedAt DateTime @updatedAt
+}
+
 model Player {
   id          String       @id @default(cuid())
   name        String

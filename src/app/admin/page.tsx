@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
-import { getAdminDashboardCounts } from '@/features/admin/queries'
+import AdminNotes from '@/components/admin/AdminNotes'
+import { getAdminDashboardCounts, getAdminNotes } from '@/features/admin/queries'
 
 export const metadata = { title: 'Admin Dashboard' }
 
@@ -10,7 +11,10 @@ const actionLinkClassName =
   'admin-action-link'
 
 export default async function AdminDashboardPage() {
-  const counts = await getAdminDashboardCounts()
+  const [counts, notes] = await Promise.all([
+    getAdminDashboardCounts(),
+    getAdminNotes(),
+  ])
 
   return (
     <main className="admin-page">
@@ -88,6 +92,11 @@ export default async function AdminDashboardPage() {
               + Create New Completion
             </Link>
           </div>
+        </section>
+
+        <section className="admin-management-section" aria-labelledby="admin-notes-heading">
+          <h2 id="admin-notes-heading" className="admin-management-title">Admin Notes</h2>
+          <AdminNotes initialNotes={notes} />
         </section>
       </div>
     </main>

@@ -27,3 +27,12 @@ export async function getAdminDashboardCounts() {
     completions,
   }
 }
+
+export async function getAdminNotes() {
+  const notes = await prisma.adminNote.findUnique({
+    where: { id: 'global' },
+    select: { content: true },
+  })
+
+  return notes?.content ?? ''
+}

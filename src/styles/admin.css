@@ -144,6 +144,31 @@
     @apply grid grid-cols-2 gap-3;
   }
 
+  /* Shared freeform notes panel on the admin dashboard. */
+  .admin-notes-panel {
+    @apply rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+  }
+
+  /* Freeform shared admin-notes editor. */
+  .admin-notes-textarea {
+    @apply min-h-56 resize-y;
+  }
+
+  /* Actions and save feedback beneath admin notes. */
+  .admin-notes-actions {
+    @apply mt-4 flex flex-wrap items-center justify-end gap-4;
+  }
+
+  /* Successful admin-notes save message. */
+  .admin-notes-status {
+    @apply m-0 mr-auto text-sm text-[#9ee6b0];
+  }
+
+  /* Save button for shared admin notes. */
+  .admin-save-notes-button {
+    @apply min-h-11 cursor-pointer rounded-xl bg-[#9c8cff] px-5 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
+  }
+
   /* Explanatory text above completion-management actions. */
   .admin-management-description {
     @apply -mt-2 mb-4 text-sm text-[#8c97b2];
