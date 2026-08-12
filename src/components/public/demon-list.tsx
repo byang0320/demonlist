@@ -3,38 +3,13 @@ import type { ReactNode } from 'react'
 
 import { listRankedLevels, type LevelType } from '@/features/levels/queries'
 import { DemonListToggle } from '@/components/public/demon-list-toggle'
-import { getYouTubeThumbnailUrl } from '@/lib/youtube'
+import { LevelPlaceholder, LevelThumbnail } from '@/components/public/level-thumbnail'
 
 export type RankedLevel = Awaited<ReturnType<typeof listRankedLevels>>[number]
-
-function LevelPlaceholder() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="level-placeholder-small"
-      viewBox="0 0 48 48"
-      fill="none"
-    >
-      <path
-        d="M24 5 40.5 14.5v19L24 43 7.5 33.5v-19L24 5Z"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
-      <path
-        d="m15 18 9-5 9 5-9 5-9-5Zm0 7 9 5 9-5M15 25v7l9 5 9-5v-7"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
 
 const cardClassName = 'level-card'
 
 function LevelCardDetails({ level }: { level: RankedLevel }) {
-  const thumbnailUrl = getYouTubeThumbnailUrl(level.videoUrl)
-
   return (
     <>
       <span className="level-card-rank">
@@ -68,10 +43,12 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
       </span>
       <span
         className="level-card-thumbnail"
-        style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
         aria-hidden="true"
       >
-        {!thumbnailUrl && <LevelPlaceholder />}
+        <LevelThumbnail
+          levelId={level.ingameId}
+          placeholderClassName="level-placeholder-small"
+        />
       </span>
     </>
   )
@@ -131,7 +108,9 @@ export async function DemonList({
     <section aria-label={`${type} demonlist`}>
       {levels.length === 0 ? (
         <div className="level-list-empty">
-          <div className="level-list-empty-icon"><LevelPlaceholder /></div>
+          <div className="level-list-empty-icon">
+            <LevelPlaceholder className="level-placeholder-small" />
+          </div>
           <h2 className="level-list-empty-title">No ranked levels yet</h2>
           <p className="level-list-empty-description">The list will appear here once levels have been added.</p>
         </div>

@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ProfileInfoCards, SortableCompletionRecords } from '@/components/public/profile-components'
+import { LevelThumbnail } from '@/components/public/level-thumbnail'
 import { getLevelBySlugWithPlayers, type LevelCompletionSort } from '@/features/levels/queries'
-import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export async function generateMetadata({
   params,
@@ -24,24 +24,6 @@ export async function generateMetadata({
 
 export const dynamic = 'force-dynamic'
 
-function LevelPlaceholder() {
-  return (
-    <svg aria-hidden="true" className="level-placeholder-large" viewBox="0 0 48 48" fill="none">
-      <path
-        d="M24 5 40.5 14.5v19L24 43 7.5 33.5v-19L24 5Z"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
-      <path
-        d="m15 18 9-5 9 5-9 5-9-5Zm0 7 9 5 9-5M15 25v7l9 5 9-5v-7"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 export default async function LevelProfilePage({
   params,
   searchParams,
@@ -60,14 +42,15 @@ export default async function LevelProfilePage({
     notFound()
   }
 
-  const thumbnailUrl = getYouTubeThumbnailUrl(level.videoUrl)
   const thumbnail = (
     <div
       className="profile-thumbnail"
-      style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
       aria-hidden="true"
     >
-      {!thumbnailUrl && <LevelPlaceholder />}
+      <LevelThumbnail
+        levelId={level.ingameId}
+        placeholderClassName="level-placeholder-large"
+      />
     </div>
   )
 

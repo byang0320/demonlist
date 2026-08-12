@@ -333,7 +333,7 @@ export default function LevelForm({
 
         <label className="form-label form-section-full">
           Level Verification Video (YouTube link)
-          <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. The thumbnail will be derived from this video. (optional)" />
+          <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. (optional)" />
           <FieldError errors={state.fieldErrors?.videoUrl} />
         </label>
       </section>

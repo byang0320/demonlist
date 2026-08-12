@@ -22,6 +22,7 @@ export function listRankedLevels(type: LevelType) {
     },
     select: {
       id: true,
+      ingameId: true,
       name: true,
       slug: true,
       rank: true,
@@ -54,6 +55,7 @@ export function getLevelBySlugWithPlayers(
     },
     select: {
       id: true,
+      ingameId: true,
       name: true,
       slug: true,
       rank: true,

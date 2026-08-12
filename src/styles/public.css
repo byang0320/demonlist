@@ -254,6 +254,11 @@
     @apply grid aspect-video w-full place-items-center rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
   }
 
+  /* Level image loaded from the Geometry Dash level-thumbnail service. */
+  .level-thumbnail-image {
+    @apply h-full w-full rounded-[inherit] object-cover;
+  }
+
   /* Edit button in an admin level card. */
   .level-card-edit-link {
     @apply relative z-10 mr-3 justify-self-end rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
