@@ -24,12 +24,12 @@ function formatCompletionDate(date: Date | null) {
 export default async function AdminCompletionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ levelId?: string; playerId?: string }>
+  searchParams: Promise<{ levelId?: string; playerId?: string; search?: string }>
 }) {
-  const { levelId, playerId } = await searchParams
+  const { levelId, playerId, search } = await searchParams
   const [{ levels, players }, completions] = await Promise.all([
     getCompletionFormOptions(),
-    listCompletionsForAdmin({ levelId, playerId }),
+    listCompletionsForAdmin({ levelId, playerId, search }),
   ])
 
   return (
@@ -61,6 +61,7 @@ export default async function AdminCompletionsPage({
           players={players}
           selectedLevelId={levelId}
           selectedPlayerId={playerId}
+          selectedSearch={search}
         />
 
         {completions.length > 0 ? (

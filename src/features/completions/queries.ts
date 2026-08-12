@@ -41,8 +41,12 @@ export function getCompletionForAdmin(id: string) {
   })
 }
 
-export function listCompletionsForAdmin(filters?: { levelId?: string; playerId?: string }) {
-  return prisma.completion.findMany({
+export async function listCompletionsForAdmin(filters?: {
+  levelId?: string
+  playerId?: string
+  search?: string
+}) {
+  const completions = await prisma.completion.findMany({
     where: {
       ...(filters?.levelId ? { levelId: filters.levelId } : {}),
       ...(filters?.playerId ? { playerId: filters.playerId } : {}),
@@ -62,5 +66,24 @@ export function listCompletionsForAdmin(filters?: { levelId?: string; playerId?:
       },
     },
     orderBy: { createdAt: 'desc' },
+  })
+
+  const search = filters?.search?.trim().toLocaleLowerCase()
+  if (!search) {
+    return completions
+  }
+
+  return completions.filter((completion) => {
+    const date = completion.completedAt
+      ? new Intl.DateTimeFormat('en-US', {
+          month: 'numeric',
+          day: 'numeric',
+          year: 'numeric',
+          timeZone: 'UTC',
+        }).format(completion.completedAt)
+      : ''
+    const text = `${completion.player.name} completed ${completion.level.name} by ${completion.level.publishedBy}${date ? ` on ${date}` : ''}`
+
+    return text.toLocaleLowerCase().includes(search)
   })
 }

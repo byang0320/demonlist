@@ -21,16 +21,19 @@ export default function CompletionFilters({
   players,
   selectedLevelId = '',
   selectedPlayerId = '',
+  selectedSearch = '',
 }: {
   levels: LevelOption[]
   players: PlayerOption[]
   selectedLevelId?: string
   selectedPlayerId?: string
+  selectedSearch?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
   const [levelId, setLevelId] = useState(selectedLevelId)
   const [playerId, setPlayerId] = useState(selectedPlayerId)
+  const [search, setSearch] = useState(selectedSearch)
   const [levelSearch, setLevelSearch] = useState('')
   const [playerSearch, setPlayerSearch] = useState('')
   const [levelOpen, setLevelOpen] = useState(false)
@@ -53,9 +56,23 @@ export default function CompletionFilters({
     router.replace(`${pathname}${query ? `?${query}` : ''}`, { scroll: false })
   }
 
+  function updateSearch(nextSearch: string) {
+    setSearch(nextSearch)
+    setLevelId('')
+    setPlayerId('')
+    setLevelSearch('')
+    setPlayerSearch('')
+
+    const params = new URLSearchParams()
+    if (nextSearch.trim()) params.set('search', nextSearch)
+    const query = params.toString()
+    router.replace(`${pathname}${query ? `?${query}` : ''}`, { scroll: false })
+  }
+
   function clearFilters() {
     setLevelId('')
     setPlayerId('')
+    setSearch('')
     setLevelSearch('')
     setPlayerSearch('')
     setLevelOpen(false)
@@ -67,7 +84,7 @@ export default function CompletionFilters({
     <section className="admin-filter-panel">
       <div className="admin-filter-header">
         <h2 className="form-section-title">Filter completions</h2>
-        {(levelId || playerId) && (
+        {(search || levelId || playerId) && (
           <button
             type="button"
             onClick={clearFilters}
@@ -77,6 +94,18 @@ export default function CompletionFilters({
           </button>
         )}
       </div>
+      <label className="admin-completion-search">
+        Search all completions
+        <input
+          autoComplete="off"
+          className="form-input"
+          type="search"
+          value={search}
+          onChange={(event) => updateSearch(event.target.value)}
+          placeholder="Search by player, level, publisher, date..."
+        />
+      </label>
+      <div className="admin-filter-or" aria-hidden="true">- or -</div>
       <div className="form-grid">
         <SearchDropdown
           label="Level"
@@ -91,6 +120,7 @@ export default function CompletionFilters({
           }}
           onSelect={(id) => {
             setLevelId(id)
+            setSearch('')
             setLevelSearch(levelLabel(id))
             setLevelOpen(false)
             updateFilters(id, playerId)
@@ -117,6 +147,7 @@ export default function CompletionFilters({
           }}
           onSelect={(id) => {
             setPlayerId(id)
+            setSearch('')
             setPlayerSearch(playerLabel(id))
             setPlayerOpen(false)
             updateFilters(levelId, id)
