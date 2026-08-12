@@ -117,6 +117,7 @@ export default async function LevelProfilePage({
           <ProfileInfoCards
             type="level"
             description={level.description}
+            ingameId={level.ingameId}
           />
         </header>
 

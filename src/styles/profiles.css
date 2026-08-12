@@ -113,7 +113,12 @@
 
   /* Description card beneath a level profile header. */
   .level-description-card {
-    @apply grid gap-6 border-t border-white/10 p-5 sm:p-8;
+    @apply grid gap-6 border-t border-white/10 p-5 sm:grid-cols-[minmax(0,1fr)_max-content] sm:gap-8 sm:p-8;
+  }
+
+  /* Flexible description column beside the level ID. */
+  .level-description-content {
+    @apply min-w-0;
   }
 
   /* Label above a level description. */
@@ -124,6 +129,21 @@
   /* Level description text on a level profile. */
   .level-description {
     @apply m-0 w-full whitespace-pre-wrap text-base leading-7 text-[#d7dcf0];
+  }
+
+  /* Dedicated level ID panel beside the description. */
+  .level-id-card {
+    @apply border-t border-white/10 pt-5 sm:flex sm:min-w-max sm:flex-col sm:justify-center sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0;
+  }
+
+  /* Label above the level ID. */
+  .level-id-label {
+    @apply mb-2;
+  }
+
+  /* Level ID value. */
+  .level-id-value {
+    @apply m-0 text-3xl font-bold tracking-[-0.05em] text-[#c6beff];
   }
 
   /* Section containing profile completion records. */

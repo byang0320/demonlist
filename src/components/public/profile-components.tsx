@@ -20,6 +20,7 @@ type PlayerInfoCardsProps = {
 type LevelInfoCardsProps = {
   type: 'level'
   description: string | null
+  ingameId: number
 }
 
 export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsProps) {
@@ -57,13 +58,17 @@ export function ProfileInfoCards(props: PlayerInfoCardsProps | LevelInfoCardsPro
 
   return (
     <div className="level-description-card">
-      <div>
+      <div className="level-description-content">
         <p className="eyebrow level-description-label">
           Description
         </p>
         <p className="level-description">
           {props.description || '(No description provided)'}
         </p>
+      </div>
+      <div className="level-id-card">
+        <p className="eyebrow level-id-label">ID</p>
+        <p className="level-id-value">{props.ingameId}</p>
       </div>
     </div>
   )
