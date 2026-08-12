@@ -39,6 +39,18 @@
     @apply mt-5 flex flex-wrap items-center gap-2;
   }
 
+  /* Selected country flags displayed alongside player profile links. */
+  .profile-country-flags {
+    @apply flex shrink-0 items-center gap-1;
+  }
+
+  /* Individual country flag image. */
+  .profile-country-flag {
+    @apply block h-7 w-10 shrink-0 rounded-md border border-white/15 bg-cover bg-center shadow-sm;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
   /* Non-link profile metadata, currently the Discord handle. */
   .profile-link-muted {
     @apply rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-[#b9c2d8];

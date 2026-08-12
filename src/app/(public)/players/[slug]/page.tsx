@@ -9,6 +9,7 @@ import {
 import { PlayerCompletionToggle } from '@/components/public/player-completion-toggle'
 import { ProfileInfoCards, SortableCompletionRecords } from '@/components/public/profile-components'
 import type { LevelType } from '@/features/levels/queries'
+import { countries } from '@/lib/countries'
 
 export async function generateMetadata({
   params,
@@ -49,6 +50,32 @@ function PlayerAvatar({
   )
 }
 
+function PlayerFlags({ countryCodes }: { countryCodes: string[] }) {
+  return (
+    <div className="profile-country-flags" aria-label="Selected countries">
+      {countryCodes.map((code) => {
+        const normalizedCode = code.toUpperCase()
+        const country = countries.find((item) => item.code === normalizedCode)
+
+        if (!country) {
+          return null
+        }
+
+        return (
+          <span
+            key={country.code}
+            className="profile-country-flag"
+            style={{ backgroundImage: `url(https://flagcdn.com/w80/${country.code.toLowerCase()}.png)` }}
+            role="img"
+            aria-label={country.name}
+            title={country.name}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
 export default async function PlayerProfilePage({
   params,
   searchParams,
@@ -82,6 +109,9 @@ export default async function PlayerProfilePage({
     },
     null,
   )
+  const countryCodes = [player.country1, player.country2].filter(
+    (country): country is string => Boolean(country),
+  )
 
   return (
     <main className="public-page">
@@ -97,17 +127,15 @@ export default async function PlayerProfilePage({
           <div className="player-profile-header-content">
             <PlayerAvatar name={player.name} avatarUrl={player.avatarUrl} />
             <div className="profile-copy">
-              <p className="profile-label">
-                Player profile
-              </p>
               <h1 className="profile-title">
                 {player.name}
               </h1>
               <p className="profile-bio">
                 {player.bio || `No biography has been added for ${player.name} yet.`}
               </p>
-              {(player.youtubeUrl || player.twitchUrl || player.discordHandle || player.twitterUrl) && (
+              {(countryCodes.length > 0 || player.youtubeUrl || player.twitchUrl || player.discordHandle || player.twitterUrl) && (
                 <div className="profile-links">
+                  {countryCodes.length > 0 && <PlayerFlags countryCodes={countryCodes} />}
                   {player.discordHandle && (
                     <span className="profile-link-muted">
                       Discord: {player.discordHandle}

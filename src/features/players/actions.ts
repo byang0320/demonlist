@@ -25,8 +25,8 @@ export function updatePlayer(input: UpdatePlayerInput) {
       twitchUrl: input.twitchUrl,
       discordHandle: input.discordHandle,
       twitterUrl: input.twitterUrl,
-      country1: input.country1,
-      country2: input.country2,
+      country1: input.country1 ?? null,
+      country2: input.country2 ?? null,
     },
     select: {
       id: true,

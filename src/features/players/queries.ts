@@ -93,6 +93,8 @@ export function getPlayerBySlugWithLevels(
       twitchUrl: true,
       discordHandle: true,
       twitterUrl: true,
+      country1: true,
+      country2: true,
       completions: {
         select: {
           times: true,
