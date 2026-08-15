@@ -280,7 +280,10 @@ export default function LevelForm({
           <p className="form-hint">
             {typeLocked
               ? 'If changed, the ranks of other levels will be adjusted automatically!'
-              : 'Active levels at this rank and below will move down one position.'}
+              : 'Levels currently placed at this rank and below will move down one position.'}
+          </p>
+          <p className="form-hint-tight">
+            Don&apos;t forget to announce this number in the Discord!
           </p>
           <p className="form-hint-tight">
             This should be between 1 and {maxRank}
