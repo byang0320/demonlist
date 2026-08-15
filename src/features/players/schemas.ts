@@ -4,24 +4,24 @@ import { ISO_COUNTRY_CODES } from '@/lib/countries'
 
 const optionalText = (max: number) =>
   z.preprocess(
-    (value) => (value === '' ? undefined : value),
-    z.string().trim().max(max).optional(),
+    (value) => (value === '' ? null : value),
+    z.string().trim().max(max).nullable().optional(),
   )
 
 const optionalUrl = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.url().optional(),
+  (value) => (value === '' ? null : value),
+  z.url().nullable().optional(),
 )
 
 const optionalCountry = z.preprocess(
   (value) => {
     if (value === '') {
-      return undefined
+      return null
     }
 
     return typeof value === 'string' ? value.toUpperCase() : value
   },
-  z.enum(ISO_COUNTRY_CODES).optional(),
+  z.enum(ISO_COUNTRY_CODES).nullable().optional(),
 )
 
 const slug = z

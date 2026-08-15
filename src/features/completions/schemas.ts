@@ -1,18 +1,18 @@
 import { z } from 'zod'
 
 const optionalDate = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.coerce.date().optional(),
+  (value) => (value === '' ? null : value),
+  z.coerce.date().nullable().optional(),
 )
 
 const optionalText = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.string().trim().max(2_000).optional(),
+  (value) => (value === '' ? null : value),
+  z.string().trim().max(2_000).nullable().optional(),
 )
 
 const optionalUrl = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.url().optional(),
+  (value) => (value === '' ? null : value),
+  z.url().nullable().optional(),
 )
 
 export const addCompletionSchema = z.object({

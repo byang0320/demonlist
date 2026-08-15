@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 const optionalText = (max: number) =>
   z.preprocess(
-    (value) => (value === '' ? undefined : value),
-    z.string().trim().max(max).optional(),
+    (value) => (value === '' ? null : value),
+    z.string().trim().max(max).nullable().optional(),
   )
 
 const requiredText = (label: string, max: number) =>
@@ -25,8 +25,8 @@ const optionalBoolean = z.preprocess(
 )
 
 const optionalUrl = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.url().optional(),
+  (value) => (value === '' ? null : value),
+  z.url().nullable().optional(),
 )
 
 const slug = z
