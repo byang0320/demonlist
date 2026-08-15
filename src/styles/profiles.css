@@ -9,6 +9,11 @@
     @apply grid gap-6 p-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-8 sm:p-8;
   }
 
+  /* Player completion controls and summary cards below the profile header. */
+  .player-completion-summary {
+    @apply mt-4;
+  }
+
   /* Responsive content layout inside a level profile header. */
   .level-profile-header-content {
     @apply grid grid-cols-[max-content_minmax(0,1fr)_12rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_15rem] sm:gap-8 sm:p-8;
@@ -78,7 +83,7 @@
 
   /* Player completion-summary card row beneath a profile header. */
   .profile-info-cards {
-    @apply grid gap-3 border-t border-white/10 p-5 sm:grid-cols-2 sm:p-8;
+    @apply grid gap-3 px-5 pb-5 pt-4 sm:grid-cols-2 sm:px-8 sm:pb-8 sm:pt-4;
   }
 
   /* Individual bordered card inside the player completion-summary row. */
@@ -333,7 +338,7 @@
 
   /* Section containing the Classic/Platformer completion toggle. */
   .completion-toggle-section {
-    @apply border-t border-white/10 px-5 pb-5 pt-5 sm:px-8 sm:pb-8 sm:pt-8;
+    @apply border-t border-white/10 px-5 pb-0 pt-4 sm:px-8 sm:pb-0 sm:pt-4;
   }
 
   /* Completion toggle container on player profiles. */

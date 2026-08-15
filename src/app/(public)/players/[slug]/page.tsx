@@ -160,7 +160,9 @@ export default async function PlayerProfilePage({
               )}
             </div>
           </div>
+        </header>
 
+        <div className="player-completion-summary">
           <PlayerCompletionToggle
             initialType={levelType}
             classicCount={player.completions.filter((completion) => completion.level.type === 'Classic').length}
@@ -178,7 +180,7 @@ export default async function PlayerProfilePage({
               rank: hardestLevel.level.rank,
             } : null}
           />
-        </header>
+        </div>
 
         <SortableCompletionRecords
           type="player"
