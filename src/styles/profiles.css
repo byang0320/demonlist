@@ -103,7 +103,7 @@
 
   /* Rank accent inside a hardest-level title. */
   .profile-hardest-rank {
-    @apply text-[#c6beff];
+    @apply font-extrabold tracking-[-0.06em] text-[#c6beff];
   }
 
   /* Empty hardest-level message on a player profile. */
