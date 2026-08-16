@@ -92,11 +92,13 @@ function buildChangelogMessage({
   rankValue,
   levels,
   originalRank,
+  levelType,
 }: {
   name: string
   rankValue: string
   levels: LevelRankName[]
   originalRank?: number
+  levelType: LevelType
 }) {
   const rank = Number(rankValue)
 
@@ -113,16 +115,17 @@ function buildChangelogMessage({
   const { above, below } = originalRank === undefined
     ? getCreateChangelogNeighbors(levels, rank)
     : getEditChangelogNeighbors(levels, rank, originalRank)
+  const isFirstCreatedLevel = originalRank === undefined && levels.length === 0 && rank === 1
 
-  if (rank > 1 && rank < levels.length + 1 && (!above || !below)) {
+  if (!isFirstCreatedLevel && rank > 1 && rank < levels.length + 1 && (!above || !below)) {
     return ''
   }
 
-  if (rank === 1 && !above) {
+  if (!isFirstCreatedLevel && rank === 1 && !above) {
     return ''
   }
 
-  if (rank === levels.length + 1 && !below) {
+  if (!isFirstCreatedLevel && rank === levels.length + 1 && !below) {
     return ''
   }
 
@@ -130,13 +133,14 @@ function buildChangelogMessage({
     above ? `above ${above.name}` : '',
     below ? `below ${below.name}` : '',
   ].filter(Boolean).join(' and ')
+  const platformerText = levelType === 'Platformer' ? ' on the Platformer Demonlist' : ''
 
   if (originalRank === undefined) {
-    return `${name.trim()} was placed at #${rank}${neighboringText ? `, ${neighboringText}` : ''}.`
+    return `${name.trim()} was placed at #${rank}${platformerText}${neighboringText ? `, ${neighboringText}` : ''}.`
   }
 
   const direction = rank < originalRank ? 'up' : 'down'
-  return `${name.trim()} has been moved ${direction} from #${originalRank} to #${rank}${neighboringText ? `, ${neighboringText}` : ''}.`
+  return `${name.trim()} has been moved ${direction} from #${originalRank} to #${rank}${platformerText}${neighboringText ? `, ${neighboringText}` : ''}.`
 }
 
 export default function LevelForm({
@@ -175,6 +179,7 @@ export default function LevelForm({
     rankValue,
     levels: rankedLevels[type],
     originalRank: initialValues?.rank,
+    levelType: type,
   })
 
   useEffect(() => {
@@ -184,9 +189,26 @@ export default function LevelForm({
   }, [state])
 
   async function autofillFromGDLevel() {
-    if (!/^\d+$/.test(gdLevelId) || autofilling || autofilled) {
+    if (!/^\d+$/.test(gdLevelId) || autofilling) {
       setAutofillMessage('Enter a valid numeric Geometry Dash level ID.')
       return
+    }
+
+    if (autofilled) {
+      const currentLevelId = gdLevelId
+      formRef.current?.reset()
+
+      const levelIdField = formRef.current?.elements.namedItem('ingameId')
+      if (levelIdField instanceof HTMLInputElement) {
+        levelIdField.value = currentLevelId
+      }
+
+      setLevelName('')
+      setRankValue('1')
+      setSlugPreview('')
+      setType('Classic')
+      setCopyStatus('idle')
+      setAutofilled(false)
     }
 
     setAutofilling(true)
@@ -200,6 +222,8 @@ export default function LevelForm({
         description?: string
         author?: string
         platformer?: boolean
+        difficulty?: string
+        stars?: number
       }
 
       if (!response.ok || !data.name) {
@@ -225,6 +249,18 @@ export default function LevelForm({
       setIfBlank('name', data.name)
       setIfBlank('publishedBy', data.author)
       setIfBlank('description', data.description)
+
+      const demotedField = formRef.current?.querySelector<HTMLInputElement>('input[type="checkbox"][name="demoted"]')
+      const unratedField = formRef.current?.querySelector<HTMLInputElement>('input[type="checkbox"][name="unrated"]')
+      const shouldMarkUnrated = data.stars === 0
+      const shouldMarkDemoted = !shouldMarkUnrated && data.stars !== undefined && data.stars > 0 && data.difficulty !== 'Extreme Demon'
+
+      if (demotedField) {
+        demotedField.checked = shouldMarkDemoted
+      }
+      if (unratedField) {
+        unratedField.checked = shouldMarkUnrated
+      }
 
       const nextType: LevelType = data.platformer ? 'Platformer' : 'Classic'
       const typeField = formRef.current?.elements.namedItem('type')
@@ -282,7 +318,6 @@ export default function LevelForm({
               value={gdLevelId}
               onChange={(event) => {
                 setGdLevelId(event.target.value.replace(/\D/g, ''))
-                setAutofilled(false)
                 setAutofillMessage('')
               }}
               placeholder="e.g. 76159410"
@@ -293,10 +328,10 @@ export default function LevelForm({
             <button
               type="button"
               onClick={autofillFromGDLevel}
-              disabled={autofilling || autofilled}
+              disabled={autofilling}
               className="form-secondary-button"
             >
-              {autofilling ? 'Autofilling…' : autofilled ? 'Autofilled' : 'Autofill'}
+              {autofilling ? 'Autofilling…' : autofilled ? 'Autofill Again' : 'Autofill'}
             </button>
           )}
           {allowAutofill && (
