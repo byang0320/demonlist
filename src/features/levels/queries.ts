@@ -3,6 +3,11 @@ import { prisma } from '@/lib/db'
 export type LevelType = 'Classic' | 'Platformer'
 export type LevelCompletionSort = 'alphabetical' | 'date'
 
+export type LevelRankName = {
+  rank: number
+  name: string
+}
+
 export function getNextAvailableRank(type: LevelType) {
   return prisma.level
     .count({
@@ -12,6 +17,23 @@ export function getNextAvailableRank(type: LevelType) {
       },
     })
     .then((count) => count + 1)
+}
+
+export function listLevelRankNames(type: LevelType, excludeId?: string) {
+  return prisma.level.findMany({
+    where: {
+      status: 'ACTIVE',
+      type,
+      ...(excludeId ? { id: { not: excludeId } } : {}),
+    },
+    select: {
+      rank: true,
+      name: true,
+    },
+    orderBy: {
+      rank: 'asc',
+    },
+  })
 }
 
 export function listRankedLevels(type: LevelType) {

@@ -69,6 +69,32 @@
     @apply mt-1 text-xs font-normal text-[#8c97b2];
   }
 
+  /* Larger guidance text used in the dedicated proposed-rank section. */
+  .form-rank-hint {
+    @apply mt-2 text-sm font-normal leading-6 text-[#b9c2d8];
+  }
+
+  /* Read-only changelog preview and clipboard action in the rank section. */
+  .form-copyable-field {
+    @apply mt-5;
+  }
+
+  .form-copyable-label {
+    @apply block text-sm font-semibold text-[#d7dcf0];
+  }
+
+  .form-copyable-controls {
+    @apply mt-2 flex flex-col gap-3 sm:flex-row sm:items-stretch;
+  }
+
+  .form-copyable-textarea {
+    @apply min-h-20 min-w-0 flex-1 resize-none rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm leading-6 text-[#f4f6ff] outline-none;
+  }
+
+  .form-copy-button {
+    @apply inline-flex min-h-12 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
   /* Introductory copy at the top of a completion form. */
   .form-intro {
     @apply mt-3 max-w-3xl text-sm leading-6 text-[#b9c2d8];
@@ -138,6 +164,11 @@
   /* Vertical stack containing the level flag checkboxes. */
   .form-toggle-stack {
     @apply flex flex-col justify-end gap-3 pb-1;
+  }
+
+  /* Center level status checkboxes in a horizontal group. */
+  .form-toggle-pair {
+    @apply flex-row items-center justify-center gap-6 pb-0;
   }
 
   /* Typography for checkbox labels. */

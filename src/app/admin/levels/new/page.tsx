@@ -1,12 +1,14 @@
 import LevelForm from '@/components/admin/LevelForm'
-import { getNextAvailableRank } from '@/features/levels/queries'
+import { getNextAvailableRank, listLevelRankNames } from '@/features/levels/queries'
 
 export const metadata = { title: 'Create New Level' }
 
 export default async function NewLevelPage() {
-  const [classicMaxRank, platformerMaxRank] = await Promise.all([
+  const [classicMaxRank, platformerMaxRank, classicLevels, platformerLevels] = await Promise.all([
     getNextAvailableRank('Classic'),
     getNextAvailableRank('Platformer'),
+    listLevelRankNames('Classic'),
+    listLevelRankNames('Platformer'),
   ])
 
   return (
@@ -20,6 +22,7 @@ export default async function NewLevelPage() {
         </header>
         <LevelForm
           maxRanks={{ Classic: classicMaxRank, Platformer: platformerMaxRank }}
+          rankedLevels={{ Classic: classicLevels, Platformer: platformerLevels }}
           allowAutofill
         />
       </div>

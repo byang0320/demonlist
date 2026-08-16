@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 import LevelForm, { type LevelFormValues } from '@/components/admin/LevelForm'
 import { updateLevelAction } from '@/app/admin/levels/[slug]/edit/actions'
-import { getLevelForAdminBySlug, getNextAvailableRank } from '@/features/levels/queries'
+import { getLevelForAdminBySlug, getNextAvailableRank, listLevelRankNames } from '@/features/levels/queries'
 
 export async function generateMetadata({
   params,
@@ -28,12 +28,13 @@ export default async function EditLevelPage({
     notFound()
   }
 
-  const [classicMaxRank, platformerMaxRank] = await Promise.all([
+  const levelType = level.type as LevelFormValues['type']
+  const [classicMaxRank, platformerMaxRank, nearbyLevels] = await Promise.all([
     getNextAvailableRank('Classic'),
     getNextAvailableRank('Platformer'),
+    listLevelRankNames(levelType, level.id),
   ])
   const updateAction = updateLevelAction.bind(null, level.id)
-  const levelType = level.type as LevelFormValues['type']
   const maxRanks = {
     Classic: classicMaxRank,
     Platformer: platformerMaxRank,
@@ -74,6 +75,10 @@ export default async function EditLevelPage({
           action={updateAction}
           initialValues={initialValues}
           maxRanks={maxRanks}
+          rankedLevels={{
+            Classic: levelType === 'Classic' ? nearbyLevels : [],
+            Platformer: levelType === 'Platformer' ? nearbyLevels : [],
+          }}
           submitLabel="Save"
           typeLocked
         />

@@ -6,6 +6,7 @@ import {
   createLevelAction,
   type LevelActionState,
 } from '@/app/admin/levels/new/actions'
+import type { LevelRankName } from '@/features/levels/queries'
 import { slugify } from '@/lib/slugs'
 
 const initialState: LevelActionState = {}
@@ -43,8 +44,104 @@ function FieldError({ errors }: { errors?: string[] }) {
   return <p className="form-error">{errors[0]}</p>
 }
 
+function getCreateChangelogNeighbors(levels: LevelRankName[], rank: number) {
+  const lastPossibleRank = levels.length + 1
+
+  if (rank === 1) {
+    return {
+      above: levels.find((level) => level.rank === 1),
+      below: undefined,
+    }
+  }
+
+  if (rank === lastPossibleRank) {
+    return {
+      above: undefined,
+      below: levels.find((level) => level.rank === rank - 1),
+    }
+  }
+
+  return {
+    above: levels.find((level) => level.rank === rank),
+    below: levels.find((level) => level.rank === rank - 1),
+  }
+}
+
+function getEditChangelogNeighbors(
+  levels: LevelRankName[],
+  newRank: number,
+  oldRank: number,
+) {
+  const lastPossibleRank = levels.length + 1
+
+  if (newRank < oldRank) {
+    return {
+      above: levels.find((level) => level.rank === newRank),
+      below: newRank === 1 ? undefined : levels.find((level) => level.rank === newRank - 1),
+    }
+  }
+
+  return {
+    above: newRank === lastPossibleRank ? undefined : levels.find((level) => level.rank === newRank + 1),
+    below: levels.find((level) => level.rank === newRank),
+  }
+}
+
+function buildChangelogMessage({
+  name,
+  rankValue,
+  levels,
+  originalRank,
+}: {
+  name: string
+  rankValue: string
+  levels: LevelRankName[]
+  originalRank?: number
+}) {
+  const rank = Number(rankValue)
+
+  if (
+    !name.trim()
+    || !Number.isInteger(rank)
+    || rank < 1
+    || rank > levels.length + 1
+    || (originalRank !== undefined && rank === originalRank)
+  ) {
+    return ''
+  }
+
+  const { above, below } = originalRank === undefined
+    ? getCreateChangelogNeighbors(levels, rank)
+    : getEditChangelogNeighbors(levels, rank, originalRank)
+
+  if (rank > 1 && rank < levels.length + 1 && (!above || !below)) {
+    return ''
+  }
+
+  if (rank === 1 && !above) {
+    return ''
+  }
+
+  if (rank === levels.length + 1 && !below) {
+    return ''
+  }
+
+  const neighboringText = [
+    above ? `above ${above.name}` : '',
+    below ? `below ${below.name}` : '',
+  ].filter(Boolean).join(' and ')
+
+  if (originalRank === undefined) {
+    return `${name.trim()} was placed at #${rank}${neighboringText ? `, ${neighboringText}` : ''}.`
+  }
+
+  const direction = rank < originalRank ? 'up' : 'down'
+  return `${name.trim()} has been moved ${direction} from #${originalRank} to #${rank}${neighboringText ? `, ${neighboringText}` : ''}.`
+}
+
 export default function LevelForm({
   maxRanks,
+  rankedLevels,
   action = createLevelAction,
   initialValues,
   submitLabel = 'Create',
@@ -52,6 +149,7 @@ export default function LevelForm({
   allowAutofill = false,
 }: {
   maxRanks: Record<LevelType, number>
+  rankedLevels: Record<LevelType, LevelRankName[]>
   action?: LevelFormAction
   initialValues?: LevelFormValues
   submitLabel?: string
@@ -60,6 +158,9 @@ export default function LevelForm({
 }) {
   const [state, formAction, pending] = useActionState(action, initialState)
   const [type, setType] = useState<LevelType>(initialValues?.type ?? 'Classic')
+  const [levelName, setLevelName] = useState(initialValues?.name ?? '')
+  const [rankValue, setRankValue] = useState(initialValues?.rank?.toString() ?? '1')
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const [slugPreview, setSlugPreview] = useState(initialValues?.slug ?? '')
   const maxRank = maxRanks[type]
   const submittedValues = state.values
@@ -69,6 +170,12 @@ export default function LevelForm({
   const [autofilling, setAutofilling] = useState(false)
   const [autofilled, setAutofilled] = useState(false)
   const [autofillMessage, setAutofillMessage] = useState('')
+  const changelogMessage = buildChangelogMessage({
+    name: levelName,
+    rankValue,
+    levels: rankedLevels[type],
+    originalRank: initialValues?.rank,
+  })
 
   useEffect(() => {
     if (state.formError || Object.keys(state.fieldErrors ?? {}).length > 0) {
@@ -108,6 +215,9 @@ export default function LevelForm({
         if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
           if (!field.value.trim()) {
             field.value = value
+            if (name === 'name') {
+              setLevelName(value)
+            }
           }
         }
       }
@@ -210,6 +320,8 @@ export default function LevelForm({
             className={inputClassName}
             name="name"
             onChange={(event) => {
+              setLevelName(event.target.value)
+              setCopyStatus('idle')
               const nextSlug = slugify(event.target.value)
               setSlugPreview(nextSlug)
               if (slugInputRef.current) {
@@ -219,7 +331,7 @@ export default function LevelForm({
             placeholder="e.g. Cosmic Cyclone"
             required
             maxLength={200}
-            defaultValue={submittedValues?.name ?? initialValues?.name ?? ''}
+            value={levelName}
           />
           <FieldError errors={state.fieldErrors?.name} />
         </label>
@@ -244,7 +356,7 @@ export default function LevelForm({
         </label>
 
         <label className="form-label">
-          Level type
+          Level Type
           <select
             autoComplete="off"
             className={inputClassName}
@@ -265,33 +377,7 @@ export default function LevelForm({
           <FieldError errors={state.fieldErrors?.type} />
         </label>
 
-        <label className="form-label">
-          Status
-          <select autoComplete="off" className={inputClassName} name="status" defaultValue={submittedValues?.status ?? initialValues?.status ?? 'ACTIVE'}>
-            <option value="ACTIVE">Active</option>
-            <option value="ARCHIVED">Archived</option>
-          </select>
-          <FieldError errors={state.fieldErrors?.status} />
-        </label>
-
-        <label className="form-label">
-          Proposed rank
-          <input autoComplete="off" className={inputClassName} name="rank" type="number" min="1" max={maxRank} required defaultValue={submittedValues?.rank ?? initialValues?.rank ?? 1} placeholder="e.g. 67" />
-          <p className="form-hint">
-            {typeLocked
-              ? 'If changed, the ranks of other levels will be adjusted automatically!'
-              : 'Levels currently placed at this rank and below will move down one position.'}
-          </p>
-          <p className="form-hint-tight">
-            Don&apos;t forget to announce this number in the Discord!
-          </p>
-          <p className="form-hint-tight">
-            This should be between 1 and {maxRank}
-          </p>
-          <FieldError errors={state.fieldErrors?.rank} />
-        </label>
-
-        <div className="form-toggle-stack">
+        <div className="form-toggle-stack form-toggle-pair">
           <label className="form-toggle-row form-toggle-copy">
             <input autoComplete="off" type="hidden" name="demoted" value="false" />
             <input autoComplete="off" defaultChecked={submittedValues?.demoted === 'true' || (submittedValues?.demoted === undefined && (initialValues?.demoted ?? false))} className="form-checkbox" name="demoted" type="checkbox" value="true" />
@@ -339,6 +425,71 @@ export default function LevelForm({
           <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. (optional)" />
           <FieldError errors={state.fieldErrors?.videoUrl} />
         </label>
+      </section>
+
+      <section className="form-section form-section-grid">
+        <div className="form-section-full">
+          <h2 className="form-section-title">Proposed Rank</h2>
+        </div>
+
+        <label className="form-label form-section-full">
+          Proposed Rank
+          <input
+            autoComplete="off"
+            className={inputClassName}
+            name="rank"
+            type="number"
+            min="1"
+            max={maxRank}
+            required
+            value={rankValue}
+            onChange={(event) => {
+              setRankValue(event.target.value)
+              setCopyStatus('idle')
+            }}
+            placeholder={`Enter a number between 1 and ${maxRank}...`}
+          />
+          <p className="form-rank-hint">
+            {typeLocked
+              ? 'If changed, the ranks of other levels will be adjusted automatically!'
+              : 'Levels currently placed at this rank and below will move down by one.'} This number should be between 1 and {maxRank}
+          </p>
+          <FieldError errors={state.fieldErrors?.rank} />
+        </label>
+
+        <div className="form-copyable-field form-section-full">
+          <span className="form-copyable-label">Copyable Changelog Message</span>
+          <div className="form-copyable-controls">
+            <textarea
+              aria-label="Copyable Changelog Message"
+              className="form-copyable-textarea"
+              readOnly
+              rows={3}
+              value={changelogMessage}
+            />
+            <button
+              className="form-copy-button"
+              type="button"
+              disabled={!changelogMessage}
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(changelogMessage)
+                  setCopyStatus('copied')
+                } catch {
+                  setCopyStatus('error')
+                }
+              }}
+            >
+              {copyStatus === 'copied' ? 'Copied!' : 'Copy to Clipboard'}
+            </button>
+          </div>
+          {copyStatus === 'error' && (
+            <p className="form-hint" role="alert">
+              Unable to copy the message. Please copy it manually.
+            </p>
+          )}
+        </div>
+
       </section>
 
       <div className="form-actions">
