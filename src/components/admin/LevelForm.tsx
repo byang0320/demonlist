@@ -129,6 +129,21 @@ function buildChangelogMessage({
     return ''
   }
 
+  if (originalRank !== undefined && Math.abs(rank - originalRank) === 1) {
+    const otherAffectedLevel = levels.find((level) => level.rank === rank)
+
+    if (!otherAffectedLevel) {
+      return ''
+    }
+
+    const higherUpLevel = rank < originalRank
+      ? { name: name.trim(), rank }
+      : { name: otherAffectedLevel.name, rank: originalRank }
+    const platformerSwapText = levelType === 'Platformer' ? ' on the Platformer Demonlist' : ''
+
+    return `${name.trim()} and ${otherAffectedLevel.name} have been swapped${platformerSwapText}, with ${higherUpLevel.name} now sitting above at #${higherUpLevel.rank}.`
+  }
+
   const neighboringText = [
     above ? `above ${above.name}` : '',
     below ? `below ${below.name}` : '',
