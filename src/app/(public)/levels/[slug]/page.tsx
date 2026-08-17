@@ -44,7 +44,7 @@ export default async function LevelProfilePage({
 
   const thumbnail = (
     <div
-      className="profile-thumbnail"
+      className="profile-thumbnail level-thumbnail-frame"
       aria-hidden="true"
     >
       <LevelThumbnail
@@ -66,37 +66,39 @@ export default async function LevelProfilePage({
 
         <header className="profile-header">
           <div className="level-profile-header-content">
-            <div className="level-profile-rank">
-              {level.rank}
-            </div>
+            <div className="level-profile-main">
+              <div className="level-profile-rank">
+                {level.rank}
+              </div>
 
-            <div className="profile-copy">
-              <div className="level-profile-meta">
-                <span className="level-profile-type">{level.type}</span>
-                {level.demoted && (
-                  <span className="level-profile-badge">
-                    Demoted
-                  </span>
-                )}
-                {level.unrated && (
-                  <span className="level-profile-badge">
-                    Unrated
-                  </span>
+              <div className="profile-copy">
+                <div className="level-profile-meta">
+                  <span className="level-profile-type">{level.type}</span>
+                  {level.demoted && (
+                    <span className="level-profile-badge">
+                      Demoted
+                    </span>
+                  )}
+                  {level.unrated && (
+                    <span className="level-profile-badge">
+                      Unrated
+                    </span>
+                  )}
+                </div>
+                <h1 className="profile-title">
+                  {level.name}
+                </h1>
+                <p className="level-profile-publisher">
+                  Published by {level.publishedBy}
+                </p>
+                {(level.createdBy || level.verifiedBy) && (
+                  <p className="level-profile-creator">
+                    {level.createdBy
+                      ? `Created by ${level.createdBy}${level.verifiedBy ? `, verified by ${level.verifiedBy}` : ''}`
+                      : `Verified by ${level.verifiedBy}`}
+                  </p>
                 )}
               </div>
-              <h1 className="profile-title">
-                {level.name}
-              </h1>
-              <p className="level-profile-publisher">
-                Published by {level.publishedBy}
-              </p>
-              {(level.createdBy || level.verifiedBy) && (
-                <p className="level-profile-creator">
-                  {level.createdBy
-                    ? `Created by ${level.createdBy}${level.verifiedBy ? `, verified by ${level.verifiedBy}` : ''}`
-                    : `Verified by ${level.verifiedBy}`}
-                </p>
-              )}
             </div>
 
             {level.videoUrl ? (

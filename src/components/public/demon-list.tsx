@@ -42,7 +42,7 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
         </span>
       </span>
       <span
-        className="level-card-thumbnail"
+        className="level-card-thumbnail level-thumbnail-frame"
         aria-hidden="true"
       >
         <LevelThumbnail

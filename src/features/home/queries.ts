@@ -21,6 +21,7 @@ function getLevelTypeStats(type: LevelType) {
     prisma.level.findFirst({
       where: activeLevel,
       select: {
+        ingameId: true,
         name: true,
         slug: true,
         rank: true,
@@ -54,7 +55,8 @@ function getLevelTypeStats(type: LevelType) {
       demotedUniqueLevels,
       unratedUniqueLevels,
       hardestLevel: hardestLevel
-        ? {
+          ? {
+            ingameId: hardestLevel.ingameId,
             name: hardestLevel.name,
             slug: hardestLevel.slug,
             rank: hardestLevel.rank,

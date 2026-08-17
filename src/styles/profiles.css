@@ -16,7 +16,12 @@
 
   /* Responsive content layout inside a level profile header. */
   .level-profile-header-content {
-    @apply grid grid-cols-[max-content_minmax(0,1fr)_12rem] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)_15rem] sm:gap-8 sm:p-8;
+    @apply relative;
+  }
+
+  /* Left content area beside the integrated level-profile thumbnail. */
+  .level-profile-main {
+    @apply relative z-10 grid min-w-0 grid-cols-[max-content_minmax(0,1fr)] items-center gap-4 p-5 sm:grid-cols-[max-content_minmax(0,1fr)] sm:gap-8 sm:p-8;
   }
 
   /* Flexible text column inside either profile header. */
@@ -323,17 +328,17 @@
 
   /* Clickable verification-video thumbnail wrapper. */
   .level-profile-video-link {
-    @apply block w-48 no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60;
+    @apply absolute inset-y-0 right-0 z-0 block min-h-0 w-[44%] no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:absolute sm:inset-y-0 sm:right-0 sm:z-0 sm:min-h-0 sm:w-[44%];
   }
 
   /* Non-clickable verification-video thumbnail wrapper. */
   .level-profile-video-container {
-    @apply w-48 sm:w-60;
+    @apply absolute inset-y-0 right-0 z-0 min-h-0 w-[44%] sm:absolute sm:inset-y-0 sm:right-0 sm:z-0 sm:min-h-0 sm:w-[44%];
   }
 
   /* Large verification thumbnail on a level profile. */
   .profile-thumbnail {
-    @apply grid aspect-video w-full place-items-center border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)];
+    @apply grid h-full min-h-48 w-full place-items-center;
   }
 
   /* Section containing the Classic/Platformer completion toggle. */

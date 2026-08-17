@@ -51,3 +51,4 @@ src/data/*.csv
 *.dump
 *.list
 /backups
+/images

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { LevelThumbnail } from '@/components/public/level-thumbnail'
+
 type LevelListStats = {
   totalCompletions: number
   demotedCompletions: number
@@ -8,6 +10,7 @@ type LevelListStats = {
   demotedUniqueLevels: number
   unratedUniqueLevels: number
   hardestLevel: {
+    ingameId: number
     name: string
     slug: string
     rank: number
@@ -98,7 +101,18 @@ export function LevelListSummary({ title, href, stats }: LevelListSummaryProps) 
           href={`/levels/${stats.hardestLevel.slug}`}
           className="level-summary-hardest-link"
         >
-          {hardestLevelContent}
+          <div className="level-summary-hardest-content">
+            {hardestLevelContent}
+          </div>
+          <span
+            className="level-summary-thumbnail level-thumbnail-frame"
+            aria-hidden="true"
+          >
+            <LevelThumbnail
+              levelId={stats.hardestLevel.ingameId}
+              placeholderClassName="level-placeholder-small"
+            />
+          </span>
         </Link>
       ) : (
         <div className="level-summary-hardest-empty">{hardestLevelContent}</div>

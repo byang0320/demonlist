@@ -106,7 +106,7 @@
 
   /* Spacing around the Classic/Platformer demonlist toggle. */
   .demonlist-toggle-wrapper {
-    @apply mb-6;
+    @apply mb-4;
   }
 
   /* Toggle container on public demonlist pages. */
@@ -136,7 +136,7 @@
 
   /* Rating explanation beneath the public demonlist toggle. */
   .demonlist-description {
-    @apply mt-2 text-sm leading-6 text-[#8c97b2];
+    @apply mt-4 text-center text-sm leading-6 text-[#8c97b2];
   }
 
   /* Header row on public demonlist pages. */
@@ -186,17 +186,17 @@
 
   /* Shared visual shell for public and admin level cards. */
   .level-card {
-    @apply overflow-hidden border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
-  /* Four-column layout for level cards in admin demonlist management. */
+  /* Full-height image treatment for level cards in admin demonlist management. */
   .level-card-admin {
-    @apply grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)_6rem_4.5rem] items-center sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)_12rem_5.5rem];
+    @apply grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)] items-stretch sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)];
   }
 
-  /* Four-column layout for public level cards. */
+  /* Full-height image treatment for public level cards. */
   .level-card-public {
-    @apply grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)_6rem_1.25rem] items-center sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)_12rem_1.5rem];
+    @apply grid min-h-[8.25rem] grid-cols-[5.5rem_minmax(0,1fr)] items-stretch sm:min-h-[9.75rem] sm:grid-cols-[6.5rem_minmax(0,1fr)];
   }
 
   /* Contents wrapper that lets a level card expose its full row as a link. */
@@ -206,12 +206,12 @@
 
   /* Rank column in a level card. */
   .level-card-rank {
-    @apply pl-4 text-[1.3rem] font-extrabold tracking-[-0.06em] text-[#c6beff] sm:pl-6 sm:text-[1.65rem];
+    @apply relative z-10 self-center pl-4 text-[1.3rem] font-extrabold tracking-[-0.06em] text-[#c6beff] sm:pl-6 sm:text-[1.65rem];
   }
 
   /* Main text/details column in a level card. */
   .level-card-details {
-    @apply min-w-0 py-4 pr-3;
+    @apply relative z-10 min-w-0 self-center py-4 pr-3;
   }
 
   /* Badge row for Demoted/Unrated level labels. */
@@ -241,17 +241,28 @@
 
   /* Verification-video thumbnail in a level card. */
   .level-card-thumbnail {
-    @apply grid aspect-video w-full place-items-center border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
+    @apply pointer-events-none absolute inset-y-0 right-0 z-0 grid h-auto w-[42%] place-items-center;
+  }
+
+  /* Shared slanted image frame used by level cards and level profiles. */
+  .level-thumbnail-frame {
+    @apply relative overflow-hidden bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Keep the card thumbnail absolute while allowing the shared frame to position its image. */
+  .level-card-thumbnail.level-thumbnail-frame {
+    @apply absolute inset-y-0 right-0 z-0;
   }
 
   /* Level image loaded from the Geometry Dash level-thumbnail service. */
   .level-thumbnail-image {
-    @apply h-full w-full object-cover;
+    @apply absolute inset-0 block h-full w-full object-center object-cover;
   }
 
   /* Edit button in an admin level card. */
   .level-card-edit-link {
-    @apply relative z-10 mr-3 justify-self-end border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
+    @apply absolute right-3 top-1/2 z-10 -translate-y-1/2 border border-[#c6beff]/60 bg-[#0b0d18]/75 px-3 py-2 text-xs font-bold text-white no-underline shadow-lg transition hover:bg-[#0b0d18]/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:right-4 sm:px-4 sm:text-sm;
   }
 
   /* Summary card shown for Classic/Platformer stats on the homepage. */
@@ -306,7 +317,17 @@
 
   /* Clickable hardest-level area in a homepage summary card. */
   .level-summary-hardest-link {
-    @apply block border-t border-white/10 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#9c8cff]/25 sm:p-6;
+    @apply relative block border-t border-white/10 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#9c8cff]/25 sm:p-6;
+  }
+
+  /* Text content layered above the homepage hardest-level thumbnail. */
+  .level-summary-hardest-content {
+    @apply relative z-10;
+  }
+
+  /* Slanted hardest-level thumbnail on homepage summary cards. */
+  .level-summary-thumbnail {
+    @apply pointer-events-none absolute inset-y-0 right-0 z-0 grid w-[42%] place-items-center;
   }
 
   /* Empty hardest-level area in a homepage summary card. */
