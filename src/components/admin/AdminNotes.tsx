@@ -18,6 +18,7 @@ export default function AdminNotes({ initialNotes }: { initialNotes: string }) {
   const savedNotesRef = useRef(initialNotes)
   const submittedNotesRef = useRef<string | null>(null)
   const failedNotesRef = useRef<string | null>(null)
+  const leaveWarningRef = useRef(false)
 
   useEffect(() => {
     if (state.saved && submittedNotesRef.current !== null) {
@@ -43,6 +44,67 @@ export default function AdminNotes({ initialNotes }: { initialNotes: string }) {
 
     return () => window.clearTimeout(timeout)
   }, [notes, pending])
+
+  useEffect(() => {
+    leaveWarningRef.current = pending || notes !== savedNotesRef.current
+  }, [notes, pending])
+
+  useEffect(() => {
+    const warningMessage = 'Your admin notes are still being saved. Leave this page?'
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!leaveWarningRef.current) {
+        return
+      }
+
+      event.preventDefault()
+      event.returnValue = ''
+    }
+
+    const handleNavigationClick = (event: MouseEvent) => {
+      if (
+        !leaveWarningRef.current
+        || event.defaultPrevented
+        || event.button !== 0
+        || event.metaKey
+        || event.ctrlKey
+        || event.shiftKey
+        || event.altKey
+      ) {
+        return
+      }
+
+      const target = event.target
+      if (!(target instanceof Element)) {
+        return
+      }
+
+      const link = target.closest('a[href]') as HTMLAnchorElement | null
+      const button = target.closest('button') as HTMLButtonElement | null
+      const isExternalButton = button && button.form !== formRef.current
+
+      if (
+        (!link && !isExternalButton)
+        || link?.target
+        || link?.hasAttribute('download')
+        || link?.getAttribute('href')?.startsWith('#')
+      ) {
+        return
+      }
+
+      if (!window.confirm(warningMessage)) {
+        event.preventDefault()
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    document.addEventListener('click', handleNavigationClick, true)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      document.removeEventListener('click', handleNavigationClick, true)
+    }
+  }, [])
 
   const statusMessage = pending
     ? 'Saving…'
