@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 import CompletionForm from '@/components/admin/CompletionForm'
@@ -42,6 +43,9 @@ export default async function EditCompletionPage({
   return (
     <main className="admin-page">
       <div className="admin-form-content">
+        <Link href="/admin/completions" className="back-link">
+          <span aria-hidden="true">←</span> Back to Completion Management
+        </Link>
         <header>
           <h1 className="admin-page-title">Edit Completion</h1>
         </header>

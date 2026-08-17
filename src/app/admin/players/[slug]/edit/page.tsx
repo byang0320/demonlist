@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 import PlayerForm, { type PlayerFormValues } from '@/components/admin/PlayerForm'
@@ -45,6 +46,9 @@ export default async function EditPlayerPage({
   return (
     <main className="admin-page">
       <div className="admin-form-content">
+        <Link href="/admin/players" className="back-link">
+          <span aria-hidden="true">←</span> Back to Player Management
+        </Link>
         <header>
           <h1 className="admin-page-title-wrapped">
             Edit Player: {player.name}

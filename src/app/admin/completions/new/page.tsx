@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import CompletionForm from '@/components/admin/CompletionForm'
 import { getCompletionFormOptions } from '@/features/completions/queries'
 
@@ -11,6 +13,9 @@ export default async function NewCompletionPage() {
   return (
     <main className="admin-page">
       <div className="admin-form-content">
+        <Link href="/admin/completions" className="back-link">
+          <span aria-hidden="true">←</span> Back to Completion Management
+        </Link>
         <header>
           <h1 className="admin-page-title">Create New Completion</h1>
         </header>

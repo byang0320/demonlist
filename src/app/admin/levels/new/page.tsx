@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import LevelForm from '@/components/admin/LevelForm'
 import { getNextAvailableRank, listLevelRankNames } from '@/features/levels/queries'
 
@@ -14,6 +16,9 @@ export default async function NewLevelPage() {
   return (
     <main className="admin-page">
       <div className="admin-form-content">
+        <Link href="/admin/demonlist" className="back-link">
+          <span aria-hidden="true">←</span> Back to Admin Demonlist
+        </Link>
         <header>
           <h1 className="admin-page-title">Create New Level</h1>
           <p className="admin-page-description">
