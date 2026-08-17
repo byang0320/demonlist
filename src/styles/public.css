@@ -221,7 +221,7 @@
 
   /* Individual Demoted or Unrated badge in a level card. */
   .level-card-badge {
-    @apply bg-red-500/15 px-2 py-0.5 text-red-300;
+    @apply rounded-full bg-red-500/15 px-2 py-0.5 text-red-300;
   }
 
   /* Level name in a level card. */

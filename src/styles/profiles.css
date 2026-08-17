@@ -308,12 +308,12 @@
 
   /* Classic/Platformer badge on a level profile. */
   .level-profile-type {
-    @apply bg-[#9c8cff]/15 px-3 py-1;
+    @apply rounded-full bg-[#9c8cff]/15 px-3 py-1;
   }
 
   /* Demoted or Unrated badge on a level profile. */
   .level-profile-badge {
-    @apply bg-red-500/15 px-3 py-1 text-red-300;
+    @apply rounded-full bg-red-500/15 px-3 py-1 text-red-300;
   }
 
   /* Publisher line on a level profile. */
