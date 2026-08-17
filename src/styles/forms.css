@@ -6,7 +6,7 @@
 
   /* Standard bordered form section, used by completion forms. */
   .form-section {
-    @apply grid gap-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+    @apply grid gap-5 border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
   }
 
   /* Two-column form-section variant used by level and player forms. */
@@ -36,7 +36,7 @@
 
   /* Shared input/select styling for admin forms and filters. */
   .form-input {
-    @apply mt-2 w-full rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
+    @apply mt-2 w-full border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
   }
 
   /* Taller textarea variant used for player biographies. */
@@ -88,11 +88,11 @@
   }
 
   .form-copyable-textarea {
-    @apply min-h-20 min-w-0 flex-1 resize-none rounded-xl border border-white/10 bg-[#0c1120] px-4 py-3 text-sm leading-6 text-[#f4f6ff] outline-none;
+    @apply min-h-20 min-w-0 flex-1 resize-none border border-white/10 bg-[#0c1120] px-4 py-3 text-sm leading-6 text-[#f4f6ff] outline-none;
   }
 
   .form-copy-button {
-    @apply inline-flex min-h-12 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-12 shrink-0 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   /* Introductory copy at the top of a completion form. */
@@ -123,7 +123,7 @@
 
   /* Top-level validation summary for a form submission. */
   .form-error-summary {
-    @apply rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200;
+    @apply border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200;
   }
 
   /* Geometry Dash level-ID row in the level form. */
@@ -148,12 +148,12 @@
 
   /* Primary create/save submit button in admin forms. */
   .form-submit {
-    @apply inline-flex min-h-12 cursor-pointer items-center rounded-xl bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60;
+    @apply inline-flex min-h-12 cursor-pointer items-center bg-[#9c8cff] px-6 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 disabled:cursor-wait disabled:opacity-60;
   }
 
   /* Secondary autofill/action button in the level form. */
   .form-secondary-button {
-    @apply inline-flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   /* Checkbox label row for level flags such as Demoted and Unrated. */
@@ -183,12 +183,12 @@
 
   /* Floating search-results menu for level/player autocomplete fields. */
   .autocomplete-menu {
-    @apply absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-[#171e35] p-1 shadow-2xl;
+    @apply absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto border border-white/10 bg-[#171e35] p-1 shadow-2xl;
   }
 
   /* Selectable option button inside an autocomplete menu. */
   .autocomplete-option {
-    @apply block w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-[#9c8cff]/15 focus:bg-[#9c8cff]/15 focus:outline-none;
+    @apply block w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-[#9c8cff]/15 focus:bg-[#9c8cff]/15 focus:outline-none;
   }
 
   /* Empty-state message inside an autocomplete menu. */

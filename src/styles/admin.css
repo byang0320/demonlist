@@ -11,7 +11,7 @@
 
   /* Sign Out button shown in the top-right corner of admin pages. */
   .admin-auth-button {
-    @apply cursor-pointer rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#b9c2d8] transition hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply cursor-pointer border border-white/10 px-3 py-2 text-xs font-semibold text-[#b9c2d8] transition hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Wide content wrapper for admin dashboards and management lists. */
@@ -56,12 +56,12 @@
 
   /* Create-new action link in admin list-page headers. */
   .admin-create-link {
-    @apply inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto;
+    @apply inline-flex min-h-11 items-center self-start border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto;
   }
 
   /* Filter panel on the admin completions page. */
   .admin-filter-panel {
-    @apply mb-8 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+    @apply mb-8 border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
   }
 
   /* Heading row inside the completion filter panel. */
@@ -86,12 +86,12 @@
 
   /* Secondary management links on the admin dashboard. */
   .admin-action-link {
-    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#ae9dff]/30 bg-[#111725]/80 px-5 py-4 text-center text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:text-base;
+    @apply flex min-h-20 items-center justify-center border border-[#ae9dff]/30 bg-[#111725]/80 px-5 py-4 text-center text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:text-base;
   }
 
   /* Primary create-completion link on the admin dashboard. */
   .admin-action-link-primary {
-    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#c6beff] bg-[#9c8cff] px-5 py-4 text-center text-sm font-bold text-[#0b0d18] no-underline shadow-lg shadow-[#9c8cff]/10 transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 sm:text-base;
+    @apply flex min-h-20 items-center justify-center border border-[#c6beff] bg-[#9c8cff] px-5 py-4 text-center text-sm font-bold text-[#0b0d18] no-underline shadow-lg shadow-[#9c8cff]/10 transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30 sm:text-base;
   }
 
   /* Responsive statistics grid on the admin dashboard. */
@@ -101,12 +101,12 @@
 
   /* Combined Classic/Platformer statistics card. */
   .admin-stat-group {
-    @apply grid grid-cols-2 divide-x divide-white/10 rounded-2xl border border-white/10 bg-[#111725]/80 md:col-span-2;
+    @apply grid grid-cols-2 divide-x divide-white/10 border border-white/10 bg-[#111725]/80 md:col-span-2;
   }
 
   /* Standalone Registered Players or Completions statistic card. */
   .admin-stat-card {
-    @apply rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-6;
+    @apply border border-white/10 bg-[#111725]/80 p-5 sm:p-6;
   }
 
   /* Individual Classic or Platformer statistic cell. */
@@ -146,7 +146,7 @@
 
   /* Shared freeform notes panel on the admin dashboard. */
   .admin-notes-panel {
-    @apply rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+    @apply border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
   }
 
   /* Freeform shared admin-notes editor. */
@@ -166,7 +166,7 @@
 
   /* Save button for shared admin notes. */
   .admin-save-notes-button {
-    @apply min-h-11 cursor-pointer rounded-xl bg-[#9c8cff] px-5 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
+    @apply min-h-11 cursor-pointer bg-[#9c8cff] px-5 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
   }
 
   /* Explanatory text above completion-management actions. */
@@ -181,7 +181,7 @@
 
   /* Clickable completion record card in the admin completions list. */
   .admin-record-card {
-    @apply block rounded-2xl border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply block border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Main sentence inside an admin completion record card. */
@@ -201,7 +201,7 @@
 
   /* Row containing a player link and its Edit button. */
   .admin-player-row {
-    @apply flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:bg-[#171e35];
+    @apply flex items-center gap-3 border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:bg-[#171e35];
   }
 
   /* Public player-profile link inside the admin player list. */
@@ -216,7 +216,7 @@
 
   /* Avatar shown beside each player in the admin player list. */
   .admin-player-avatar {
-    @apply grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff];
+    @apply grid h-12 w-12 shrink-0 place-items-center overflow-hidden border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff];
   }
 
   /* Player name in an admin player row. */
@@ -236,6 +236,6 @@
 
   /* Edit button beside each admin player record. */
   .admin-edit-link {
-    @apply shrink-0 rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
+    @apply shrink-0 border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
   }
 }

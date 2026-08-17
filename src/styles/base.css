@@ -81,6 +81,6 @@
 
   /* Empty-result cards on public lists and admin management pages. */
   .empty-state {
-    @apply rounded-2xl border border-dashed border-white/10 p-8 text-center text-[#8c97b2];
+    @apply border border-dashed border-white/10 p-8 text-center text-[#8c97b2];
   }
 }

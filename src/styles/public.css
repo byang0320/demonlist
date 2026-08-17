@@ -11,17 +11,17 @@
 
   /* Low-contrast Admin button visible in the homepage corner. */
   .admin-faint-link {
-    @apply rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#59627b] no-underline transition hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply border border-white/10 px-3 py-2 text-xs font-semibold text-[#59627b] no-underline transition hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Hero card on the root homepage. */
   .home-header {
-    @apply relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-[#1b2140]/95 via-[#11172a]/98 to-[#0f1422] p-6 shadow-2xl shadow-black/25 sm:p-12;
+    @apply relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#1b2140]/95 via-[#11172a]/98 to-[#0f1422] p-6 shadow-2xl shadow-black/25 sm:p-12;
   }
 
   /* Decorative glow inside the homepage hero card. */
   .home-header-glow {
-    @apply pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-[#8e7af7]/15 blur-3xl;
+    @apply pointer-events-none absolute -right-24 -top-32 h-80 w-80 bg-[#8e7af7]/15 blur-3xl;
   }
 
   /* Positioning context for homepage hero text. */
@@ -51,7 +51,7 @@
 
   /* Profile-selection panel on the homepage. */
   .home-profiles-section {
-    @apply mt-5 rounded-2xl border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
+    @apply mt-5 border border-white/10 bg-[#111725]/80 p-5 sm:p-7;
   }
 
   /* Heading block above the homepage player cards. */
@@ -76,12 +76,12 @@
 
   /* Clickable player profile card on the homepage. */
   .home-player-card {
-    @apply flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply flex items-center gap-4 border border-white/10 bg-[#0c1120]/70 p-4 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Player avatar displayed in a homepage profile card. */
   .player-avatar-card {
-    @apply grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff];
+    @apply grid h-12 w-12 shrink-0 place-items-center overflow-hidden border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center text-lg font-bold text-[#c6beff];
   }
 
   /* Flexible text column in a homepage player card. */
@@ -111,7 +111,7 @@
 
   /* Toggle container on public demonlist pages. */
   .demonlist-toggle {
-    @apply flex w-full overflow-hidden rounded-2xl border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8];
+    @apply flex w-full overflow-hidden border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8];
   }
 
   /* Individual Classic/Platformer demonlist toggle button. */
@@ -151,7 +151,7 @@
 
   /* Create-level link shown to authorized admins on the public list. */
   .create-level-link {
-    @apply inline-flex min-h-11 items-center rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply inline-flex min-h-11 items-center border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Ordered level-card list on public demonlist pages. */
@@ -161,7 +161,7 @@
 
   /* Empty public demonlist placeholder. */
   .level-list-empty {
-    @apply grid min-h-64 place-items-center content-center gap-2 rounded-2xl border border-dashed border-white/10 text-center text-[#8c97b2];
+    @apply grid min-h-64 place-items-center content-center gap-2 border border-dashed border-white/10 text-center text-[#8c97b2];
   }
 
   /* Icon color in the empty public demonlist placeholder. */
@@ -186,7 +186,7 @@
 
   /* Shared visual shell for public and admin level cards. */
   .level-card {
-    @apply overflow-hidden rounded-[1.1rem] border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply overflow-hidden border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Four-column layout for level cards in admin demonlist management. */
@@ -221,7 +221,7 @@
 
   /* Individual Demoted or Unrated badge in a level card. */
   .level-card-badge {
-    @apply rounded-full bg-red-500/15 px-2 py-0.5 text-red-300;
+    @apply bg-red-500/15 px-2 py-0.5 text-red-300;
   }
 
   /* Level name in a level card. */
@@ -241,22 +241,22 @@
 
   /* Verification-video thumbnail in a level card. */
   .level-card-thumbnail {
-    @apply grid aspect-video w-full place-items-center rounded-xl border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
+    @apply grid aspect-video w-full place-items-center border border-[#ae9dff]/20 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
   }
 
   /* Level image loaded from the Geometry Dash level-thumbnail service. */
   .level-thumbnail-image {
-    @apply h-full w-full rounded-[inherit] object-cover;
+    @apply h-full w-full object-cover;
   }
 
   /* Edit button in an admin level card. */
   .level-card-edit-link {
-    @apply relative z-10 mr-3 justify-self-end rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
+    @apply relative z-10 mr-3 justify-self-end border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
   }
 
   /* Summary card shown for Classic/Platformer stats on the homepage. */
   .level-summary {
-    @apply overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80;
+    @apply overflow-hidden border border-white/10 bg-[#111725]/80;
   }
 
   /* Header row inside a homepage level summary card. */
@@ -271,7 +271,7 @@
 
   /* “Check it out” button linking to a demonlist from the homepage. */
   .level-summary-link {
-    @apply inline-flex min-h-10 shrink-0 items-center rounded-xl bg-[#9c8cff] px-4 text-sm font-bold text-[#0b0d18] no-underline transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
+    @apply inline-flex min-h-10 shrink-0 items-center bg-[#9c8cff] px-4 text-sm font-bold text-[#0b0d18] no-underline transition hover:bg-[#c6beff] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
   }
 
   /* Two-column statistics row inside a homepage summary card. */

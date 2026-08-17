@@ -11,7 +11,7 @@
 
   /* Centered admin login card. */
   .auth-card {
-    @apply w-full max-w-md rounded-3xl border border-white/10 bg-[#111725]/90 p-8 text-center shadow-2xl shadow-black/20;
+    @apply w-full max-w-md border border-white/10 bg-[#111725]/90 p-8 text-center shadow-2xl shadow-black/20;
   }
 
   /* Product-name kicker at the top of the admin login card. */
@@ -31,7 +31,7 @@
 
   /* Google sign-in button on the admin login page. */
   .google-button {
-    @apply mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-md border border-[#dadce0] bg-white px-5 text-sm font-medium tracking-[0.01em] text-[#3c4043] shadow-[0_1px_2px_rgba(60,64,67,0.15)] transition hover:bg-[#f8fafd] hover:shadow-[0_1px_3px_rgba(60,64,67,0.25)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4285f4]/30;
+    @apply mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 border border-[#dadce0] bg-white px-5 text-sm font-medium tracking-[0.01em] text-[#3c4043] shadow-[0_1px_2px_rgba(60,64,67,0.15)] transition hover:bg-[#f8fafd] hover:shadow-[0_1px_3px_rgba(60,64,67,0.25)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4285f4]/30;
   }
 
   /* Google logo inside the sign-in button. */

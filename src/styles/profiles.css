@@ -1,7 +1,7 @@
 @layer components {
   /* Shared card shell for player and level profile headers. */
   .profile-header {
-    @apply overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20;
+    @apply overflow-hidden border border-white/10 bg-gradient-to-br from-[#171e35]/98 to-[#0f1422]/98 shadow-2xl shadow-black/20;
   }
 
   /* Responsive content layout inside a player profile header. */
@@ -51,19 +51,19 @@
 
   /* Individual country flag image. */
   .profile-country-flag {
-    @apply block h-7 w-10 shrink-0 rounded-md border border-white/15 bg-cover bg-center shadow-sm;
+    @apply block h-7 w-10 shrink-0 border border-white/15 bg-cover bg-center shadow-sm;
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
 
   /* Non-link profile metadata, currently the Discord handle. */
   .profile-link-muted {
-    @apply rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-[#b9c2d8];
+    @apply border border-white/10 px-3 py-2 text-sm font-semibold text-[#b9c2d8];
   }
 
   /* Clickable YouTube/Twitch/Twitter links on player profiles. */
   .profile-link {
-    @apply rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Large player avatar in a player profile header. */
@@ -73,22 +73,22 @@
 
   /* Small player avatar used in compact profile contexts. */
   .profile-avatar-small {
-    @apply h-10 w-10 rounded-xl text-sm;
+    @apply h-10 w-10 text-sm;
   }
 
   /* Shared avatar base styling. */
   .profile-avatar {
-    @apply grid shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center font-bold text-[#c6beff];
+    @apply grid shrink-0 place-items-center overflow-hidden border border-[#ae9dff]/25 bg-[#252d49] bg-cover bg-center font-bold text-[#c6beff];
   }
 
   /* Player completion-summary card row beneath a profile header. */
   .profile-info-cards {
-    @apply grid gap-3 px-5 pb-5 pt-4 sm:grid-cols-2 sm:px-8 sm:pb-8 sm:pt-4;
+    @apply grid gap-3 pb-5 pt-4 sm:grid-cols-2 sm:pb-8 sm:pt-4;
   }
 
   /* Individual bordered card inside the player completion-summary row. */
   .profile-info-card {
-    @apply rounded-2xl border border-white/10 bg-white/[0.03] p-4;
+    @apply border border-white/10 bg-white/[0.03] p-4;
   }
 
   /* Large completion count inside a profile info card. */
@@ -98,7 +98,7 @@
 
   /* Clickable hardest-level card on player profiles. */
   .profile-hardest-link {
-    @apply block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply block border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Hardest-level name inside a player profile card. */
@@ -173,7 +173,7 @@
 
   /* Shared button styling for profile sort controls. */
   .sort-button {
-    @apply cursor-pointer rounded-lg px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply cursor-pointer px-2 py-1 no-underline transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Selected sort option on a profile. */
@@ -188,7 +188,7 @@
 
   /* Outer shell around profile completion tables. */
   .completion-table-shell {
-    @apply overflow-hidden rounded-2xl border border-white/10 bg-[#111725]/80;
+    @apply overflow-hidden border border-white/10 bg-[#111725]/80;
   }
 
   /* Horizontal scrolling wrapper for narrow screens. */
@@ -303,12 +303,12 @@
 
   /* Classic/Platformer badge on a level profile. */
   .level-profile-type {
-    @apply rounded-full bg-[#9c8cff]/15 px-3 py-1;
+    @apply bg-[#9c8cff]/15 px-3 py-1;
   }
 
   /* Demoted or Unrated badge on a level profile. */
   .level-profile-badge {
-    @apply rounded-full bg-red-500/15 px-3 py-1 text-red-300;
+    @apply bg-red-500/15 px-3 py-1 text-red-300;
   }
 
   /* Publisher line on a level profile. */
@@ -323,7 +323,7 @@
 
   /* Clickable verification-video thumbnail wrapper. */
   .level-profile-video-link {
-    @apply block w-48 rounded-2xl no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60;
+    @apply block w-48 no-underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:w-60;
   }
 
   /* Non-clickable verification-video thumbnail wrapper. */
@@ -333,17 +333,17 @@
 
   /* Large verification thumbnail on a level profile. */
   .profile-thumbnail {
-    @apply grid aspect-video w-full place-items-center rounded-2xl border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)];
+    @apply grid aspect-video w-full place-items-center border border-[#ae9dff]/25 bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_2rem_rgba(5,7,15,0.45)];
   }
 
   /* Section containing the Classic/Platformer completion toggle. */
   .completion-toggle-section {
-    @apply border-t border-white/10 px-5 pb-0 pt-4 sm:px-8 sm:pb-0 sm:pt-4;
+    @apply border-t border-white/10 pb-0 pt-4;
   }
 
   /* Completion toggle container on player profiles. */
   .completion-toggle {
-    @apply flex w-full overflow-hidden rounded-2xl border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8];
+    @apply flex w-full overflow-hidden border border-[#ae9dff]/35 bg-[#111725] text-sm font-semibold text-[#b9c2d8];
   }
 
   /* Individual Classic/Platformer completion toggle button. */
@@ -368,6 +368,6 @@
 
   /* Compact avatar used in level completion tables. */
   .profile-table-avatar {
-    @apply grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-[#252d49] bg-cover bg-center text-sm font-bold text-[#c6beff];
+    @apply grid h-10 w-10 shrink-0 place-items-center overflow-hidden border border-white/10 bg-[#252d49] bg-cover bg-center text-sm font-bold text-[#c6beff];
   }
 }
