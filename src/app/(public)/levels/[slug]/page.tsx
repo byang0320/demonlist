@@ -49,7 +49,6 @@ export default async function LevelProfilePage({
     >
       <LevelThumbnail
         levelId={level.ingameId}
-        placeholderClassName="level-placeholder-large"
       />
     </div>
   )

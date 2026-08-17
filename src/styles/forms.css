@@ -39,6 +39,44 @@
     @apply mt-2 w-full border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
   }
 
+  /* Wrapper and custom controls for the inverted Proposed Rank spinner. */
+  .form-number-control {
+    @apply relative mt-2;
+  }
+
+  .form-number-input {
+    @apply mt-0 pr-22;
+    -moz-appearance: textfield;
+  }
+
+  .form-number-input::-webkit-inner-spin-button,
+  .form-number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .form-number-stepper {
+    @apply absolute right-1 top-1/2 flex -translate-y-1/2 flex-row;
+  }
+
+  .form-number-stepper-button {
+    @apply grid h-10 w-10 cursor-pointer place-items-center border-l border-white/10 text-[#8c97b2] transition hover:bg-[#9c8cff]/15 hover:text-white disabled:opacity-30;
+  }
+
+  .form-number-stepper-triangle {
+    @apply block h-0 w-0;
+    border-left: 0.45rem solid transparent;
+    border-right: 0.45rem solid transparent;
+  }
+
+  .form-number-stepper-triangle-up {
+    border-bottom: 0.65rem solid currentcolor;
+  }
+
+  .form-number-stepper-triangle-down {
+    border-top: 0.65rem solid currentcolor;
+  }
+
   /* Taller textarea variant used for player biographies. */
   .form-textarea {
     @apply min-h-40 resize-y;
@@ -88,11 +126,11 @@
   }
 
   .form-copyable-textarea {
-    @apply min-h-20 min-w-0 flex-1 resize-none border border-white/10 bg-[#0c1120] px-4 py-3 text-sm leading-6 text-[#f4f6ff] outline-none;
+    @apply min-h-12 min-w-0 flex-1 resize-none overflow-hidden border border-white/10 bg-[#0c1120] px-4 py-3 text-sm leading-5 text-[#f4f6ff] outline-none;
   }
 
   .form-copy-button {
-    @apply inline-flex min-h-12 shrink-0 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-12 shrink-0 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:opacity-50;
   }
 
   /* Introductory copy at the top of a completion form. */
@@ -153,7 +191,7 @@
 
   /* Secondary autofill/action button in the level form. */
   .form-secondary-button {
-    @apply inline-flex min-h-12 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center border border-[#ae9dff]/40 px-5 text-sm font-bold text-[#c6beff] transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 disabled:opacity-60;
   }
 
   /* Checkbox label row for level flags such as Demoted and Unrated. */

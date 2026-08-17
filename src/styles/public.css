@@ -246,8 +246,15 @@
 
   /* Shared slanted image frame used by level cards and level profiles. */
   .level-thumbnail-frame {
-    @apply relative overflow-hidden bg-gradient-to-br from-[#8e7af7]/20 to-[#2c3456]/50 bg-cover bg-center text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
+    @apply relative overflow-hidden bg-[#252d49] text-[#c6beff]/80 shadow-[inset_0_0_1.5rem_rgba(5,7,15,0.4)];
     clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Failed thumbnails leave the parent tile completely unobstructed. */
+  .level-thumbnail-frame:empty {
+    clip-path: none;
+    background-color: transparent;
+    box-shadow: none;
   }
 
   /* Keep the card thumbnail absolute while allowing the shared frame to position its image. */

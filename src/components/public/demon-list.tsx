@@ -47,7 +47,6 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
       >
         <LevelThumbnail
           levelId={level.ingameId}
-          placeholderClassName="level-placeholder-small"
         />
       </span>
     </>

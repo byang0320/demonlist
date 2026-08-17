@@ -110,7 +110,6 @@ export function LevelListSummary({ title, href, stats }: LevelListSummaryProps) 
           >
             <LevelThumbnail
               levelId={stats.hardestLevel.ingameId}
-              placeholderClassName="level-placeholder-small"
             />
           </span>
         </Link>

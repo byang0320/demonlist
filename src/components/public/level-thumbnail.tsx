@@ -4,19 +4,17 @@ import { useState } from 'react'
 
 export function LevelThumbnail({
   levelId,
-  placeholderClassName,
 }: {
   levelId: number
-  placeholderClassName: string
 }) {
   const [imageFailed, setImageFailed] = useState(false)
 
   if (imageFailed) {
-    return <LevelPlaceholder className={placeholderClassName} />
+    return null
   }
 
   return (
-    // This external image needs onError so unavailable level thumbnails can use the placeholder.
+    // This external image needs onError so unavailable level thumbnails can disappear cleanly.
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`https://levelthumbs.prevter.me/thumbnail/${levelId}`}
