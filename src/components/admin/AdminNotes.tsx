@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 
 import {
   saveAdminNotesAction,
@@ -12,22 +12,83 @@ export default function AdminNotes({ initialNotes }: { initialNotes: string }) {
     saveAdminNotesAction,
     {},
   )
+  const [notes, setNotes] = useState(initialNotes)
+  const [editStatus, setEditStatus] = useState<'saved' | 'unsaved' | 'saving'>('saved')
+  const formRef = useRef<HTMLFormElement>(null)
+  const savedNotesRef = useRef(initialNotes)
+  const submittedNotesRef = useRef<string | null>(null)
+  const failedNotesRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (state.saved && submittedNotesRef.current !== null) {
+      savedNotesRef.current = submittedNotesRef.current
+      submittedNotesRef.current = null
+      failedNotesRef.current = null
+    }
+
+    if (state.error && submittedNotesRef.current !== null) {
+      failedNotesRef.current = submittedNotesRef.current
+      submittedNotesRef.current = null
+    }
+  }, [state.saved, state.error])
+
+  useEffect(() => {
+    if (pending || notes === savedNotesRef.current || notes === failedNotesRef.current) {
+      return
+    }
+
+    const timeout = window.setTimeout(() => {
+      formRef.current?.requestSubmit()
+    }, 1500)
+
+    return () => window.clearTimeout(timeout)
+  }, [notes, pending])
+
+  const statusMessage = pending
+    ? 'Saving…'
+    : state.error
+      ? state.error
+      : editStatus === 'unsaved'
+        ? 'Unsaved changes'
+        : state.saved
+          ? 'Saved automatically.'
+          : 'Saved.'
+  const statusClassName = pending
+    ? 'admin-notes-status-saving'
+    : state.error || editStatus === 'unsaved'
+      ? 'admin-notes-status-unsaved'
+      : 'admin-notes-status-saved'
 
   return (
-    <form action={formAction} className="admin-notes-panel">
+    <form
+      ref={formRef}
+      action={formAction}
+      className="admin-notes-panel"
+      onSubmit={() => {
+        submittedNotesRef.current = notes
+        setEditStatus('saving')
+      }}
+    >
       <textarea
         name="notes"
         className="form-input admin-notes-textarea"
-        defaultValue={initialNotes}
+        value={notes}
+        onChange={(event) => {
+          setNotes(event.target.value)
+          setEditStatus('unsaved')
+          failedNotesRef.current = null
+        }}
         placeholder="Write down notes, issues, or reminders for the admin team..."
         aria-label="Admin notes"
       />
       <div className="admin-notes-actions">
-        {state.saved && <p className="admin-notes-status" role="status">Notes saved.</p>}
-        {state.error && <p className="form-error" role="alert">{state.error}</p>}
-        <button type="submit" className="admin-save-notes-button" disabled={pending}>
-          {pending ? 'Saving…' : 'Save Notes'}
-        </button>
+        <p
+          className={`admin-notes-status ${statusClassName}`}
+          role={state.error ? 'alert' : 'status'}
+          aria-live="polite"
+        >
+          {statusMessage}
+        </p>
       </div>
     </form>
   )

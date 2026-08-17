@@ -156,17 +156,27 @@
 
   /* Actions and save feedback beneath admin notes. */
   .admin-notes-actions {
-    @apply mt-4 flex flex-wrap items-center justify-end gap-4;
+    @apply mt-4 flex flex-wrap items-center justify-center gap-4;
   }
 
-  /* Successful admin-notes save message. */
+  /* Centered autosave feedback beneath admin notes. */
   .admin-notes-status {
-    @apply m-0 mr-auto text-sm text-[#9ee6b0];
+    @apply m-0 text-center text-sm;
   }
 
-  /* Save button for shared admin notes. */
-  .admin-save-notes-button {
-    @apply min-h-11 cursor-pointer bg-[#9c8cff] px-5 text-sm font-bold text-[#0b0d18] transition hover:bg-[#c6beff] disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/30;
+  /* Unsaved or failed admin-notes changes. */
+  .admin-notes-status-unsaved {
+    @apply text-[#f28b8b];
+  }
+
+  /* Active admin-notes autosave. */
+  .admin-notes-status-saving {
+    @apply text-[#f2d27d];
+  }
+
+  /* Successful admin-notes autosave. */
+  .admin-notes-status-saved {
+    @apply text-[#9ee6b0];
   }
 
   /* Explanatory text above completion-management actions. */
