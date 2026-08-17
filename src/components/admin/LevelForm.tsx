@@ -185,6 +185,7 @@ export default function LevelForm({
   const submittedValues = state.values
   const slugInputRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const changelogTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [gdLevelId, setGdLevelId] = useState(initialValues?.ingameId?.toString() ?? '')
   const [autofilling, setAutofilling] = useState(false)
   const [autofilled, setAutofilled] = useState(false)
@@ -202,6 +203,17 @@ export default function LevelForm({
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [state])
+
+  useEffect(() => {
+    const textarea = changelogTextareaRef.current
+
+    if (!textarea) {
+      return
+    }
+
+    textarea.style.height = 'auto'
+    textarea.style.height = `${textarea.scrollHeight}px`
+  }, [changelogMessage])
 
   async function autofillFromGDLevel() {
     if (!/^\d+$/.test(gdLevelId) || autofilling) {
@@ -482,23 +494,53 @@ export default function LevelForm({
           <h2 className="form-section-title">Proposed Rank</h2>
         </div>
 
-        <label className="form-label form-section-full">
-          Proposed Rank
-          <input
-            autoComplete="off"
-            className={inputClassName}
-            name="rank"
-            type="number"
-            min="1"
-            max={maxRank}
-            required
-            value={rankValue}
-            onChange={(event) => {
-              setRankValue(event.target.value)
-              setCopyStatus('idle')
-            }}
-            placeholder={`Enter a number between 1 and ${maxRank}...`}
-          />
+          <label className="form-label form-section-full">
+            Proposed Rank
+          <div className="form-number-control">
+            <input
+              autoComplete="off"
+              className={`${inputClassName} form-number-input`}
+              name="rank"
+              type="number"
+              min="1"
+              max={maxRank}
+              required
+              value={rankValue}
+              onChange={(event) => {
+                setRankValue(event.target.value)
+                setCopyStatus('idle')
+              }}
+              placeholder={`Enter a number between 1 and ${maxRank}...`}
+            />
+            <div className="form-number-stepper">
+              <button
+                type="button"
+                className="form-number-stepper-button"
+                aria-label="Decrease proposed rank"
+                disabled={rankValue === '1'}
+                onClick={() => {
+                  const nextRank = Math.max(1, Number(rankValue || 1) - 1)
+                  setRankValue(String(nextRank))
+                  setCopyStatus('idle')
+                }}
+              >
+                <span className="form-number-stepper-triangle form-number-stepper-triangle-up" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                className="form-number-stepper-button"
+                aria-label="Increase proposed rank"
+                disabled={rankValue === String(maxRank)}
+                onClick={() => {
+                  const nextRank = Math.min(maxRank, Number(rankValue || 1) + 1)
+                  setRankValue(String(nextRank))
+                  setCopyStatus('idle')
+                }}
+              >
+                <span className="form-number-stepper-triangle form-number-stepper-triangle-down" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
           <p className="form-rank-hint">
             {typeLocked
               ? 'If changed, the ranks of other levels will be adjusted automatically!'
@@ -513,8 +555,9 @@ export default function LevelForm({
             <textarea
               aria-label="Copyable Changelog Message"
               className="form-copyable-textarea"
+              ref={changelogTextareaRef}
               readOnly
-              rows={3}
+              rows={1}
               value={changelogMessage}
             />
             <button
