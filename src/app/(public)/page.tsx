@@ -36,7 +36,7 @@ export default async function HomePage() {
               Stream VC Demonlist
             </h1>
             <p className="home-intro">
-              Explore the hardest levels the Stream VC has completed, and see who conquered them.
+              Explore the hardest levels the Stream VC has completed, and see who beat them.
             </p>
           </div>
         </header>
@@ -76,9 +76,6 @@ export default async function HomePage() {
                       {player._count.completions}{' '}
                       {player._count.completions === 1 ? 'completion' : 'completions'}
                     </span>
-                  </span>
-                  <span className="player-card-arrow" aria-hidden="true">
-                    →
                   </span>
                 </Link>
               ))}

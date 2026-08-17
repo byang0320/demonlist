@@ -60,9 +60,6 @@ export default async function AdminPlayersPage() {
                       {player._count.completions === 1 ? 'completion' : 'completions'}
                     </span>
                   </span>
-                  <span className="admin-player-arrow" aria-hidden="true">
-                    →
-                  </span>
                 </Link>
                 <Link
                   href={`/admin/players/${player.slug}/edit`}

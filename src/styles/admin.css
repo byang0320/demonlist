@@ -11,7 +11,7 @@
 
   /* Sign Out button shown in the top-right corner of admin pages. */
   .admin-auth-button {
-    @apply cursor-pointer rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#b9c2d8] transition hover:border-[#ae9dff]/50 hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply cursor-pointer rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#b9c2d8] transition hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Wide content wrapper for admin dashboards and management lists. */
@@ -56,7 +56,7 @@
 
   /* Create-new action link in admin list-page headers. */
   .admin-create-link {
-    @apply inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto;
+    @apply inline-flex min-h-11 items-center self-start rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:self-auto;
   }
 
   /* Filter panel on the admin completions page. */
@@ -86,7 +86,7 @@
 
   /* Secondary management links on the admin dashboard. */
   .admin-action-link {
-    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#ae9dff]/30 bg-[#111725]/80 px-5 py-4 text-center text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:text-base;
+    @apply flex min-h-20 items-center justify-center rounded-2xl border border-[#ae9dff]/30 bg-[#111725]/80 px-5 py-4 text-center text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:text-base;
   }
 
   /* Primary create-completion link on the admin dashboard. */
@@ -181,7 +181,7 @@
 
   /* Clickable completion record card in the admin completions list. */
   .admin-record-card {
-    @apply block rounded-2xl border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply block rounded-2xl border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Main sentence inside an admin completion record card. */
@@ -201,7 +201,7 @@
 
   /* Row containing a player link and its Edit button. */
   .admin-player-row {
-    @apply flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:border-[#ae9dff]/55 hover:bg-[#171e35];
+    @apply flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white transition hover:bg-[#171e35];
   }
 
   /* Public player-profile link inside the admin player list. */
@@ -234,18 +234,8 @@
     @apply mt-1 block text-xs text-[#8c97b2];
   }
 
-  /* Arrow at the end of an admin player row. */
-  .admin-player-arrow {
-    @apply text-lg text-[#8c97b2] transition;
-  }
-
-  /* Hover movement/color for the admin player-row arrow. */
-  .admin-player-link:hover .admin-player-arrow {
-    @apply translate-x-1 text-[#c6beff];
-  }
-
   /* Edit button beside each admin player record. */
   .admin-edit-link {
-    @apply shrink-0 rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
+    @apply shrink-0 rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
   }
 }

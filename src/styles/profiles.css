@@ -63,7 +63,7 @@
 
   /* Clickable YouTube/Twitch/Twitter links on player profiles. */
   .profile-link {
-    @apply rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply rounded-xl border border-[#ae9dff]/30 px-3 py-2 text-sm font-semibold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Large player avatar in a player profile header. */
@@ -98,7 +98,7 @@
 
   /* Clickable hardest-level card on player profiles. */
   .profile-hardest-link {
-    @apply block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:border-[#ae9dff]/55 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply block rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-white no-underline transition hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Hardest-level name inside a player profile card. */

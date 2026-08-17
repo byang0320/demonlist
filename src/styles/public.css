@@ -11,7 +11,7 @@
 
   /* Low-contrast Admin button visible in the homepage corner. */
   .admin-faint-link {
-    @apply rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#59627b] no-underline transition hover:border-[#ae9dff]/50 hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-[#59627b] no-underline transition hover:text-[#8c97b2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Hero card on the root homepage. */
@@ -76,7 +76,7 @@
 
   /* Clickable player profile card on the homepage. */
   .home-player-card {
-    @apply flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white no-underline transition hover:-translate-y-0.5 hover:border-[#ae9dff]/55 hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0c1120]/70 p-4 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Player avatar displayed in a homepage profile card. */
@@ -102,16 +102,6 @@
   /* Completion-count caption in a homepage player card. */
   .player-card-count {
     @apply mt-1 block text-xs text-[#8c97b2];
-  }
-
-  /* Arrow at the end of a homepage player card. */
-  .player-card-arrow {
-    @apply text-lg text-[#8c97b2] transition;
-  }
-
-  /* Hover movement/color for the homepage player-card arrow. */
-  .home-player-card:hover .player-card-arrow {
-    @apply translate-x-1 text-[#c6beff];
   }
 
   /* Spacing around the Classic/Platformer demonlist toggle. */
@@ -161,7 +151,7 @@
 
   /* Create-level link shown to authorized admins on the public list. */
   .create-level-link {
-    @apply inline-flex min-h-11 items-center rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply inline-flex min-h-11 items-center rounded-xl border border-[#ae9dff]/30 px-4 text-sm font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Ordered level-card list on public demonlist pages. */
@@ -196,7 +186,7 @@
 
   /* Shared visual shell for public and admin level cards. */
   .level-card {
-    @apply overflow-hidden rounded-[1.1rem] border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:-translate-y-0.5 hover:border-[#ae9dff]/60 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply overflow-hidden rounded-[1.1rem] border border-white/10 bg-gradient-to-br from-[#141b2d]/98 to-[#0f1422]/98 text-inherit transition duration-150 hover:from-[#1d223e]/98 hover:to-[#12182b]/98 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
   }
 
   /* Four-column layout for level cards in admin demonlist management. */
@@ -261,7 +251,7 @@
 
   /* Edit button in an admin level card. */
   .level-card-edit-link {
-    @apply relative z-10 mr-3 justify-self-end rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:border-[#c6beff] hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
+    @apply relative z-10 mr-3 justify-self-end rounded-lg border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:mr-4 sm:px-4 sm:text-sm;
   }
 
   /* Summary card shown for Classic/Platformer stats on the homepage. */
