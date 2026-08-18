@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import { getLevelThumbnailUrl } from '@/lib/level-thumbnails'
 
 export function LevelThumbnail({
   levelId,
@@ -8,6 +10,33 @@ export function LevelThumbnail({
   levelId: number
 }) {
   const [imageFailed, setImageFailed] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
+
+  useEffect(() => {
+    const image = imageRef.current
+
+    if (!image || image.complete || typeof IntersectionObserver === 'undefined') {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          return
+        }
+
+        // Warm the browser cache shortly before the thumbnail enters view.
+        const preloadImage = new window.Image()
+        preloadImage.src = image.src
+        observer.disconnect()
+      },
+      { rootMargin: '800px 0px' },
+    )
+
+    observer.observe(image)
+
+    return () => observer.disconnect()
+  }, [])
 
   if (imageFailed) {
     return null
@@ -17,9 +46,11 @@ export function LevelThumbnail({
     // This external image needs onError so unavailable level thumbnails can disappear cleanly.
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`https://levelthumbs.prevter.me/thumbnail/${levelId}`}
+      ref={imageRef}
+      src={getLevelThumbnailUrl(levelId)}
       alt=""
       className="level-thumbnail-image"
+      loading="lazy"
       onError={() => setImageFailed(true)}
     />
   )

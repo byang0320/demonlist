@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { listRankedLevels, type LevelType } from '@/features/levels/queries'
 import { DemonListToggle } from '@/components/public/demon-list-toggle'
 import { LevelPlaceholder, LevelThumbnail } from '@/components/public/level-thumbnail'
+import { getLevelThumbnailUrl } from '@/lib/level-thumbnails'
 
 export type RankedLevel = Awaited<ReturnType<typeof listRankedLevels>>[number]
 
@@ -49,6 +50,22 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
           levelId={level.ingameId}
         />
       </span>
+    </>
+  )
+}
+
+function ThumbnailPreloads({ levels }: { levels: RankedLevel[] }) {
+  return (
+    <>
+      {levels.slice(0, 10).map((level) => (
+        <link
+          key={level.id}
+          rel="preload"
+          as="image"
+          href={getLevelThumbnailUrl(level.ingameId)}
+          fetchPriority="high"
+        />
+      ))}
     </>
   )
 }
@@ -123,6 +140,8 @@ export async function DemonList({
 
   return (
     <main className="public-page">
+      <ThumbnailPreloads levels={classicLevels} />
+      <ThumbnailPreloads levels={platformerLevels} />
       <div className="content-width">
         <Link
           href={admin ? '/admin' : '/'}
