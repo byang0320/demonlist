@@ -151,7 +151,7 @@ function buildChangelogMessage({
   const platformerText = levelType === 'Platformer' ? ' on the Platformer Demonlist' : ''
 
   if (originalRank === undefined) {
-    return `${name.trim()} was placed at #${rank}${platformerText}${neighboringText ? `, ${neighboringText}` : ''}.`
+    return `${name.trim()} has been placed at #${rank}${platformerText}${neighboringText ? `, ${neighboringText}` : ''}.`
   }
 
   const direction = rank < originalRank ? 'up' : 'down'
