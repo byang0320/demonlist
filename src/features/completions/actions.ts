@@ -79,3 +79,18 @@ export async function updateCompletion(input: UpdateCompletionInput) {
     throw error
   }
 }
+
+export async function deleteCompletion(id: string) {
+  try {
+    return await prisma.completion.delete({
+      where: { id },
+      select: { id: true },
+    })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      throw new Error('Completion not found.')
+    }
+
+    throw error
+  }
+}

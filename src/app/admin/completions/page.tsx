@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import DeleteCompletionButton from '@/components/admin/DeleteCompletionButton'
 import CompletionFilters from '@/components/admin/CompletionFilters'
 import { getCompletionFormOptions } from '@/features/completions/queries'
 import { listCompletionsForAdmin } from '@/features/completions/queries'
@@ -70,18 +71,27 @@ export default async function AdminCompletionsPage({
               const date = formatCompletionDate(completion.completedAt)
 
               return (
-                <Link
+                <div
                   key={completion.id}
-                  href={`/admin/completions/${completion.id}/edit`}
-                  className="admin-record-card"
+                  className="admin-record-row"
                 >
-                  <p className="admin-record-card-text">
-                    <strong>{completion.player.name}</strong> completed <strong>{completion.level.name}</strong> by <strong>{completion.level.publishedBy}</strong>{date ? <> on <strong>{date}</strong></> : null}
-                  </p>
-                  <p className="admin-record-card-meta">
-                    Completion Slug: {completion.id}
-                  </p>
-                </Link>
+                  <Link
+                    href={`/admin/completions/${completion.id}/edit`}
+                    className="admin-record-card"
+                  >
+                    <p className="admin-record-card-text">
+                      <strong>{completion.player.name}</strong> completed <strong>{completion.level.name}</strong> by <strong>{completion.level.publishedBy}</strong>{date ? <> on <strong>{date}</strong></> : null}
+                    </p>
+                    <p className="admin-record-card-meta">
+                      Completion Slug: {completion.id}
+                    </p>
+                  </Link>
+                  <DeleteCompletionButton
+                    completionId={completion.id}
+                    levelName={completion.level.name}
+                    playerName={completion.player.name}
+                  />
+                </div>
               )
             })}
           </div>

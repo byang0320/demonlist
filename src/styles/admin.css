@@ -189,9 +189,14 @@
     @apply grid gap-3;
   }
 
+  /* Row containing a completion link and its Delete button. */
+  .admin-record-row {
+    @apply relative;
+  }
+
   /* Clickable completion record card in the admin completions list. */
   .admin-record-card {
-    @apply block border border-white/10 bg-[#0c1120]/70 p-5 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25;
+    @apply block w-full min-w-0 border border-white/10 bg-[#0c1120]/70 p-5 pr-24 text-white no-underline transition hover:bg-[#171e35] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:pr-28;
   }
 
   /* Main sentence inside an admin completion record card. */
@@ -247,5 +252,50 @@
   /* Edit button beside each admin player record. */
   .admin-edit-link {
     @apply shrink-0 border border-[#ae9dff]/30 px-3 py-2 text-xs font-bold text-[#c6beff] no-underline transition hover:bg-[#9c8cff]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9c8cff]/25 sm:px-4 sm:text-sm;
+  }
+
+  /* Red Delete button beside each admin completion record. */
+  .admin-delete-button {
+    @apply absolute right-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer border border-[#ef7070]/60 bg-[#0b0d18]/75 px-3 py-2 text-xs font-bold text-[#ff9b9b] shadow-lg transition hover:bg-[#b83d4d]/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ef7070]/25 sm:right-4 sm:px-4 sm:text-sm;
+  }
+
+  /* Full-screen backdrop for the completion deletion confirmation. */
+  .admin-confirmation-backdrop {
+    @apply fixed inset-0 z-40 grid place-items-center bg-[#050711]/75 p-4;
+  }
+
+  /* Centered completion deletion confirmation dialog. */
+  .admin-confirmation-dialog {
+    @apply w-full max-w-xl border border-white/15 bg-[#111725] p-6 text-center shadow-2xl sm:p-8;
+  }
+
+  .admin-confirmation-title {
+    @apply m-0 text-xl font-bold leading-7;
+  }
+
+  .admin-confirmation-detail {
+    @apply mt-5 text-base leading-7 text-[#b9c2d8];
+  }
+
+  /* Equal-width cancel/delete actions in the confirmation dialog. */
+  .admin-confirmation-actions {
+    @apply mt-7 grid grid-cols-2 gap-4;
+  }
+
+  .admin-confirmation-cancel,
+  .admin-confirmation-delete {
+    @apply min-h-12 w-full cursor-pointer px-4 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-4;
+  }
+
+  .admin-confirmation-cancel {
+    @apply bg-[#111725] text-white hover:bg-[#171e35] focus-visible:ring-[#9c8cff]/25;
+  }
+
+  .admin-confirmation-delete {
+    @apply bg-[#c63f52] text-white hover:bg-[#df5264] focus-visible:ring-[#ef7070]/35;
+  }
+
+  .admin-confirmation-delete-form {
+    @apply m-0;
   }
 }
