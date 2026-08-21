@@ -39,6 +39,11 @@
     @apply mt-2 w-full border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
   }
 
+  /* Read-only level/player value shown when editing a completion. */
+  .form-input-readonly {
+    @apply cursor-default opacity-70;
+  }
+
   /* Wrapper and custom controls for the inverted Proposed Rank spinner. */
   .form-number-control {
     @apply relative mt-2;

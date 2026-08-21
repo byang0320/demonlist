@@ -64,6 +64,7 @@ export default async function EditCompletionPage({
             notes: completion.notes ?? '',
           }}
           submitLabel="Save"
+          readOnlySelections
         />
       </div>
     </main>

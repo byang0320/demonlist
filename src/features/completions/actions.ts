@@ -41,21 +41,19 @@ export async function createCompletion(input: AddCompletionInput) {
 }
 
 export async function updateCompletion(input: UpdateCompletionInput) {
-  const [level, player] = await Promise.all([
-    prisma.level.findUnique({ where: { id: input.levelId }, select: { id: true } }),
-    prisma.player.findUnique({ where: { id: input.playerId }, select: { id: true } }),
-  ])
+  const existingCompletion = await prisma.completion.findUnique({
+    where: { id: input.id },
+    select: { id: true },
+  })
 
-  if (!level || !player) {
-    throw new Error(COMPLETION_REFERENCE_ERROR)
+  if (!existingCompletion) {
+    throw new Error('Completion not found.')
   }
 
   try {
     return await prisma.completion.update({
       where: { id: input.id },
       data: {
-        playerId: input.playerId,
-        levelId: input.levelId,
         times: input.times,
         completedAt: input.completedAt,
         videoUrl: input.videoUrl,

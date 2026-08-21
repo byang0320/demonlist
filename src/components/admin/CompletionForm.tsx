@@ -58,6 +58,7 @@ export function SearchDropdown({
   renderOption,
   renderSelected,
   error,
+  readOnly = false,
 }: {
   label: string
   name: 'levelId' | 'playerId'
@@ -72,6 +73,7 @@ export function SearchDropdown({
   renderOption: (option: { id: string }) => React.ReactNode
   renderSelected: (id: string) => string
   error?: string[]
+  readOnly?: boolean
 }) {
   const containerRef = useRef<HTMLLabelElement>(null)
 
@@ -93,12 +95,11 @@ export function SearchDropdown({
   const filteredOptions = useMemo(() => {
     const query = search.trim().toLowerCase()
     if (!query) {
-      return options.slice(0, 50)
+      return options
     }
 
     return options
       .filter((option) => renderSelected(option.id).toLowerCase().includes(query))
-      .slice(0, 50)
   }, [options, renderSelected, search])
 
   return (
@@ -106,14 +107,15 @@ export function SearchDropdown({
       {label}
       <input
         autoComplete="off"
-        className={inputClassName}
+        className={readOnly ? `${inputClassName} form-input-readonly` : inputClassName}
         name={`${name}Search`}
         value={search}
-        onChange={(event) => onSearchChange(event.target.value)}
-        onFocus={onFocus}
+        onChange={readOnly ? undefined : (event) => onSearchChange(event.target.value)}
+        onFocus={readOnly ? undefined : onFocus}
         placeholder={`Search ${label.toLowerCase()}...`}
+        readOnly={readOnly}
         role="combobox"
-        aria-expanded={open}
+        aria-expanded={readOnly ? undefined : open}
         aria-controls={`${name}-options`}
       />
       <input type="hidden" name={name} value={value} />
@@ -122,7 +124,7 @@ export function SearchDropdown({
           Selected: {renderSelected(value)}
         </p>
       )}
-      {open && (
+      {!readOnly && open && (
         <div
           id={`${name}-options`}
           className="autocomplete-menu"
@@ -156,12 +158,14 @@ export default function CompletionForm({
   action = createCompletionAction,
   initialValues,
   submitLabel = 'Create Completion',
+  readOnlySelections = false,
 }: {
   levels: LevelOption[]
   players: PlayerOption[]
   action?: CompletionFormAction
   initialValues?: CompletionFormValues
   submitLabel?: string
+  readOnlySelections?: boolean
 }) {
   const [state, formAction, pending] = useActionState(action, {})
   const submittedValues = state.values
@@ -235,6 +239,7 @@ export default function CompletionForm({
             onFocus={() => setLevelOpen(true)}
             onClose={() => setLevelOpen(false)}
             open={levelOpen}
+            readOnly={readOnlySelections}
             renderOption={(option) => {
               const level = levelById.get(option.id)
               return level ? <><span className="form-option-name">{level.name}</span><span className="form-option-detail">by {level.publishedBy}</span></> : null
@@ -261,6 +266,7 @@ export default function CompletionForm({
             onFocus={() => setPlayerOpen(true)}
             onClose={() => setPlayerOpen(false)}
             open={playerOpen}
+            readOnly={readOnlySelections}
             renderOption={(option) => <span>{playerById.get(option.id)?.name}</span>}
             renderSelected={playerLabel}
             error={state.fieldErrors?.playerId}
