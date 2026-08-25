@@ -39,7 +39,7 @@ function LevelCardDetails({ level }: { level: RankedLevel }) {
         </span>
         <span className="level-card-completions">
           {level._count.completions}{' '}
-          {level._count.completions === 1 ? 'completion' : 'completions'}
+          {level._count.completions === 1 ? 'victor' : 'victors'}
         </span>
       </span>
       <span
