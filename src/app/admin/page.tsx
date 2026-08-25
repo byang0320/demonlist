@@ -56,7 +56,7 @@ export default async function AdminDashboardPage() {
           <h2 id="level-management-heading" className="admin-management-title">Level management</h2>
           <div className="admin-management-grid">
             <Link href="/admin/demonlist" className={actionLinkClassName}>
-              View/Edit Demonlists
+              View/Edit Demonlists and Levels
             </Link>
             <Link href="/admin/levels/new" className={actionLinkClassName}>
               + Create New Level
@@ -83,7 +83,7 @@ export default async function AdminDashboardPage() {
           </p>
           <div className="admin-management-grid">
             <Link href="/admin/completions" className={actionLinkClassName}>
-              View/Edit Completions
+              View/Edit/Delete Completions
             </Link>
             <Link
               href="/admin/completions/new"

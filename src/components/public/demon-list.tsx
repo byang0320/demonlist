@@ -151,7 +151,7 @@ export async function DemonList({
         </Link>
         <header className="demonlist-header">
           <div>
-            <h1 className="demonlist-title">Stream VC Demonlist</h1>
+            <h1 className="demonlist-title">{admin ? "Manage Levels" : "Stream VC Demonlist"}</h1>
           </div>
           {admin && (
             <Link
