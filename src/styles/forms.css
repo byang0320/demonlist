@@ -39,6 +39,16 @@
     @apply mt-2 w-full border border-white/10 bg-[#0c1120] px-4 py-3 text-sm text-[#f4f6ff] outline-none transition placeholder:text-[#59627b] focus:border-[#9c8cff]/70 focus:ring-4 focus:ring-[#9c8cff]/15;
   }
 
+  /* Red treatment for controls with a validation error. */
+  .form-input-error {
+    @apply border-[#ef7070]/80 bg-[#ef7070]/5;
+    box-shadow: 0 0 0 3px rgb(239 112 112 / 0.12);
+  }
+
+  .form-input-error:focus {
+    @apply border-[#ff9b9b] ring-4 ring-[#ef7070]/25;
+  }
+
   /* Read-only level/player value shown when editing a completion. */
   .form-input-readonly {
     @apply cursor-default opacity-70;
@@ -161,7 +171,7 @@
 
   /* Inline validation message for one form field. */
   .form-error {
-    @apply mt-2 text-sm text-red-300;
+    @apply mt-2 text-sm font-medium text-[#ff9b9b];
   }
 
   /* Top-level validation summary for a form submission. */

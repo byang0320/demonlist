@@ -6,6 +6,7 @@ import {
   createCompletionAction,
   type CompletionActionState,
 } from '@/app/admin/completions/new/actions'
+import { useFormFieldValidation } from '@/components/admin/form-validation'
 
 type LevelOption = {
   id: string
@@ -23,6 +24,8 @@ type CompletionFormAction = (
   formData: FormData,
 ) => Promise<CompletionActionState>
 
+type CompletionFieldName = keyof NonNullable<CompletionActionState['fieldErrors']>
+
 export type CompletionFormValues = {
   levelId: string
   playerId: string
@@ -36,12 +39,18 @@ export type CompletionFormValues = {
 
 const inputClassName = 'form-input'
 
+function getInputClassName(hasError: boolean, additionalClassName = '') {
+  return [inputClassName, additionalClassName, hasError ? 'form-input-error' : '']
+    .filter(Boolean)
+    .join(' ')
+}
+
 function FieldError({ errors }: { errors?: string[] }) {
   if (!errors?.length) {
     return null
   }
 
-  return <p className="form-error">{errors[0]}</p>
+  return <p className="form-error" role="alert">{errors[0]}</p>
 }
 
 export function SearchDropdown({
@@ -54,6 +63,7 @@ export function SearchDropdown({
   onSelect,
   onFocus,
   onClose,
+  onFieldBlur,
   open,
   renderOption,
   renderSelected,
@@ -69,6 +79,7 @@ export function SearchDropdown({
   onSelect: (id: string) => void
   onFocus: () => void
   onClose: () => void
+  onFieldBlur?: () => void
   open: boolean
   renderOption: (option: { id: string }) => React.ReactNode
   renderSelected: (id: string) => string
@@ -102,21 +113,25 @@ export function SearchDropdown({
       .filter((option) => renderSelected(option.id).toLowerCase().includes(query))
   }, [options, renderSelected, search])
 
+  const hasError = Boolean(error?.length)
+
   return (
     <label ref={containerRef} className="form-label form-autocomplete-label">
       {label}
       <input
         autoComplete="off"
-        className={readOnly ? `${inputClassName} form-input-readonly` : inputClassName}
+        className={getInputClassName(hasError, readOnly ? 'form-input-readonly' : '')}
         name={`${name}Search`}
         value={search}
         onChange={readOnly ? undefined : (event) => onSearchChange(event.target.value)}
         onFocus={readOnly ? undefined : onFocus}
+        onBlur={onFieldBlur}
         placeholder={`Search ${label.toLowerCase()}...`}
         readOnly={readOnly}
         role="combobox"
         aria-expanded={readOnly ? undefined : open}
         aria-controls={`${name}-options`}
+        aria-invalid={hasError}
       />
       <input type="hidden" name={name} value={value} />
       {value && (
@@ -175,6 +190,15 @@ export default function CompletionForm({
   const [playerSearch, setPlayerSearch] = useState(initialValues?.playerLabel ?? '')
   const [levelOpen, setLevelOpen] = useState(false)
   const [playerOpen, setPlayerOpen] = useState(false)
+  const { getErrors, setFieldError, validateField } = useFormFieldValidation<CompletionFieldName>(state.fieldErrors)
+  const fieldErrors = {
+    levelId: getErrors('levelId'),
+    playerId: getErrors('playerId'),
+    completedAt: getErrors('completedAt'),
+    times: getErrors('times'),
+    videoUrl: getErrors('videoUrl'),
+    notes: getErrors('notes'),
+  }
 
   const levelById = useMemo(() => new Map(levels.map((level) => [level.id, level])), [levels])
   const playerById = useMemo(() => new Map(players.map((player) => [player.id, player])), [players])
@@ -197,6 +221,7 @@ export default function CompletionForm({
       action={formAction}
       autoComplete="off"
       className="form-layout"
+      noValidate
     >
       {state.formError && (
         <p className="form-error-summary" role="alert">
@@ -238,6 +263,7 @@ export default function CompletionForm({
             }}
             onFocus={() => setLevelOpen(true)}
             onClose={() => setLevelOpen(false)}
+            onFieldBlur={() => setFieldError('levelId', levelId ? undefined : 'Level is required')}
             open={levelOpen}
             readOnly={readOnlySelections}
             renderOption={(option) => {
@@ -245,7 +271,7 @@ export default function CompletionForm({
               return level ? <><span className="form-option-name">{level.name}</span><span className="form-option-detail">by {level.publishedBy}</span></> : null
             }}
             renderSelected={levelLabel}
-            error={state.fieldErrors?.levelId}
+            error={fieldErrors.levelId}
           />
           <SearchDropdown
             label="Player"
@@ -265,11 +291,12 @@ export default function CompletionForm({
             }}
             onFocus={() => setPlayerOpen(true)}
             onClose={() => setPlayerOpen(false)}
+            onFieldBlur={() => setFieldError('playerId', playerId ? undefined : 'Player is required')}
             open={playerOpen}
             readOnly={readOnlySelections}
             renderOption={(option) => <span>{playerById.get(option.id)?.name}</span>}
             renderSelected={playerLabel}
-            error={state.fieldErrors?.playerId}
+            error={fieldErrors.playerId}
           />
         </div>
 
@@ -278,27 +305,29 @@ export default function CompletionForm({
             Original completion date
             <input
               autoComplete="off"
-              className={inputClassName}
+              className={getInputClassName(Boolean(fieldErrors.completedAt?.length))}
               name="completedAt"
               type="date"
               defaultValue={submittedValues?.completedAt ?? initialValues?.completedAt ?? ''}
+              onBlur={(event) => validateField('completedAt', event.currentTarget, 'Completion date')}
             />
-            <FieldError errors={state.fieldErrors?.completedAt} />
+            <FieldError errors={fieldErrors.completedAt} />
           </label>
           <label className="form-label">
             How many times did you beat this?
             <input
               autoComplete="off"
-              className={inputClassName}
+              className={getInputClassName(Boolean(fieldErrors.times?.length))}
               name="times"
               type="number"
               min="1"
               step="1"
               required
               defaultValue={submittedValues?.times ?? initialValues?.times ?? '1'}
+              onBlur={(event) => validateField('times', event.currentTarget, 'Times')}
             />
             <p className="form-hint">Enter 1 for a single completion. This box is for people such as Star who have completed Reverie upwards of 100 times.</p>
-            <FieldError errors={state.fieldErrors?.times} />
+            <FieldError errors={fieldErrors.times} />
           </label>
         </div>
 
@@ -306,26 +335,28 @@ export default function CompletionForm({
           Video URL
           <input
             autoComplete="off"
-            className={inputClassName}
+            className={getInputClassName(Boolean(fieldErrors.videoUrl?.length))}
             name="videoUrl"
             type="url"
             defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''}
             placeholder="Paste a video link... (optional)"
+            onBlur={(event) => validateField('videoUrl', event.currentTarget, 'Video URL')}
           />
-          <FieldError errors={state.fieldErrors?.videoUrl} />
+          <FieldError errors={fieldErrors.videoUrl} />
         </label>
 
         <label className="form-label">
           Other notes
           <textarea
             autoComplete="off"
-            className={`${inputClassName} form-textarea-small`}
+            className={getInputClassName(Boolean(fieldErrors.notes?.length), 'form-textarea-small')}
             name="notes"
             maxLength={2000}
             defaultValue={submittedValues?.notes ?? initialValues?.notes ?? ''}
             placeholder="Leave some notes about this completion that will be only visible to other admins (optional)"
+            onBlur={(event) => validateField('notes', event.currentTarget, 'Notes')}
           />
-          <FieldError errors={state.fieldErrors?.notes} />
+          <FieldError errors={fieldErrors.notes} />
         </label>
       </section>
 

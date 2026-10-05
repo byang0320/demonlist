@@ -6,6 +6,7 @@ import {
   createLevelAction,
   type LevelActionState,
 } from '@/app/admin/levels/new/actions'
+import { useFormFieldValidation } from '@/components/admin/form-validation'
 import type { LevelRankName } from '@/features/levels/queries'
 import { slugify } from '@/lib/slugs'
 
@@ -34,14 +35,22 @@ type LevelFormAction = (
   formData: FormData,
 ) => Promise<LevelActionState>
 
+type LevelFieldName = keyof NonNullable<LevelActionState['fieldErrors']>
+
 const inputClassName = 'form-input'
+
+function getInputClassName(hasError: boolean, additionalClassName = '') {
+  return [inputClassName, additionalClassName, hasError ? 'form-input-error' : '']
+    .filter(Boolean)
+    .join(' ')
+}
 
 function FieldError({ errors }: { errors?: string[] }) {
   if (!errors?.length) {
     return null
   }
 
-  return <p className="form-error">{errors[0]}</p>
+  return <p className="form-error" role="alert">{errors[0]}</p>
 }
 
 function getCreateChangelogNeighbors(levels: LevelRankName[], rank: number) {
@@ -200,6 +209,19 @@ export default function LevelForm({
     originalRank: initialValues?.rank,
     levelType: type,
   })
+  const { getErrors, validateField } = useFormFieldValidation<LevelFieldName>(state.fieldErrors)
+  const fieldErrors = {
+    ingameId: getErrors('ingameId'),
+    name: getErrors('name'),
+    slug: getErrors('slug'),
+    rank: getErrors('rank'),
+    type: getErrors('type'),
+    publishedBy: getErrors('publishedBy'),
+    createdBy: getErrors('createdBy'),
+    verifiedBy: getErrors('verifiedBy'),
+    description: getErrors('description'),
+    videoUrl: getErrors('videoUrl'),
+  }
 
   useEffect(() => {
     if (state.formError || Object.keys(state.fieldErrors ?? {}).length > 0) {
@@ -224,7 +246,11 @@ export default function LevelForm({
       return
     }
 
-    if (changelogMessage && copyStatus !== 'copied') {
+    if (
+      changelogMessage
+      && copyStatus !== 'copied'
+      && event.currentTarget.checkValidity()
+    ) {
       event.preventDefault()
       setIsCopyConfirmationOpen(true)
     }
@@ -253,12 +279,6 @@ export default function LevelForm({
     const form = formRef.current
 
     if (!form || pending) {
-      return
-    }
-
-    if (!form.checkValidity()) {
-      form.reportValidity()
-      setIsCopyConfirmationOpen(false)
       return
     }
 
@@ -370,6 +390,7 @@ export default function LevelForm({
       action={formAction}
       autoComplete="off"
       className="form-layout"
+      noValidate
       onSubmit={handleSubmit}
     >
       {state.formError && (
@@ -391,7 +412,7 @@ export default function LevelForm({
             Level ID
             <input
               autoComplete="off"
-              className={inputClassName}
+              className={getInputClassName(Boolean(fieldErrors.ingameId?.length))}
               inputMode="numeric"
               name="ingameId"
               required
@@ -401,8 +422,16 @@ export default function LevelForm({
                 setAutofillMessage('')
               }}
               placeholder="e.g. 76159410"
+              onBlur={(event) => validateField(
+                'ingameId',
+                event.currentTarget,
+                'Level ID',
+                event.currentTarget.value && Number(event.currentTarget.value) <= 0
+                  ? 'Level ID must be greater than zero.'
+                  : undefined,
+              )}
             />
-            <FieldError errors={state.fieldErrors?.ingameId} />
+            <FieldError errors={fieldErrors.ingameId} />
           </label>
           {allowAutofill && (
             <button
@@ -432,7 +461,7 @@ export default function LevelForm({
           Name
           <input
             autoComplete="off"
-            className={inputClassName}
+            className={getInputClassName(Boolean(fieldErrors.name?.length))}
             name="name"
             onChange={(event) => {
               setLevelName(event.target.value)
@@ -447,15 +476,16 @@ export default function LevelForm({
             required
             maxLength={200}
             value={levelName}
+            onBlur={(event) => validateField('name', event.currentTarget, 'Name')}
           />
-          <FieldError errors={state.fieldErrors?.name} />
+          <FieldError errors={fieldErrors.name} />
         </label>
 
         <label className="form-label">
           Slug
           <input
             autoComplete="off"
-            className={inputClassName}
+            className={getInputClassName(Boolean(fieldErrors.slug?.length))}
             name="slug"
             ref={slugInputRef}
             readOnly
@@ -463,18 +493,19 @@ export default function LevelForm({
             maxLength={100}
             defaultValue={submittedValues?.slug ?? initialValues?.slug ?? ''}
             placeholder="No need to edit this manually!"
+            onBlur={(event) => validateField('slug', event.currentTarget, 'Slug')}
           />
           <p className="form-hint">
             This will become the URL: /levels/{submittedValues?.slug ?? (slugPreview || '[slug]')}. If it is already taken, the publisher name will be appended automatically.
           </p>
-          <FieldError errors={state.fieldErrors?.slug} />
+          <FieldError errors={fieldErrors.slug} />
         </label>
 
         <label className="form-label">
           Level Type
           <select
             autoComplete="off"
-            className={inputClassName}
+            className={getInputClassName(Boolean(fieldErrors.type?.length))}
             disabled={typeLocked}
             name="type"
             onChange={(event) => {
@@ -482,6 +513,7 @@ export default function LevelForm({
               setCopyStatus('idle')
             }}
             defaultValue={submittedValues?.type ?? type}
+            onBlur={(event) => validateField('type', event.currentTarget, 'Level type')}
           >
             <option value="Classic">Classic</option>
             <option value="Platformer">Platformer</option>
@@ -492,7 +524,7 @@ export default function LevelForm({
               ? 'You cannot change the level type retroactively. Delete this and create a new level if you need to change the type.'
               : 'Make sure the correct level type is chosen; it cannot be changed later.'}
           </p>
-          <FieldError errors={state.fieldErrors?.type} />
+          <FieldError errors={fieldErrors.type} />
         </label>
 
         <div className="form-toggle-stack form-toggle-pair">
@@ -516,32 +548,32 @@ export default function LevelForm({
 
         <label className="form-label form-section-full">
           Published by
-          <input autoComplete="off" className={inputClassName} name="publishedBy" required maxLength={200} defaultValue={submittedValues?.publishedBy ?? initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" />
-          <FieldError errors={state.fieldErrors?.publishedBy} />
+          <input autoComplete="off" className={getInputClassName(Boolean(fieldErrors.publishedBy?.length))} name="publishedBy" required maxLength={200} defaultValue={submittedValues?.publishedBy ?? initialValues?.publishedBy ?? ''} placeholder="e.g. APTeamOfficial" onBlur={(event) => validateField('publishedBy', event.currentTarget, 'Published by')} />
+          <FieldError errors={fieldErrors.publishedBy} />
         </label>
 
         <label className="form-label">
           Created by
-          <input autoComplete="off" className={inputClassName} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (optional)"/>
-          <FieldError errors={state.fieldErrors?.createdBy} />
+          <input autoComplete="off" className={getInputClassName(Boolean(fieldErrors.createdBy?.length))} name="createdBy" maxLength={200} defaultValue={submittedValues?.createdBy ?? initialValues?.createdBy ?? ''} placeholder="e.g. Riot and more (optional)" onBlur={(event) => validateField('createdBy', event.currentTarget, 'Created by')}/>
+          <FieldError errors={fieldErrors.createdBy} />
         </label>
 
         <label className="form-label">
           Verified by
-          <input autoComplete="off" className={inputClassName} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (optional)" />
-          <FieldError errors={state.fieldErrors?.verifiedBy} />
+          <input autoComplete="off" className={getInputClassName(Boolean(fieldErrors.verifiedBy?.length))} name="verifiedBy" maxLength={200} defaultValue={submittedValues?.verifiedBy ?? initialValues?.verifiedBy ?? ''} placeholder="e.g. DoSh7t (optional)" onBlur={(event) => validateField('verifiedBy', event.currentTarget, 'Verified by')} />
+          <FieldError errors={fieldErrors.verifiedBy} />
         </label>
 
         <label className="form-label form-section-full">
           Level Description (copied from in-game)
-          <textarea autoComplete="off" className={`${inputClassName} form-textarea-small`} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (optional)" />
-          <FieldError errors={state.fieldErrors?.description} />
+          <textarea autoComplete="off" className={getInputClassName(Boolean(fieldErrors.description?.length), 'form-textarea-small')} name="description" maxLength={5000} defaultValue={submittedValues?.description ?? initialValues?.description ?? ''} placeholder="e.g. Sequel to the legendary Sonic Wave by Cyclic. Verified by DoSh7t. Made by APTeam. (v1.3) (optional)" onBlur={(event) => validateField('description', event.currentTarget, 'Description')} />
+          <FieldError errors={fieldErrors.description} />
         </label>
 
         <label className="form-label form-section-full">
           Level Verification Video (YouTube link)
-          <input autoComplete="off" className={inputClassName} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. (optional)" />
-          <FieldError errors={state.fieldErrors?.videoUrl} />
+          <input autoComplete="off" className={getInputClassName(Boolean(fieldErrors.videoUrl?.length))} name="videoUrl" type="url" defaultValue={submittedValues?.videoUrl ?? initialValues?.videoUrl ?? ''} placeholder="Paste the official verification video link from YouTube. (optional)" onBlur={(event) => validateField('videoUrl', event.currentTarget, 'Video URL')} />
+          <FieldError errors={fieldErrors.videoUrl} />
         </label>
       </section>
 
@@ -555,7 +587,7 @@ export default function LevelForm({
           <div className="form-number-control">
             <input
               autoComplete="off"
-              className={`${inputClassName} form-number-input`}
+              className={getInputClassName(Boolean(fieldErrors.rank?.length), 'form-number-input')}
               name="rank"
               type="number"
               min="1"
@@ -567,6 +599,7 @@ export default function LevelForm({
                 setCopyStatus('idle')
               }}
               placeholder={`Enter a number between 1 and ${maxRank}...`}
+              onBlur={(event) => validateField('rank', event.currentTarget, 'Rank')}
             />
             <div className="form-number-stepper">
               <button
@@ -602,7 +635,7 @@ export default function LevelForm({
               ? 'If changed, the ranks of other levels will be adjusted automatically!'
               : 'Levels currently placed at this rank and below will move down by one.'} This number should be between 1 and {maxRank}
           </p>
-          <FieldError errors={state.fieldErrors?.rank} />
+          <FieldError errors={fieldErrors.rank} />
         </label>
 
         <div className="form-copyable-field form-section-full">
