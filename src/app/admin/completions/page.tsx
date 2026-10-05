@@ -83,7 +83,7 @@ export default async function AdminCompletionsPage({
                       <strong>{completion.player.name}</strong> completed <strong>{completion.level.name}</strong> by <strong>{completion.level.publishedBy}</strong>{date ? <> on <strong>{date}</strong></> : null}
                     </p>
                     <p className="admin-record-card-meta">
-                      Completion Slug: {completion.id}
+                      Completion ID: {completion.id}
                     </p>
                   </Link>
                   <DeleteCompletionButton
