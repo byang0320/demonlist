@@ -295,6 +295,11 @@
     @apply bg-[#c63f52] text-white hover:bg-[#df5264] focus-visible:ring-[#ef7070]/35;
   }
 
+  /* Green confirmation action for saving a level after copying its changelog. */
+  .admin-confirmation-save {
+    @apply min-h-12 w-full cursor-pointer bg-[#4f8f68] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#5da378] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#75c493]/35 disabled:cursor-wait disabled:opacity-60;
+  }
+
   .admin-confirmation-delete-form {
     @apply m-0;
   }

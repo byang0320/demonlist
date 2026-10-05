@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useRef, useState } from 'react'
+import { type FormEvent, useActionState, useEffect, useRef, useState } from 'react'
 
 import {
   createLevelAction,
@@ -180,12 +180,15 @@ export default function LevelForm({
   const [levelName, setLevelName] = useState(initialValues?.name ?? '')
   const [rankValue, setRankValue] = useState(initialValues?.rank?.toString() ?? '1')
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
+  const [isCopyConfirmationOpen, setIsCopyConfirmationOpen] = useState(false)
+  const [isCopying, setIsCopying] = useState(false)
   const [slugPreview, setSlugPreview] = useState(initialValues?.slug ?? '')
   const maxRank = maxRanks[type]
   const submittedValues = state.values
   const slugInputRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const changelogTextareaRef = useRef<HTMLTextAreaElement>(null)
+  const bypassCopyConfirmationRef = useRef(false)
   const [gdLevelId, setGdLevelId] = useState(initialValues?.ingameId?.toString() ?? '')
   const [autofilling, setAutofilling] = useState(false)
   const [autofilled, setAutofilled] = useState(false)
@@ -214,6 +217,55 @@ export default function LevelForm({
     textarea.style.height = 'auto'
     textarea.style.height = `${textarea.scrollHeight}px`
   }, [changelogMessage])
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    if (bypassCopyConfirmationRef.current) {
+      bypassCopyConfirmationRef.current = false
+      return
+    }
+
+    if (changelogMessage && copyStatus !== 'copied') {
+      event.preventDefault()
+      setIsCopyConfirmationOpen(true)
+    }
+  }
+
+  async function copyChangelogMessage() {
+    if (!changelogMessage || isCopying) {
+      return false
+    }
+
+    setIsCopying(true)
+
+    try {
+      await navigator.clipboard.writeText(changelogMessage)
+      setCopyStatus('copied')
+      return true
+    } catch {
+      setCopyStatus('error')
+      return false
+    } finally {
+      setIsCopying(false)
+    }
+  }
+
+  function submitAfterCopyConfirmation() {
+    const form = formRef.current
+
+    if (!form || pending) {
+      return
+    }
+
+    if (!form.checkValidity()) {
+      form.reportValidity()
+      setIsCopyConfirmationOpen(false)
+      return
+    }
+
+    bypassCopyConfirmationRef.current = true
+    setIsCopyConfirmationOpen(false)
+    form.requestSubmit()
+  }
 
   async function autofillFromGDLevel() {
     if (!/^\d+$/.test(gdLevelId) || autofilling) {
@@ -318,6 +370,7 @@ export default function LevelForm({
       action={formAction}
       autoComplete="off"
       className="form-layout"
+      onSubmit={handleSubmit}
     >
       {state.formError && (
         <p
@@ -424,7 +477,10 @@ export default function LevelForm({
             className={inputClassName}
             disabled={typeLocked}
             name="type"
-            onChange={(event) => setType(event.target.value as LevelType)}
+            onChange={(event) => {
+              setType(event.target.value as LevelType)
+              setCopyStatus('idle')
+            }}
             defaultValue={submittedValues?.type ?? type}
           >
             <option value="Classic">Classic</option>
@@ -563,17 +619,10 @@ export default function LevelForm({
             <button
               className="form-copy-button"
               type="button"
-              disabled={!changelogMessage}
-              onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText(changelogMessage)
-                  setCopyStatus('copied')
-                } catch {
-                  setCopyStatus('error')
-                }
-              }}
+              disabled={!changelogMessage || isCopying}
+              onClick={copyChangelogMessage}
             >
-              {copyStatus === 'copied' ? 'Copied!' : 'Copy to Clipboard'}
+              {isCopying ? 'Copying…' : copyStatus === 'copied' ? 'Copied!' : 'Copy to Clipboard'}
             </button>
           </div>
           {copyStatus === 'error' && (
@@ -594,6 +643,51 @@ export default function LevelForm({
           {pending ? `${submitLabel}…` : submitLabel}
         </button>
       </div>
+
+      {isCopyConfirmationOpen ? (
+        <div
+          className="admin-confirmation-backdrop"
+          role="presentation"
+          onClick={() => setIsCopyConfirmationOpen(false)}
+        >
+          <div
+            className="admin-confirmation-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="level-copy-confirmation-title"
+            aria-describedby="level-copy-confirmation-detail"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2 id="level-copy-confirmation-title" className="admin-confirmation-title">
+              Hold Up!
+            </h2>
+            <p id="level-copy-confirmation-detail" className="admin-confirmation-detail">
+              It looks like you changed the placement of this level and didn&apos;t copy the changelog message. Do you want to copy the changelog message to send it in the Discord?
+            </p>
+            <div className="admin-confirmation-actions">
+              <button
+                type="button"
+                className="admin-confirmation-cancel"
+                onClick={submitAfterCopyConfirmation}
+              >
+                No, just save
+              </button>
+              <button
+                type="button"
+                className="admin-confirmation-save"
+                disabled={isCopying}
+                onClick={async () => {
+                  if (await copyChangelogMessage()) {
+                    submitAfterCopyConfirmation()
+                  }
+                }}
+              >
+                Yes, copy and save
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </form>
   )
 }
